@@ -3,6 +3,8 @@ const express = require('express');
 const { getUserById } = require('../models/userModel');
 const { getCoinsByUserId } = require('../models/coinModel');
 const authenticateToken = require('../middleware/authenticateToken');
+const {SUCCESS,ERROR} = require('../middleware/handler');
+const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
 const router = express.Router();
 
 // GET /api/user/:userId - Fetch user data and coin data
@@ -12,6 +14,7 @@ router.get('/user/:userId', authenticateToken, async (req, res, next) => {
 
     // Fetch user data
     const user = await getUserById(userId);
+
     if (!user) {
       return res.status(404).json({
         statusCode: 'E10001',
@@ -34,13 +37,9 @@ router.get('/user/:userId', authenticateToken, async (req, res, next) => {
       status: user.status
     };
 
-    res.status(200).json({
-      statusCode: 'S10000',
-      message: 'Fetch Successfully',
-      data: responseData
-    });
+    SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_SUCCESS_DETAILS, responseData);
   } catch (error) {
-    next(error); // Forward the error to centralized error handler
+    next(error);  // Pass to errorHandler
   }
 });
 

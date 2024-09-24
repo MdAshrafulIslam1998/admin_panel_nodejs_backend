@@ -7,6 +7,14 @@ const getUserById = async (userId) => {
   return result.length > 0 ? result[0] : null;
 };
 
+const getUserList = async () => {
+  const query = 'SELECT * FROM User';
+  const [result] = await db.execute(query);
+  return result.length > 0 ? result[0] : null;
+};
+
+
 module.exports = {
-  getUserById
+  getUserById,
+  getUserList
 };
