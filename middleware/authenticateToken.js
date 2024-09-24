@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config(); // Load environment variables
 
-// Secret key for verifying the token
-const secretKey = 'mukeyhere'; // Make sure this matches the key used to sign the token
+// Secret key for verifying the token from .env file
+const secretKey = process.env.JWT_SECRET; // Use the secret from .env
 
 const authenticateToken = (req, res, next) => {
     // Get the token from the Authorization header
