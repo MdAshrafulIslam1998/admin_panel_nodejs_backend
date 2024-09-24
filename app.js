@@ -2,7 +2,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
-const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config();
 
@@ -12,8 +11,6 @@ app.use(express.json());
 // User panel routes
 app.use('/api', userRoutes);
 
-// Centralized error handling
-app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
