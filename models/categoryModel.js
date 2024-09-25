@@ -27,6 +27,14 @@ class CategoryModel {
         return result;
     }
 
+    static async deleteCategory(id) {
+        const query = 'DELETE FROM categories WHERE id = ?';
+        const [result] = await db.execute(query, [id]);
+        return result;
+    }
+
+
+  
 
    
 }
