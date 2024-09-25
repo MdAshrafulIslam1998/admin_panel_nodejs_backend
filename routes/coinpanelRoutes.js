@@ -1,54 +1,40 @@
-// routes/coinpanelRoutes.js
 const express = require('express');
 const router = express.Router();
-const userModel = require('../models/userModel');
-const coinModel = require('../models/coinModel');
-const { MESSAGES, RESPONSE_CODES } = require('../utils/message'); // Adjusted import
+const userModel = require('../models/userModel'); // Assuming you have this model
+const message = require('../utils/message');
+const authenticateToken = require('../middleware/authenticateToken'); // Ensure this import is correct
 
-// API to fetch users with their coin data
-router.get('/users/coins', async (req, res) => {
+// Endpoint to fetch user list with pagination
+router.get('/coins', authenticateToken, async (req, res) => {
     try {
-        const offset = parseInt(req.query.offset) || 0; // Default to 0 if not provided
-        const limit = parseInt(req.query.limit) || 10;  // Default to 10 if not provided
+        const page = parseInt(req.query.page) || 1; // Default to 1 if not provided
+        const limit = parseInt(req.query.limit) || 10; // Default to 10 if not provided
+        const offset = (page - 1) * limit; // Calculate offset
 
-        // Fetch users
-        const users = await userModel.getUserList(offset, limit);
-        
-        if (!users.length) {
-            return res.status(404).json({
-                responseCode: RESPONSE_CODES.NOT_FOUND,
-                responseMessage: MESSAGES.NO_USERS_FOUND,
-                data: []
-            });
-        }
+        const users = await userModel.getUserList(offset, limit); // Fetch users with pagination
+        const totalUsers = await userModel.getTotalUserCount(); // Ensure this method exists in your userModel
 
-        // Fetch coins for each user
-        const userWithCoins = await Promise.all(users.map(async (user) => {
-            const coinData = await coinModel.getCoinsByUserId(user.user_id);
-            return {
-                user_id: user.user_id,
-                name: user.name,
-                email: user.email,
-                level: user.level_name, // Assuming you want level_name from the join
-                status: user.status,
-                coins: coinData
-            };
-        }));
-
-        return res.status(200).json({
-            responseCode: RESPONSE_CODES.SUCCESS,
-            responseMessage: MESSAGES.USER_COIN_LIST_FETCHED,
-            data: userWithCoins
+        // Prepare the response
+        res.status(200).json({
+            statusCode: "S10000", // Use a standard success code
+            message: message.MESSAGES.USER_LIST_FETCH_SUCCESSFULLY,
+            data: {
+                users,
+                total: totalUsers,
+                page,
+                limit
+            }
         });
-
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            responseCode: RESPONSE_CODES.SERVER_ERROR,
-            responseMessage: MESSAGES.SERVER_ERROR,
-            data: {}
+            statusCode: "E10005", // General error code
+            message: message.MESSAGES.ERROR + error.message,
+            data: null
         });
     }
 });
+
+// Other routes...
 
 module.exports = router;
