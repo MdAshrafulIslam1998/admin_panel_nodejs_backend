@@ -5,7 +5,8 @@ const message = require('../utils/message');
 const authenticateToken = require('../middleware/authenticateToken'); // Ensure this import is correct
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message'); // Ensure this import is present
 const { updateCoinValue } = require('../models/coinModel'); // Make sure this path is correct
-
+const { SUCCESS, ERROR } = require('../middleware/handler'); // Ensure this line is present
+const TransactionHistoryModel = require('../models/transactionHistoryModel'); // Adjust the path if necessary
 
 
 // Endpoint to fetch user list with pagination
@@ -79,6 +80,17 @@ router.put('/coins/edit', authenticateToken, async (req, res) => {
     }
   });
 
-// Other routes...
+
+// GET /api/transactions - Fetch all transaction history user-wise
+router.get('/transactions', async (req, res) => {
+    try {
+        const transactions = await TransactionHistoryModel.getAllUserWiseTransactions();
+        
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, 'Transaction history fetched successfully', transactions);
+    } catch (error) {
+        console.error('Error fetching transaction history:', error); // Log the error for debugging
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, 'Failed to fetch transaction history', error);
+    }
+});
 
 module.exports = router;
