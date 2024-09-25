@@ -31,6 +31,8 @@ module.exports = {
     LEVEL_REQUIRED: "Level is required.",
     UPDATE_SUCCESS: "User level updated successfully.",
     STATUS_UPDATE_SUCCESS: "User status updated successfully.",
+    LEVELS_FETCH_SUCCESSFULLY: 'Levels fetched successfully',
+    NO_LEVELS_FOUND: 'No levels found',
 
   },
   RESPONSE_CODES: {
