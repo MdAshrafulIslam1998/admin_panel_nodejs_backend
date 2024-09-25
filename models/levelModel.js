@@ -20,6 +20,9 @@ class LevelModel {
         return result.insertId; // Return the ID of the newly inserted level
     }
 
+
+    
+
     // Add more methods as needed (update, delete, etc.)
 }
 

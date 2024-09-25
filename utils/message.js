@@ -27,6 +27,9 @@ module.exports = {
     PROFILE_FETCH_SUCCESS: "User profile fetched successfully",
     LEVEL_ADDED_SUCCESSFULLY: "Level added successfully",
     INVALID_INPUT: "Level name and level value are required",
+    LEVEL_UPDATE_SUCCESS: "User level updated successfully",
+    LEVEL_REQUIRED: "Level is required.",
+    UPDATE_SUCCESS: "User level updated successfully.",
 
   },
   RESPONSE_CODES: {

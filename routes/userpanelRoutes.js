@@ -7,6 +7,8 @@ const DocumentModel = require('../models/documentModel');  // Import the Documen
 const { getUserById } = require('../models/userModel');
 const { createLevel } = require('../models/levelModel'); 
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
+const LevelModel = require('../models/levelModel');
+const { updateUserLevel } = require('../models/userModel'); // Assuming this function is correctly implemented
 
 
 
@@ -30,6 +32,7 @@ router.get('/users', authenticateToken, async (req, res) => {
     ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
   }
 });
+
 
 
 
@@ -88,9 +91,30 @@ router.post('/levels/addlevel', authenticateToken, async (req, res) => {
       ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
     }
   });
-  
-  
 
+
+// PUT endpoint to update user level
+router.put('/users/editlevel/:userid', authenticateToken, async (req, res) => {
+  const userId = req.params.userid; // Extracting userId from request parameters
+    const { level } = req.body; // Assuming 'level' is being sent in the body
+
+    try {
+        // Call the model function to update the user's level
+        const updated = await updateUserLevel(userId, level);
+        
+        if (updated) {
+            return SUCCESS(res, "User level updated successfully", updated);
+        } else {
+            return ERROR(res, "Failed to update user level", 400);
+        }
+    } catch (error) {
+        return ERROR(res, error.message, 500);
+    }
+});
+
+
+
+  
 
 // Export the router (this should already exist in your file)
 module.exports = router;
