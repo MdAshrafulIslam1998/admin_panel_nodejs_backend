@@ -195,4 +195,31 @@ router.delete('/categories/:id', authenticateToken, async (req, res) => {
 
 
 
+// GET /api/categories - Fetch paginated categories
+router.get('/categories', authenticateToken, async (req, res) => {
+    const limit = 15; // Number of categories per page
+    const page = parseInt(req.query.page) || 1; // Get page from query parameter, default to 1
+    const offset = (page - 1) * limit;
+
+    try {
+        const categories = await CategoryModel.getPaginatedCategories(limit, offset);
+        const totalCategories = await CategoryModel.getTotalCategories();
+
+        // Prepare response data
+        const responseData = {
+            categories,
+            total: totalCategories,
+            currentPage: page,
+            totalPages: Math.ceil(totalCategories / limit)
+        };
+
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, 'Categories fetched successfully', responseData);
+    } catch (error) {
+        console.error(error); // Log error for debugging
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, 'Failed to fetch categories', error);
+    }
+});
+
+
+
 module.exports = router;

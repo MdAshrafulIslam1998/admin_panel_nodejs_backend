@@ -33,6 +33,22 @@ class CategoryModel {
         return result;
     }
 
+    static async getPaginatedCategories(limit, offset) {
+        const query = `
+            SELECT id, name, image, created_by 
+            FROM categories 
+            LIMIT ? OFFSET ?
+        `;
+        const [rows] = await db.execute(query, [limit, offset]);
+        return rows;
+    }
+
+    static async getTotalCategories() {
+        const query = 'SELECT COUNT(*) as total FROM categories';
+        const [rows] = await db.execute(query);
+        return rows[0].total;
+    }
+
 
   
 
