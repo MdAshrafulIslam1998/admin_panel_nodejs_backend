@@ -14,7 +14,7 @@ if (!secretKey) {
     process.exit(1); // Exit if the key is not defined
 }
 
-// Generate the token
-const token = jwt.sign(user, secretKey, { expiresIn: '1h' });
+// Generate the token with an expiration of 24 hours
+const token = jwt.sign(user, secretKey, { expiresIn: '24h' });
 
 console.log('Generated JWT Token:', token);

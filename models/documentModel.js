@@ -1,8 +1,15 @@
-const db = require('../config/db.config'); // Adjust the path as necessary
+// models/documentModel.js
+const db = require('../config/db.config');
 
 class DocumentModel {
-    static async getAllDocuments() {
-        const [rows] = await db.execute('SELECT * FROM documents');
+    // Fetch all documents for a given user
+    static async getDocumentsByUserId(uid) {
+        const [rows] = await db.execute('SELECT doc_type, path FROM documents WHERE uid = ?', [uid]);
+        return rows;
+    }
+
+    static async getAllDocuments(uid) {
+        const [rows] = await db.execute('SELECT * FROM documents WHERE uid = ?', [uid]);
         return rows;
     }
 
@@ -20,7 +27,7 @@ class DocumentModel {
         return result.insertId; // Return the ID of the newly inserted document
     }
 
-    // Add more methods as needed (update, delete, etc.)
+    // Additional methods can be added as needed (update, delete, etc.)
 }
 
 module.exports = DocumentModel;

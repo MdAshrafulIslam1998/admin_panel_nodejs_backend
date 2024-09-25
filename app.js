@@ -1,15 +1,18 @@
 // app.js
 const express = require('express');
 const dotenv = require('dotenv');
-const userRoutes = require('./routes/userRoutes');
+const userpanelRoutes = require('./routes/userpanelRoutes');
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// User panel routes
-app.use('/api', userRoutes);
+
+// Register your routes
+app.use('/api', userpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
+
 
 
 const PORT = process.env.PORT || 3000;
