@@ -2,12 +2,13 @@ const db = require('../config/db.config'); // Adjust the path as necessary
 
 class LevelModel {
     static async getAllLevels() {
-        const [rows] = await db.execute('SELECT * FROM levels');
+        const query = 'SELECT level_name, level_value, created_by, date FROM levels';
+        const [rows] = await db.execute(query);
         return rows;
     }
 
     static async getLevelById(id) {
-        const [rows] = await db.execute('SELECT * FROM levels WHERE id = ?', [id]);
+        const [rows] = await db.execute('SELECT level_name, level_value, created_by, date FROM levels WHERE levid = ?', [id]);
         return rows[0];
     }
 
@@ -19,11 +20,6 @@ class LevelModel {
         );
         return result.insertId; // Return the ID of the newly inserted level
     }
-
-
-    
-
-    // Add more methods as needed (update, delete, etc.)
 }
 
 module.exports = LevelModel;
