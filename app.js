@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // Register your routes
+
 app.use('/api', userpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
 
 
