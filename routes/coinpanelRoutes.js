@@ -93,4 +93,17 @@ router.get('/transactions', async (req, res) => {
     }
 });
 
+
+// New API to fetch transaction history categorized by category ID
+router.get('/transactions/category', async (req, res) => {
+    try {
+        const transactions = await TransactionHistoryModel.getTransactionsCategorizedByCategory();
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, "Fetched categorized transaction history", transactions);
+    } catch (error) {
+        console.error("Error fetching categorized transaction history:", error);
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, "Failed to fetch categorized transaction history", error);
+    }
+});
+
+
 module.exports = router;
