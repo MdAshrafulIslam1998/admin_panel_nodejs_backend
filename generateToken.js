@@ -3,7 +3,7 @@ require('dotenv').config(); // Load environment variables from .env file
 const jwt = require('jsonwebtoken');
 
 // User data to encode in the token
-const user = { id: 'b7746c19-7a61-11ef-8211-80fa5b888c9a' }; // Use a valid user ID
+const user = { id: 'b7746c19-7a61-11ef-8211-80fa5b888c9a', uid : '123456' }; // Use a valid user ID
 
 // Secret key for signing the token from .env
 const secretKey = process.env.JWT_SECRET; // Accessing the secret from environment variables

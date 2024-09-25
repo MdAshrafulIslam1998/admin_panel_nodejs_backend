@@ -23,7 +23,8 @@ module.exports = {
     USER_SUCCESS_DETAILS : 'User details found successfully',
     PROVIDE_A_VALID_TRNX_ID : "Provide a valid transaction id",
     USER_LIST_FETCH_SUCCESSFULLY : "User list successfull",
-
+    NO_DATA_FOUND: 'No data found',
+    NOTIFICATIONS_FETCH_SUCCESSFULLY: 'Notifications fetched successfully',
   },
   RESPONSE_CODES: {
     SUCCESS: 'S100000',
