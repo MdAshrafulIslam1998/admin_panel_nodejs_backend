@@ -141,6 +141,24 @@ router.post('/users/changestatus/:userId', authenticateToken, async (req, res) =
 });
 
 
+// GET /api/levels - Fetch all level data
+router.get('/levels', authenticateToken, async (req, res) => {
+  try {
+      // Fetch all level data
+      const levels = await LevelModel.getAllLevels();
+
+      if (!levels || levels.length === 0) {
+          return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_LEVELS_FOUND);
+      }
+
+      // Send success response with levels
+      SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVELS_FETCH_SUCCESSFULLY, { levels });
+  } catch (error) {
+      ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+  }
+});
+
+
 
 
   
