@@ -106,4 +106,28 @@ router.get('/transactions/category', async (req, res) => {
 });
 
 
+// New API to fetch paginated transaction history
+router.get('/transactions/paginated', async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Current page number
+    const limit = parseInt(req.query.limit) || 15; // Number of records per page
+    const offset = (page - 1) * limit; // Calculate offset
+
+    try {
+        const transactions = await TransactionHistoryModel.getPaginatedTransactions(limit, offset);
+        const totalTransactions = await TransactionHistoryModel.getTotalTransactions();
+        
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, "Fetched paginated transaction history", {
+            currentPage: page,
+            totalPages: Math.ceil(totalTransactions / limit),
+            totalTransactions,
+            transactions
+        });
+    } catch (error) {
+        console.error("Error fetching paginated transaction history:", error);
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, "Failed to fetch paginated transaction history", error);
+    }
+});
+
+
+
 module.exports = router;
