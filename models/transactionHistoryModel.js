@@ -27,6 +27,16 @@ class TransactionHistoryModel {
         const [rows] = await db.execute(query);
         return rows;
     }
+
+    static async getTransactionsCategorizedByCategory() {
+        const query = `
+            SELECT cat_id, uid, SUM(coin) as total_coins, COUNT(*) as transaction_count
+            FROM transaction_history
+            GROUP BY cat_id, uid
+        `;
+        const [rows] = await db.execute(query);
+        return rows;
+    }
 }
 
 
