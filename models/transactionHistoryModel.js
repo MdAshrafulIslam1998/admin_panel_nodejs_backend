@@ -7,11 +7,26 @@ class TransactionHistoryModel {
         return rows;
     }
 
+    static async getPaginatedTransactions(limit, offset) {
+        const query = `
+            SELECT * FROM transaction_history
+            LIMIT ? OFFSET ?
+        `;
+        const [rows] = await db.execute(query, [limit, offset]);
+        return rows;
+    }
+
     // Fetch transactions by user ID
     static async getTransactionsByUserId(userId) {
         const query = 'SELECT name, email, coin, date, created_by FROM transaction_history WHERE uid = ?';
         const [rows] = await db.execute(query, [userId]);
         return rows;
+    }
+
+    static async getTotalTransactions() {
+        const query = 'SELECT COUNT(*) as total FROM transaction_history';
+        const [rows] = await db.execute(query);
+        return rows[0].total;
     }
 
     static async getAllUserWiseTransactions() {
