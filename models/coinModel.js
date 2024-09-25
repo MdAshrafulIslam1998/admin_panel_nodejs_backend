@@ -12,6 +12,18 @@ const getCoinsByUserId = async (userId) => {
   return result.length > 0 ? result[0] : { primary_coin: 0, secondary_coin: 0 };
 };
 
+
+const updateCoinValue = async (userId, coinType, newCoinValue) => {
+  const query = `
+    UPDATE Coin 
+    SET coin_value = ? 
+    WHERE uid = ? AND coin_type = ?
+  `;
+  const [result] = await db.execute(query, [newCoinValue, userId, coinType]);
+  return result.affectedRows > 0; // Returns true if at least one row was updated
+};
+
 module.exports = {
   getCoinsByUserId,
+  updateCoinValue // Add this line
 };
