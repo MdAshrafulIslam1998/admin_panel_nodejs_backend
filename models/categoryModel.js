@@ -8,6 +8,16 @@ class CategoryModel {
         return rows;
     }
 
+    static async addCategory(name, image, created_by) {
+        const query = `
+            INSERT INTO categories (name, image, created_by)
+            VALUES (?, ?, ?)
+        `;
+        const [result] = await db.execute(query, [name, image, created_by]);
+        return result;
+    }
+
+
    
 }
 

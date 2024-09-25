@@ -7,7 +7,7 @@ const { MESSAGES, RESPONSE_CODES } = require('../utils/message'); // Ensure this
 const { updateCoinValue } = require('../models/coinModel'); // Make sure this path is correct
 const { SUCCESS, ERROR } = require('../middleware/handler'); // Ensure this line is present
 const TransactionHistoryModel = require('../models/transactionHistoryModel'); // Adjust the path if necessary
-
+const CategoriesModel = require('../models/categoryModel'); 
 
 // Endpoint to fetch user list with pagination
 router.get('/coins', authenticateToken, async (req, res) => {
@@ -125,6 +125,24 @@ router.get('/transactions/paginated', async (req, res) => {
     } catch (error) {
         console.error("Error fetching paginated transaction history:", error);
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, "Failed to fetch paginated transaction history", error);
+    }
+});
+
+
+// API to add a category
+router.post('/categories/add', async (req, res) => {
+    const { name, image, created_by } = req.body;
+
+    if (!name || !created_by) {
+        return ERROR(res, RESPONSE_CODES.BAD_REQUEST, "Name and created_by are required");
+    }
+
+    try {
+        const result = await CategoriesModel.addCategory(name, image, created_by);
+        return SUCCESS(res, RESPONSE_CODES.SUCCESS, "Category added successfully", { id: result.insertId });
+    } catch (error) {
+        console.error("Error adding category:", error);
+        return ERROR(res, RESPONSE_CODES.SERVER_ERROR, "Failed to add category", error);
     }
 });
 
