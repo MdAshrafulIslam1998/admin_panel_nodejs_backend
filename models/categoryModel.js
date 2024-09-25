@@ -17,6 +17,16 @@ class CategoryModel {
         return result;
     }
 
+    static async updateCategory(id, name, image, createdBy) {
+        const query = `
+            UPDATE categories 
+            SET name = ?, image = ?, created_by = ? 
+            WHERE id = ?
+        `;
+        const [result] = await db.execute(query, [name, image, createdBy, id]);
+        return result;
+    }
+
 
    
 }

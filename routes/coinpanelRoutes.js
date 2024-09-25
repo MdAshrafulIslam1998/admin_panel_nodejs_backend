@@ -147,5 +147,24 @@ router.post('/categories/add', async (req, res) => {
 });
 
 
+// API to update category
+router.put('/categories/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    const { name, image, created_by } = req.body; // Make sure to include created_by
+
+    try {
+        const result = await CategoriesModel.updateCategory(id, name, image, created_by);
+        if (result.affectedRows > 0) {
+            SUCCESS(res, RESPONSE_CODES.SUCCESS, "Category updated successfully");
+        } else {
+            ERROR(res, RESPONSE_CODES.NOT_FOUND, "Category not found");
+        }
+    } catch (error) {
+        console.error("Error updating category:", error);
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, "Failed to update category", error);
+    }
+});
+
+
 
 module.exports = router;
