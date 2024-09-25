@@ -20,6 +20,14 @@ class LevelModel {
         );
         return result.insertId; // Return the ID of the newly inserted level
     }
+
+// models/LevelModel.js
+    static async deleteLevelById(levid) {
+        const query = 'DELETE FROM levels WHERE levid = ?';
+        const [result] = await db.execute(query, [levid]);
+        return result.affectedRows > 0; // Returns true if the deletion was successful
+    }
+
 }
 
 module.exports = LevelModel;

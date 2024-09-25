@@ -33,6 +33,11 @@ module.exports = {
     STATUS_UPDATE_SUCCESS: "User status updated successfully.",
     LEVELS_FETCH_SUCCESSFULLY: 'Levels fetched successfully',
     NO_LEVELS_FOUND: 'No levels found',
+    LEVEL_NOT_FOUND: 'Level not found',
+    LEVEL_DELETED_SUCCESSFULLY: 'Level deleted successfully',
+    LEVEL_HAS_ASSOCIATED_USERS: 'Level cannot be deleted because users are associated with it',
+
+
 
   },
   RESPONSE_CODES: {
@@ -42,8 +47,8 @@ module.exports = {
     FORBIDDEN: 'E00002',
     NOT_FOUND: 'E00003',
     BAD_REQUEST :'BAD404',
-    SERVER_ERROR :'SV1000'
-
+    SERVER_ERROR :'SV1000',
+    LEVEL_HAS_ASSOCIATED_USERS: 'LAU409'
     
   },
 
