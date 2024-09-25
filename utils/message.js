@@ -36,7 +36,7 @@ module.exports = {
     LEVEL_NOT_FOUND: 'Level not found',
     LEVEL_DELETED_SUCCESSFULLY: 'Level deleted successfully',
     LEVEL_HAS_ASSOCIATED_USERS: 'Level cannot be deleted because users are associated with it',
-
+    LEVEL_UPDATED_SUCCESSFULLY: 'Level and associated users updated successfully',
 
 
   },

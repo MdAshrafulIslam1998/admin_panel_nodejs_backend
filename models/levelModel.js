@@ -28,6 +28,17 @@ class LevelModel {
         return result.affectedRows > 0; // Returns true if the deletion was successful
     }
 
+
+    static async updateLevel(levid, levelData) {
+        const { level_name, level_value, created_by } = levelData;
+        const [result] = await db.execute(
+          'UPDATE levels SET level_name = ?, level_value = ?, created_by = ? WHERE levid = ?',
+          [level_name, level_value, created_by, levid]
+        );
+        return result.affectedRows > 0; // Return true if the level was updated
+      }
+      
+
 }
 
 module.exports = LevelModel;

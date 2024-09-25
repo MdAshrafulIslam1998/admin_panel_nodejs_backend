@@ -85,12 +85,21 @@ const getUsersByLevelId = async (levid) => {
 };
 
 
+// Update all users who are associated with a specific levid
+const updateUsersLevelByLevid = async (levid) => {
+  const query = 'UPDATE User SET level = ? WHERE level = ?';
+  const [result] = await db.execute(query, [levid, levid]);  // Update all users with the new levid
+  return result.affectedRows; // Return the number of rows updated
+};
+
+
 
 
 
 
 module.exports = {
   getUserProfileById,
+  updateUsersLevelByLevid,
   getUserById,
   updateUserLevel,
   getUsersByLevelId,
