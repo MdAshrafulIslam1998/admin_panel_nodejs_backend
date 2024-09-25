@@ -10,6 +10,8 @@ const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
 const LevelModel = require('../models/levelModel');
 const { updateUserLevel } = require('../models/userModel'); // Assuming this function is correctly implemented
 const { updateUserStatus } = require('../models/userModel'); // Assuming this function is correctly implemented
+const { getLevelById } = require('../models/userModel');
+const UserModel = require('../models/userModel'); // Add this line to import UserModel
 
 
 // GET /api/users - Fetch paginated user list
@@ -160,6 +162,32 @@ router.get('/levels', authenticateToken, async (req, res) => {
 
 
 
+// DELETE /api/levels/:levid - Delete a level by levid
+router.delete('/levels/:levid', authenticateToken, async (req, res) => {
+  const { levid } = req.params;
+
+  try {
+      // Check if the level exists
+      const level = await LevelModel.getLevelById(levid);
+      if (!level) {
+          return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.LEVEL_NOT_FOUND);
+      }
+
+      // Check if any users are associated with this level
+      const usersWithLevel = await UserModel.getUsersByLevelId(levid);
+      if (usersWithLevel.length > 0) {
+          return ERROR(res, RESPONSE_CODES.LEVEL_HAS_ASSOCIATED_USERS, MESSAGES.LEVEL_HAS_ASSOCIATED_USERS);
+      }
+
+      // Delete the level
+      await LevelModel.deleteLevelById(levid);
+
+      // Send success response
+      return SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVEL_DELETED_SUCCESSFULLY, { levid });
+  } catch (error) {
+      return ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+  }
+});
 
 
 

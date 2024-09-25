@@ -77,11 +77,23 @@ const updateUserStatus = async (userId, status) => {
 };
 
 
+// models/userModel.js
+const getUsersByLevelId = async (levid) => {
+  const query = 'SELECT user_id FROM user WHERE level = ?';
+  const [result] = await db.execute(query, [levid]);
+  return result; // Returns an array of users associated with the level
+};
+
+
+
+
+
 
 module.exports = {
   getUserProfileById,
   getUserById,
   updateUserLevel,
+  getUsersByLevelId,
   updateUserStatus,
   getUserList
 };
