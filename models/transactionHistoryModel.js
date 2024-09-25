@@ -52,6 +52,14 @@ class TransactionHistoryModel {
         const [rows] = await db.execute(query);
         return rows;
     }
+
+
+     // Check if there are any transactions associated with the category ID
+     static async checkTransactionHistoryByCategoryId(catId) {
+        const query = 'SELECT COUNT(*) as count FROM transaction_history WHERE cat_id = ?';
+        const [rows] = await db.execute(query, [catId]);
+        return rows[0].count > 0; // Returns true if there are associated transactions
+    }
 }
 
 

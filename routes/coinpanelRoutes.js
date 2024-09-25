@@ -7,7 +7,7 @@ const { MESSAGES, RESPONSE_CODES } = require('../utils/message'); // Ensure this
 const { updateCoinValue } = require('../models/coinModel'); // Make sure this path is correct
 const { SUCCESS, ERROR } = require('../middleware/handler'); // Ensure this line is present
 const TransactionHistoryModel = require('../models/transactionHistoryModel'); // Adjust the path if necessary
-const CategoriesModel = require('../models/categoryModel'); 
+const CategoryModel = require('../models/categoryModel');
 
 // Endpoint to fetch user list with pagination
 router.get('/coins', authenticateToken, async (req, res) => {
@@ -162,6 +162,34 @@ router.put('/categories/:id', authenticateToken, async (req, res) => {
     } catch (error) {
         console.error("Error updating category:", error);
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, "Failed to update category", error);
+    }
+});
+
+
+
+// DELETE /api/categories/:id - Delete a category
+router.delete('/categories/:id', authenticateToken, async (req, res) => {
+    const categoryId = req.params.id;
+
+    try {
+        // Check if there are associated transactions
+        const hasTransactions = await TransactionHistoryModel.checkTransactionHistoryByCategoryId(categoryId);
+
+        if (hasTransactions) {
+            return ERROR(res, RESPONSE_CODES.BAD_REQUEST, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, 'Associated category cannot be deleted');
+        }
+
+        // Proceed to delete the category
+        const result = await CategoryModel.deleteCategory(categoryId);
+
+        if (result.affectedRows === 0) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, 'Category not found');
+        }
+
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, 'Category deleted successfully');
+    } catch (error) {
+        console.error(error); // Log error for debugging
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, 'Failed to delete category', error);
     }
 });
 

@@ -22,7 +22,7 @@ module.exports = {
     USER_NOT_FOUND : 'User not found',
     USER_SUCCESS_DETAILS : 'User details found successfully',
     PROVIDE_A_VALID_TRNX_ID : "Provide a valid transaction id",
-    USER_LIST_FETCH_SUCCESSFULLY: 'User list fetched successfullym',
+    USER_LIST_FETCH_SUCCESSFULLY: 'User list fetched successfully',
     NO_USERS_FOUND: 'No users found',
     PROFILE_FETCH_SUCCESS: "User profile fetched successfully",
     LEVEL_ADDED_SUCCESSFULLY: "Level added successfully",
