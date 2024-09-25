@@ -190,6 +190,30 @@ router.delete('/levels/:levid', authenticateToken, async (req, res) => {
 });
 
 
+// PUT /api/levels/edit/:levid - Edit level and update associated users
+router.put('/levels/edit/:levid', authenticateToken, async (req, res) => {
+  const { levid } = req.params;
+  const { level_name, level_value, created_by } = req.body;
+
+  try {
+    // Update level in the levels table
+    const levelUpdated = await LevelModel.updateLevel(levid, { level_name, level_value, created_by });
+
+    if (!levelUpdated) {
+      return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.LEVEL_NOT_FOUND);
+    }
+
+    // Update all users who are associated with this level (levid)
+    const usersUpdated = await UserModel.updateUsersLevelByLevid(levid);
+
+    SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVEL_UPDATED_SUCCESSFULLY, { level_name, level_value, usersUpdated });
+  } catch (error) {
+    ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+  }
+});
+
+
+
 
 
   
