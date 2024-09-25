@@ -38,6 +38,8 @@ module.exports = {
     LEVEL_HAS_ASSOCIATED_USERS: 'Level cannot be deleted because users are associated with it',
     LEVEL_UPDATED_SUCCESSFULLY: 'Level and associated users updated successfully',
     USER_COIN_LIST_FETCHED: 'User list with coin data fetched successfully.',
+    TRANSACTION_HISTORY_FETCHED: "Transaction history fetched successfully", // New message
+
 
 
   },
