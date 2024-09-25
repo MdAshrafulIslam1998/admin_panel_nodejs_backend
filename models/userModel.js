@@ -94,11 +94,19 @@ const updateUsersLevelByLevid = async (levid) => {
 
 
 
+// models/userModel.js
+const getTotalUserCount = async () => {
+  const query = `SELECT COUNT(*) AS total FROM User`;
+  const [result] = await db.execute(query);
+  return result[0].total;
+};
+
 
 
 
 module.exports = {
   getUserProfileById,
+  getTotalUserCount,
   updateUsersLevelByLevid,
   getUserById,
   updateUserLevel,
