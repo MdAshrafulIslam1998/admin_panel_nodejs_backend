@@ -9,7 +9,7 @@ const { createLevel } = require('../models/levelModel');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
 const LevelModel = require('../models/levelModel');
 const { updateUserLevel } = require('../models/userModel'); // Assuming this function is correctly implemented
-
+const { updateUserStatus } = require('../models/userModel'); // Assuming this function is correctly implemented
 
 
 // GET /api/users - Fetch paginated user list
@@ -111,6 +111,35 @@ router.put('/users/editlevel/:userid', authenticateToken, async (req, res) => {
         return ERROR(res, error.message, 500);
     }
 });
+
+
+
+// POST /api/users/changestatus/:userId
+router.post('/users/changestatus/:userId', authenticateToken, async (req, res) => {
+  const { userId } = req.params;
+  const { status } = req.body;
+
+  // Validate the incoming status
+  const validStatuses = ['VERIFIED', 'PENDING', 'REJECTED', 'BLOCKED', 'DELETED'];
+  if (!validStatuses.includes(status)) {
+    return ERROR(res, RESPONSE_CODES.BAD_REQUEST, "Invalid status value provided.");
+  }
+
+  try {
+    // Update the user's status in the database
+    const result = await updateUserStatus(userId, status);
+
+    if (result.affectedRows === 0) {
+      return ERROR(res, RESPONSE_CODES.NOT_FOUND, "User not found or status not changed.");
+    }
+
+    // Send success response
+    SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.STATUS_UPDATE_SUCCESS);
+  } catch (error) {
+    ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+  }
+});
+
 
 
 

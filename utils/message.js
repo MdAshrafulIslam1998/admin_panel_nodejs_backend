@@ -30,6 +30,7 @@ module.exports = {
     LEVEL_UPDATE_SUCCESS: "User level updated successfully",
     LEVEL_REQUIRED: "Level is required.",
     UPDATE_SUCCESS: "User level updated successfully.",
+    STATUS_UPDATE_SUCCESS: "User status updated successfully.",
 
   },
   RESPONSE_CODES: {

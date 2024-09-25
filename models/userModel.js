@@ -70,10 +70,18 @@ const updateUserLevel = async (userId, newLevel) => {
 };
 
 
+const updateUserStatus = async (userId, status) => {
+  const query = 'UPDATE User SET status = ? WHERE user_id = ?';
+  const [result] = await db.execute(query, [status, userId]);
+  return result;
+};
+
+
 
 module.exports = {
   getUserProfileById,
   getUserById,
   updateUserLevel,
+  updateUserStatus,
   getUserList
 };
