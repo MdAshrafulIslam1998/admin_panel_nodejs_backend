@@ -3,6 +3,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const userpanelRoutes = require('./routes/userpanelRoutes');
 const coinpanelRoutes = require('./routes/coinpanelRoutes');
+const documentRoutes = require('./routes/documentRoutes');
 
 
 dotenv.config();
@@ -15,7 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 // Register your routes
 
 app.use('/api', userpanelRoutes);
-app.use('/api', coinpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
+app.use('/api', coinpanelRoutes);
+app.use('/api', documentRoutes); // This registers all routes from userpanelRoutes.js under /api
 
 
 const PORT = process.env.PORT || 3000;
