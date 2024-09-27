@@ -63,6 +63,39 @@ class TransactionHistoryModel {
         const [rows] = await db.execute(query, [catId]);
         return rows[0].count > 0; // Returns true if there are associated transactions
     }
+
+
+     // Fetch users who used coins in a specific category
+     static async getUsersWithCategoryCoins(category, limit, offset) {
+        const query = `
+            SELECT u.user_id, u.name, u.email, u.level, u.status, u.date,
+                SUM(CASE WHEN th.coin_type = 'PRIMARY' THEN th.coin ELSE 0 END) AS primary_total,
+                SUM(CASE WHEN th.coin_type = 'SECONDARY' THEN th.coin ELSE 0 END) AS secondary_total
+            FROM User u
+            JOIN transaction_history th ON u.user_id = th.uid
+            WHERE th.cat_id = ?
+            GROUP BY u.user_id
+            HAVING primary_total > 0 OR secondary_total > 0
+            LIMIT ? OFFSET ?
+        `;
+        const [result] = await db.execute(query, [category, limit, offset]);
+        return result;
+    }
+
+    // Count the total number of users with coin transactions in the specific category
+    static async getTotalUsersWithCategoryCoins(category) {
+        const query = `
+            SELECT COUNT(DISTINCT u.user_id) AS total
+            FROM User u
+            JOIN transaction_history th ON u.user_id = th.uid
+            WHERE th.cat_id = ?
+            AND (th.coin_type = 'PRIMARY' OR th.coin_type = 'SECONDARY')
+        `;
+        const [result] = await db.execute(query, [category]);
+        return result[0].total;
+    }
+
+    
 }
 
 
