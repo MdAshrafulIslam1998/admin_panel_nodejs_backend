@@ -70,6 +70,33 @@ router.get('/users/userwise/transactions', authenticateToken, async (req, res) =
 });
 
 
+// GET /users/paginated-transactions-history-by-category
+router.get('/users/paginated-transactions-history-by-category', async (req, res) => {
+    const { page = 1, limit = 10, category } = req.query; // Take the category ID as input
+    const offset = (page - 1) * limit;
+
+    try {
+        // Step 1: Get the paginated list of users who have some coins in the specified category
+        const usersWithCoins = await TransactionHistoryModel.getUsersWithCategoryCoins(category, +limit, +offset);
+
+        // Step 2: Get total count of users with coins in the category
+        const totalUsers = await TransactionHistoryModel.getTotalUsersWithCategoryCoins(category);
+
+        // Step 3: Send the paginated response
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
+            total: totalUsers,
+            page: +page,
+            limit: +limit,
+            category_id: category,
+            data: usersWithCoins,
+        });
+    } catch (error) {
+        console.error(error);
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
+    }
+});
+
+
 
 // API to add a category
 router.post('/categories/add', async (req, res) => {
