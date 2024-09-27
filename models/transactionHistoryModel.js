@@ -71,7 +71,7 @@ class TransactionHistoryModel {
             SELECT u.user_id, u.name, u.email, u.level, u.status, u.date,
                 SUM(CASE WHEN th.coin_type = 'PRIMARY' THEN th.coin ELSE 0 END) AS primary_total,
                 SUM(CASE WHEN th.coin_type = 'SECONDARY' THEN th.coin ELSE 0 END) AS secondary_total
-            FROM User u
+            FROM user u
             JOIN transaction_history th ON u.user_id = th.uid
             WHERE th.cat_id = ?
             GROUP BY u.user_id
@@ -86,7 +86,7 @@ class TransactionHistoryModel {
     static async getTotalUsersWithCategoryCoins(category) {
         const query = `
             SELECT COUNT(DISTINCT u.user_id) AS total
-            FROM User u
+            FROM user u
             JOIN transaction_history th ON u.user_id = th.uid
             WHERE th.cat_id = ?
             AND (th.coin_type = 'PRIMARY' OR th.coin_type = 'SECONDARY')
