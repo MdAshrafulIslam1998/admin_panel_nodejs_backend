@@ -71,6 +71,18 @@ module.exports = {
      DOCUMENT_ADD_FAILED: 'Failed to add the document',
      DOCUMENT_INVALID_INPUT: 'Invalid input: doc_type, uid, and path are required',
 
+     ROLE_ADDED: 'Role added successfully',
+    ROLES_FETCHED: 'Roles fetched successfully',
+    ROLE_UPDATED: 'Role updated successfully',
+    ROLE_DELETED: 'Role deleted successfully',
+    ROLE_ASSOCIATED_WITH_STAFF: 'Cannot delete this role, it has associated staff',
+    ROLE_NOT_FOUND: 'Role not found',
+
+    STAFF_ADDED: 'Staff added successfully',
+    STAFF_ROLE_UPDATED: 'Staff role updated successfully',
+    STAFFS_FETCHED: 'Staff list fetched successfully',
+    STAFF_NOT_FOUND: 'Staff not found',
+
   },
   RESPONSE_CODES: {
     SUCCESS: 'S100000',
