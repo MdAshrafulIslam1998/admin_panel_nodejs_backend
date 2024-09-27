@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();  
 const authenticateToken = require('../middleware/authenticateToken'); 
-const { getUserList, getUserById, updateUserLevel, updateUserStatus } = require('../models/userModel');
+const { getUserList, getUserById, updateUserLevel, updateUserStatus, getTotalUserCount } = require('../models/userModel');
 const { createLevel, getAllLevels, getLevelById, deleteLevelById, updateLevel } = require('../models/levelModel');
 const DocumentModel = require('../models/documentModel');
 const UserModel = require('../models/userModel');
@@ -15,16 +15,30 @@ router.get('/users', authenticateToken, async (req, res) => {
         const limit = 10;
         const offset = (page - 1) * limit;
 
+        // Fetch total user count
+        const totalUsers = await getTotalUserCount();
+        const totalPages = Math.ceil(totalUsers / limit);
+
+        // Fetch paginated users
         const users = await getUserList(offset, limit);
         if (!users || users.length === 0) {
             return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_USERS_FOUND);
         }
 
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, { users, page });
+        // Prepare response data
+        const responseData = {
+            users,
+            currentPage: page,
+            totalPages,
+            totalUsers,
+        };
+
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, responseData);
     } catch (error) {
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
     }
 });
+
 
 // GET /api/users/profile/:userId - Fetch user profile information
 router.get('/users/profile/:userId', authenticateToken, async (req, res) => {
