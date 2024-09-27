@@ -4,7 +4,7 @@ const db = require('../config/db.config');
 const getUserById = async (userId) => {
   const query = `
       SELECT name AS username, email, phone, dob, gender, address, level, status 
-      FROM User 
+      FROM user 
       WHERE user_id = ?
   `;
   const [result] = await db.execute(query, [userId]);
@@ -24,7 +24,7 @@ const getUserList = async (offset, limit) => {
       u.status, 
       u.date 
     FROM 
-      User u
+      user u
     LEFT JOIN 
       levels l ON u.level = l.levid  -- Join levels table based on level
     LIMIT ? OFFSET ?`;
@@ -45,7 +45,7 @@ const getUserProfileById = async (userId) => {
       address, 
       level, 
       status 
-    FROM User 
+    FROM user 
     WHERE user_id = ?`;
   
   const [result] = await db.execute(query, [userId]);
@@ -71,7 +71,7 @@ const updateUserLevel = async (userId, newLevel) => {
 
 
 const updateUserStatus = async (userId, status) => {
-  const query = 'UPDATE User SET status = ? WHERE user_id = ?';
+  const query = 'UPDATE user SET status = ? WHERE user_id = ?';
   const [result] = await db.execute(query, [status, userId]);
   return result;
 };
@@ -87,7 +87,7 @@ const getUsersByLevelId = async (levid) => {
 
 // Update all users who are associated with a specific levid
 const updateUsersLevelByLevid = async (levid) => {
-  const query = 'UPDATE User SET level = ? WHERE level = ?';
+  const query = 'UPDATE user SET level = ? WHERE level = ?';
   const [result] = await db.execute(query, [levid, levid]);  // Update all users with the new levid
   return result.affectedRows; // Return the number of rows updated
 };
@@ -96,7 +96,7 @@ const updateUsersLevelByLevid = async (levid) => {
 
 // models/userModel.js
 const getTotalUserCount = async () => {
-  const query = `SELECT COUNT(*) AS total FROM User`;
+  const query = `SELECT COUNT(*) AS total FROM user`;
   const [result] = await db.execute(query);
   return result[0].total;
 };
