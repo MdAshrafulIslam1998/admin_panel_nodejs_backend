@@ -43,10 +43,35 @@ const getTransactionCount = async () => {
   return result[0].total;  // Return the total count
 };
 
+
+// Function to fetch paginated transaction history by category
+const getTransactionHistoryByCategory = async (cat_id, limit, offset) => {
+  const query = `
+    SELECT id, cat_id, uid, coin, date, name, email, created_by, coin_type 
+    FROM transaction_history 
+    WHERE cat_id = ? 
+    ORDER BY date DESC 
+    LIMIT ? OFFSET ?;
+  `;
+  const [results] = await db.execute(query, [cat_id, limit, offset]);
+  return results;
+};
+
+// Function to fetch total transaction count by category
+const getTransactionCountByCategory = async (cat_id) => {
+  const query = `SELECT COUNT(*) as total FROM transaction_history WHERE cat_id = ?;`;
+  const [result] = await db.execute(query, [cat_id]);
+  return result[0].total;  // Return the total count for the specific category
+};
+
+
+
 module.exports = {
   getCoinsByUserId,
   updateCoinValue,
   getTransactionHistory,  // Add this line
-  getTransactionCount  // Add this line
+  getTransactionCount,
+  getTransactionHistoryByCategory,  // Add this line
+  getTransactionCountByCategory // Add this line
 
 };
