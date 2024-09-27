@@ -47,11 +47,7 @@ module.exports = {
     // Transaction-related
     TRANSACTION_HISTORY_FETCHED: 'Transaction history fetched successfully',
     TRANSACTION_HISTORY_FAILED: 'Failed to fetch transaction history',
-    TRANSACTION_HISTORY_CATEGORIZED_FETCHED: 'Categorized transaction history fetched successfully',
-    TRANSACTION_HISTORY_CATEGORIZED_FAILED: 'Failed to fetch categorized transaction history',
-    TRANSACTION_HISTORY_PAGINATED_FETCHED: 'Paginated transaction history fetched successfully',
-    TRANSACTION_HISTORY_PAGINATED_FAILED: 'Failed to fetch paginated transaction history',
-
+    
     // Category-related
     CATEGORY_ADDED_SUCCESS: 'Category added successfully',
     CATEGORY_ADD_FAILED: 'Failed to add category',

@@ -9,92 +9,67 @@ const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
 
-// Endpoint to fetch user list with pagination
-router.get('/coins', authenticateToken, async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const offset = (page - 1) * limit;
 
+
+// API to fetch users and their categorized transactions
+router.get('/users/userwise/transactions', authenticateToken, async (req, res) => {
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
+
+    try {
+        // Fetch paginated users from the user table
         const users = await userModel.getUserList(offset, limit);
         const totalUsers = await userModel.getTotalUserCount();
 
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_LIST_FETCHED, {
-            users,
-            total: totalUsers,
-            page,
-            limit
-        });
-    } catch (error) {
-        console.error(error);
-        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.USER_LIST_FETCH_FAILED, error.message);
-    }
-});
+        // Prepare an array to store the user details along with their transaction data
+        let userTransactionData = [];
 
-// Endpoint for editing coin amount
-router.put('/coins/edit', authenticateToken, async (req, res) => {
-    const { userId, coinType, newCoinValue } = req.body;
+        for (const user of users) {
+            // Fetch categorized transactions for each user
+            const transactions = await TransactionHistoryModel.getTransactionsCategorizedByCategory(user.user_id);
 
-    if (!userId || !coinType || newCoinValue === undefined) {
-        return ERROR(res, RESPONSE_CODES.BAD_REQUEST, MESSAGES.COIN_UPDATE_VALIDATION_ERROR);
-    }
+            // Structure to hold the categorized coin totals
+            let categorizedCoins = {};
 
-    try {
-        const updated = await updateCoinValue(userId, coinType, newCoinValue);
-        if (updated) {
-            SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.COIN_UPDATE_SUCCESS, { userId, coinType, newCoinValue });
-        } else {
-            ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.COIN_UPDATE_NO_RECORDS);
+            transactions.forEach((transaction) => {
+                const { cat_id, coin_type, total_coins } = transaction;
+
+                // Initialize category data if it doesn't exist
+                if (!categorizedCoins[cat_id]) {
+                    categorizedCoins[cat_id] = { PRIMARY: 0, SECONDARY: 0 };
+                }
+
+                // Add coins to the corresponding coin_type (PRIMARY/SECONDARY)
+                categorizedCoins[cat_id][coin_type] = total_coins;
+            });
+
+            // Prepare user data structure for the response
+            userTransactionData.push({
+                user_id: user.user_id,
+                name: user.name,
+                email: user.email,
+                level_id: user.level_id,
+                status: user.status,
+                date: user.date,
+                categories: categorizedCoins
+            });
         }
-    } catch (error) {
-        console.error(error);
-        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.COIN_UPDATE_FAILED, error.message);
-    }
-});
 
-// GET /api/transactions - Fetch all transaction history user-wise
-router.get('/transactions', async (req, res) => {
-    try {
-        const transactions = await TransactionHistoryModel.getAllUserWiseTransactions();
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, transactions);
+        // Send paginated response
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
+            total: totalUsers,
+            page: page,
+            limit: limit,
+            users: userTransactionData
+        });
     } catch (error) {
         console.error(error);
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
     }
 });
 
-// New API to fetch transaction history categorized by category ID
-router.get('/transactions/category', async (req, res) => {
-    try {
-        const transactions = await TransactionHistoryModel.getTransactionsCategorizedByCategory();
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_CATEGORIZED_FETCHED, transactions);
-    } catch (error) {
-        console.error(error);
-        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_CATEGORIZED_FAILED, error.message);
-    }
-});
 
-// New API to fetch paginated transaction history
-router.get('/transactions/paginated', async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 15;
-    const offset = (page - 1) * limit;
-
-    try {
-        const transactions = await TransactionHistoryModel.getPaginatedTransactions(limit, offset);
-        const totalTransactions = await TransactionHistoryModel.getTotalTransactions();
-
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_PAGINATED_FETCHED, {
-            currentPage: page,
-            totalPages: Math.ceil(totalTransactions / limit),
-            totalTransactions,
-            transactions
-        });
-    } catch (error) {
-        console.error(error);
-        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_PAGINATED_FAILED, error.message);
-    }
-});
 
 // API to add a category
 router.post('/categories/add', async (req, res) => {
