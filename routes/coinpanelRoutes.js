@@ -4,7 +4,7 @@ const userModel = require('../models/userModel');
 const message = require('../utils/message');
 const authenticateToken = require('../middleware/authenticateToken');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
-const { updateCoinValue } = require('../models/coinModel');
+const { getTransactionHistory, getTransactionCount } = require('../models/coinModel');
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
@@ -97,6 +97,38 @@ router.get('/users/paginated-transactions-history-by-category', async (req, res)
 });
 
 
+// GET /api/coin/transactions - Fetch paginated transaction history
+router.get('/alltransactions', authenticateToken, async (req, res, next) => {
+    try {
+      const { page = 1 } = req.query;  // Defaults to page 1 if not provided
+      const limit = 10;
+      const offset = (page - 1) * limit;
+  
+      // Fetch the paginated transaction history and total count
+      const [transactions, total] = await Promise.all([
+        getTransactionHistory(limit, offset),
+        getTransactionCount()
+      ]);
+  
+      if (transactions.length === 0) {
+        return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
+      }
+  
+      const totalPages = Math.ceil(total / limit);  // Calculate total pages
+  
+      SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
+        total,          // Total number of transactions
+        page: parseInt(page), // Current page
+        limit,          // Number of records per page
+        totalPages,     // Total pages available
+        transactions    // Actual transaction records
+      });
+    } catch (error) {
+      next(error);  // Pass error to centralized error handler
+    }
+  });
+
+  
 
 // API to add a category
 router.post('/categories/add', async (req, res) => {
