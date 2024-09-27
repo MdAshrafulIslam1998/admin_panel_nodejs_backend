@@ -47,6 +47,9 @@ module.exports = {
     // Transaction-related
     TRANSACTION_HISTORY_FETCHED: 'Transaction history fetched successfully',
     TRANSACTION_HISTORY_FAILED: 'Failed to fetch transaction history',
+     // New messages for transaction history
+     NO_TRANSACTIONS_FOUND: 'No transactions found',
+     TRANSACTION_HISTORY_FETCH_SUCCESS: 'Transaction history fetched successfully',
     
     // Category-related
     CATEGORY_ADDED_SUCCESS: 'Category added successfully',

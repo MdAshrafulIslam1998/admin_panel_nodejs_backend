@@ -23,7 +23,30 @@ const updateCoinValue = async (userId, coinType, newCoinValue) => {
   return result.affectedRows > 0; // Returns true if at least one row was updated
 };
 
+
+// Function to fetch paginated transaction history
+const getTransactionHistory = async (limit, offset) => {
+  const query = `
+    SELECT id, cat_id, uid, coin, date, name, email, created_by, coin_type 
+    FROM transaction_history 
+    ORDER BY date DESC 
+    LIMIT ? OFFSET ?;
+  `;
+  const [results] = await db.execute(query, [limit, offset]);
+  return results;
+};
+
+// Function to fetch total transaction count
+const getTransactionCount = async () => {
+  const query = `SELECT COUNT(*) as total FROM transaction_history;`;
+  const [result] = await db.execute(query);
+  return result[0].total;  // Return the total count
+};
+
 module.exports = {
   getCoinsByUserId,
-  updateCoinValue // Add this line
+  updateCoinValue,
+  getTransactionHistory,  // Add this line
+  getTransactionCount  // Add this line
+
 };
