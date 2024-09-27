@@ -43,15 +43,18 @@ class TransactionHistoryModel {
         return rows;
     }
 
-    static async getTransactionsCategorizedByCategory() {
-        const query = `
-            SELECT cat_id, uid, SUM(coin) as total_coins, COUNT(*) as transaction_count
-            FROM transaction_history
-            GROUP BY cat_id, uid
-        `;
-        const [rows] = await db.execute(query);
-        return rows;
-    }
+    // Fetch categorized transactions by category and coin type for a specific user
+        static async getTransactionsCategorizedByCategory(userId) {
+            const query = `
+                SELECT cat_id, coin_type, SUM(coin) as total_coins
+                FROM transaction_history
+                WHERE uid = ?
+                GROUP BY cat_id, coin_type
+            `;
+            const [rows] = await db.execute(query, [userId]);
+            return rows;
+        }
+
 
 
      // Check if there are any transactions associated with the category ID
