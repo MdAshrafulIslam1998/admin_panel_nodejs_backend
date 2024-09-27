@@ -4,7 +4,7 @@ const userModel = require('../models/userModel');
 const message = require('../utils/message');
 const authenticateToken = require('../middleware/authenticateToken');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
-const { getTransactionHistory, getTransactionCount } = require('../models/coinModel');
+const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCategory, getTransactionCountByCategory } = require('../models/coinModel');
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
@@ -118,6 +118,42 @@ router.get('/alltransactions', authenticateToken, async (req, res, next) => {
   
       SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
         total,          // Total number of transactions
+        page: parseInt(page), // Current page
+        limit,          // Number of records per page
+        totalPages,     // Total pages available
+        transactions    // Actual transaction records
+      });
+    } catch (error) {
+      next(error);  // Pass error to centralized error handler
+    }
+  });
+
+
+  // GET /api/coin/transactions/category - Fetch paginated transaction history by category
+router.get('/alltransactions/category', authenticateToken, async (req, res, next) => {
+    try {
+      const { cat_id, page = 1 } = req.query;  // Defaults to page 1 if not provided
+      const limit = 10;
+      const offset = (page - 1) * limit;
+  
+      if (!cat_id) {
+        return ERROR(res, RESPONSE_CODES.VALIDATION_ERROR, MESSAGES.INVALID_CATEGORY_ID);
+      }
+  
+      // Fetch the paginated transaction history and total count by category
+      const [transactions, total] = await Promise.all([
+        getTransactionHistoryByCategory(cat_id, limit, offset),
+        getTransactionCountByCategory(cat_id)
+      ]);
+  
+      if (transactions.length === 0) {
+        return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
+      }
+  
+      const totalPages = Math.ceil(total / limit);
+  
+      SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
+        total,          // Total number of transactions for this category
         page: parseInt(page), // Current page
         limit,          // Number of records per page
         totalPages,     // Total pages available
