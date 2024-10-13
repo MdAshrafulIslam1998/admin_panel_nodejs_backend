@@ -95,6 +95,41 @@ class TransactionHistoryModel {
         return result[0].total;
     }
 
+
+    // Fetch paginated transactions with category name and image by user ID
+    static async getPaginatedTransactionsByUserId(userId, limit, offset) {
+        const query = `
+            SELECT 
+                th.id,
+                th.cat_id,
+                c.name AS category_name,
+                c.image,
+                th.coin,
+                th.date,
+                th.name,
+                th.email,
+                th.created_by,
+                th.coin_type
+            FROM transaction_history th
+            JOIN categories c ON th.cat_id = c.id
+            WHERE th.uid = ?
+            LIMIT ? OFFSET ?
+        `;
+        const [rows] = await db.execute(query, [userId, limit, offset]);
+        return rows;
+    }
+
+
+    // Count total transactions for the user
+    static async getTotalTransactionsByUserId(userId) {
+        const query = 'SELECT COUNT(*) as total FROM transaction_history WHERE uid = ?';
+        const [rows] = await db.execute(query, [userId]);
+        return rows[0].total;
+    }
+
+
+
+
     
 }
 
