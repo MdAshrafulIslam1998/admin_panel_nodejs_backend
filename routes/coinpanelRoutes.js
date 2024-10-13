@@ -202,7 +202,7 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
                 coin_type: transaction.coin_type,
             })),
             pagination: {
-                total_transactions: totalTransactions,
+                total: totalTransactions,
                 total_pages: totalPages,
                 current_page: page,
                 limit: limit
@@ -216,6 +216,63 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
     }
 });
+
+
+
+
+// API to fetch user's transactions history by category with pagination
+router.get('/users/:user_id/transactions-by-category', authenticateToken, async (req, res) => {
+    const user_id = req.params.user_id;
+    const cat_id = req.query.cat_id;  // Category ID input from query params
+    const limit = parseInt(req.query.limit) || 20;  // Default limit is 20
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
+
+    try {
+        // Fetch paginated transactions for the given user_id and category
+        const transactions = await TransactionHistoryModel.getPaginatedTransactionsByUserIdAndCategory(user_id, cat_id, limit, offset);
+        const totalTransactions = await TransactionHistoryModel.getTotalTransactionsByUserIdAndCategory(user_id, cat_id);
+        const totalPages = Math.ceil(totalTransactions / limit);
+
+        // Check if the user has any transactions in the category
+        if (transactions.length === 0) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
+        }
+
+        // Prepare paginated response
+        const userTransactionData = {
+            user_id: user_id,
+            category_id: cat_id,
+            transactions: transactions.map(transaction => ({
+                id: transaction.id,
+                category: {
+                    id: transaction.cat_id,
+                    name: transaction.category_name,
+                    image_link: transaction.image,
+                },
+                coin: transaction.coin,
+                date: transaction.date,
+                name: transaction.name,
+                email: transaction.email,
+                created_by: transaction.created_by,
+                coin_type: transaction.coin_type,
+            })),
+            pagination: {
+                total: totalTransactions,
+                total_pages: totalPages,
+                current_page: page,
+                limit: limit
+            }
+        };
+
+        // Send the response with paginated transactions
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, userTransactionData);
+    } catch (error) {
+        console.error(error);
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
+    }
+});
+
 
 
   
