@@ -192,7 +192,7 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
                 category: {
                     id: transaction.cat_id,
                     name: transaction.category_name,  // Use category_name here
-                    image_link: transaction.image,
+                    image: transaction.image,
                 },
                 coin: transaction.coin,
                 date: transaction.date,
@@ -248,7 +248,7 @@ router.get('/users/:user_id/transactions-by-category', authenticateToken, async 
                 category: {
                     id: transaction.cat_id,
                     name: transaction.category_name,
-                    image_link: transaction.image,
+                    image: transaction.image,
                 },
                 coin: transaction.coin,
                 date: transaction.date,
@@ -344,11 +344,15 @@ router.get('/categories', authenticateToken, async (req, res) => {
         const categories = await CategoryModel.getPaginatedCategories(limit, offset);
         const totalCategories = await CategoryModel.getTotalCategories();
 
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.CATEGORY_LIST_FETCHED, {
-            categories,
-            total: totalCategories,
-            currentPage: page,
-            totalPages: Math.ceil(totalCategories / limit)
+          // Modify response to have pagination data in a separate object
+          SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.CATEGORY_LIST_FETCHED, {
+            categories,  // List of categories
+            pagination: {
+                total: totalCategories,           // Total categories available
+                total_pages: Math.ceil(totalCategories / limit),  // Total number of pages
+                current_page: page,               // Current page
+                limit: limit                      // Limit per page
+            }
         });
     } catch (error) {
         console.error(error);
