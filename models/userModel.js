@@ -150,6 +150,53 @@ const createUser = async (userData) => {
 };
 
 
+// Function to fetch user profile by user ID
+const fetchUserProfileById = async (userId) => {
+  // Query to get user details
+  const userQuery = `
+      SELECT name AS username, email, phone, dob, gender, address, level, profile_pic
+      FROM user
+      WHERE user_id = ?
+  `;
+  const [userResult] = await db.execute(userQuery, [userId]);
+  const userProfile = userResult.length > 0 ? userResult[0] : null;
+
+  if (!userProfile) {
+      return null; // User not found
+  }
+
+  // Query to get the level name based on level ID
+  const levelQuery = `
+      SELECT level_name
+      FROM levels
+      WHERE levid = ?
+  `;
+  const [levelResult] = await db.execute(levelQuery, [userProfile.level]);
+  userProfile.level_name = levelResult.length > 0 ? levelResult[0].level_name : null;
+
+  // Query to calculate total primary coins
+  const primaryCoinsQuery = `
+      SELECT SUM(coin) AS total_primary_coins
+      FROM transaction_history
+      WHERE uid = ? AND coin_type = 'PRIMARY'
+  `;
+  const [primaryCoinsResult] = await db.execute(primaryCoinsQuery, [userId]);
+  userProfile.total_primary_coins = primaryCoinsResult[0].total_primary_coins || 0;
+
+  // Query to calculate total secondary coins
+  const secondaryCoinsQuery = `
+      SELECT SUM(coin) AS total_secondary_coins
+      FROM transaction_history
+      WHERE uid = ? AND coin_type = 'SECONDARY'
+  `;
+  const [secondaryCoinsResult] = await db.execute(secondaryCoinsQuery, [userId]);
+  userProfile.total_secondary_coins = secondaryCoinsResult[0].total_secondary_coins || 0;
+
+  return userProfile;
+};
+
+
+
 // Function to update user password
 
 module.exports = {
@@ -163,5 +210,6 @@ module.exports = {
   getUserList,
   getUserByEmail,
   checkUserByEmail,
+  fetchUserProfileById,
   createUser
 };
