@@ -150,6 +150,8 @@ const createUser = async (userData) => {
 };
 
 
+// Function to update user password
+
 module.exports = {
   getUserProfileById,
   getTotalUserCount,
