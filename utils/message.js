@@ -95,6 +95,13 @@ module.exports = {
     STAFFS_FETCHED: 'Staff list fetched successfully',
     STAFF_NOT_FOUND: 'Staff not found',
 
+    TFA_CODE_SENT: 'Verification code sent successfully.',
+    INVALID_TFA_CODE: 'Invalid verification code.',
+    TFA_CODE_EXPIRED: 'The verification code has expired.',
+    TFA_VALIDATED: 'Two-factor authentication validated successfully.',
+    SESSION_NOT_FOUND: 'Session not found.',
+    INVALID_INPUT_PROVIDED: 'Invalid input provided.'
+
   },
   RESPONSE_CODES: {
     SUCCESS: 'S100000',
