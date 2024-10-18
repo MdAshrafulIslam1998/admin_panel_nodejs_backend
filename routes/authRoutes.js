@@ -110,7 +110,7 @@ const { v4: uuidv4 } = require('uuid'); // For generating unique user_id
 const { RESPONSE_CODES, MESSAGES } = require('../utils/message'); // Import response codes and messages
 const router = express.Router();     
 const crypto = require('crypto');
-const { createTFA, getTFABySessionId, validateTFA, updateUserPassword } = require('../models/tfaModel');
+const { createTFA, getTFABySessionId, validateTFA, updateUserPassword , checkTfaSession} = require('../models/tfaModel');
 
 
 // POST /auth/login - User Login
@@ -164,27 +164,51 @@ router.post('/auth/login', async (req, res) => {
 
 
 
-
-// POST /auth/register - User Registration
 // POST /auth/register - User Registration
 router.post('/auth/register', async (req, res) => {
-    const { name, email, password, phone, documents, dob, gender, address } = req.body;
+    const { name, email, password, phone, documents, dob, gender, address, session_id } = req.body;
 
     // Validate input
-    if (!name || !email || !password) {
-        return res.status(400).json({ 
-            responseCode: RESPONSE_CODES.BAD_REQUEST, 
-            responseMessage: MESSAGES.NAME_EMAIL_PASSWORD_REQUIRED 
+    if (!name || !email || !password || !session_id) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.VALIDATION_ERROR,
+            responseMessage: MESSAGES.NAME_EMAIL_PASSWORD_REQUIRED
         });
     }
 
     try {
+        // Fetch the TFA entry by session_id
+        const tfaEntry = await getTFABySessionId(session_id);
+
+        // Check if the session is found
+        if (!tfaEntry) {
+            return res.status(404).json({
+                responseCode: RESPONSE_CODES.NOT_FOUND,
+                responseMessage: MESSAGES.SESSION_NOT_FOUND
+            });
+        }
+
+        // Check if the session is validated or expired
+        if (tfaEntry.status !== 'VALIDATED') {
+            if (tfaEntry.status === 'EXPIRED') {
+                return res.status(403).json({
+                    responseCode: RESPONSE_CODES.FORBIDDEN,
+                    responseMessage: MESSAGES.TFA_CODE_EXPIRED
+                });
+            } else {
+                return res.status(403).json({
+                    responseCode: RESPONSE_CODES.FORBIDDEN,
+                    responseMessage: MESSAGES.INVALID_TFA_CODE
+                });
+            }
+        }
+
         // Check if the user already exists
         const existingUser = await getUserByEmail(email);
         if (existingUser) {
-            return res.status(409).json({ 
-                responseCode: RESPONSE_CODES.UNAUTHORIZED, 
-                responseMessage: MESSAGES.EMAIL_ALREADY_EXISTS 
+            return res.status(409).json({
+                responseCode: RESPONSE_CODES.UNAUTHORIZED,
+                responseMessage: MESSAGES.EMAIL_ALREADY_EXISTS
             });
         }
 
@@ -208,18 +232,20 @@ router.post('/auth/register', async (req, res) => {
         // Create new user
         await createUser(userData);
 
-        return res.status(201).json({ 
-            responseCode: RESPONSE_CODES.SUCCESS, 
-            responseMessage: MESSAGES.SUCCESS 
+        return res.status(201).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.SUCCESS
         });
     } catch (error) {
         console.error('Error during registration:', error);
-        return res.status(500).json({ 
-            responseCode: RESPONSE_CODES.SERVER_ERROR, 
-            responseMessage: MESSAGES.SERVER_ERROR + error.message 
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR + error.message
         });
     }
 });
+
+
 
 
 
