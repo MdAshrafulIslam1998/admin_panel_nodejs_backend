@@ -646,14 +646,18 @@ router.get('/alltransactions/category', authenticateToken, async (req, res, next
         return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
       }
   
-      const totalPages = Math.ceil(total / limit);
+      const total_Pages = Math.ceil(total / limit);
   
       SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
-        total,          // Total number of transactions for this category
-        page: parseInt(page), // Current page
-        limit,          // Number of records per page
-        totalPages,     // Total pages available
-        transactions    // Actual transaction records
+        transactions,
+        pagination: {
+          total,              // Total number of transactions for this category
+          total_Pages,        // Total pages available
+          current_page: parseInt(page),  // Current page
+          limit               // Number of records per page
+        }
+           
+          // Actual transaction records
       });
     } catch (error) {
       next(error);  // Pass error to centralized error handler
