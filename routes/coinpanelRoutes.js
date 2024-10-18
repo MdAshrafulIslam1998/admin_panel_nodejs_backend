@@ -577,11 +577,11 @@ router.get('/users/paginated-transactions-history-by-category', async (req, res)
             limit: +limit
         };
 
-        // Step 3: Send the paginated response
+        // Step 4: Send the response with the users list and pagination at the bottom
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
             category_id: category,
             users: usersWithCoins,
-            pagination: pagination // Make sure pagination is clear and well-defined
+            pagination // Put pagination at the bottom of the response data
         });
     } catch (error) {
         console.error(error);
@@ -590,37 +590,39 @@ router.get('/users/paginated-transactions-history-by-category', async (req, res)
 });
 
 
-
 // GET /api/coin/transactions - Fetch paginated transaction history
 router.get('/alltransactions', authenticateToken, async (req, res, next) => {
     try {
-      const { page = 1 } = req.query;  // Defaults to page 1 if not provided
-      const limit = 10;
-      const offset = (page - 1) * limit;
-  
-      // Fetch the paginated transaction history and total count
-      const [transactions, total] = await Promise.all([
-        getTransactionHistory(limit, offset),
-        getTransactionCount()
-      ]);
-  
-      if (transactions.length === 0) {
-        return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
-      }
-  
-      const totalPages = Math.ceil(total / limit);  // Calculate total pages
-  
-      SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
-        total,          // Total number of transactions
-        page: parseInt(page), // Current page
-        limit,          // Number of records per page
-        totalPages,     // Total pages available
-        transactions    // Actual transaction records
-      });
+        const { page = 1 } = req.query;  // Defaults to page 1 if not provided
+        const limit = 10;
+        const offset = (page - 1) * limit;
+
+        // Fetch the paginated transaction history and total count
+        const [transactions, total] = await Promise.all([
+            getTransactionHistory(limit, offset),
+            getTransactionCount()
+        ]);
+
+        if (transactions.length === 0) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
+        }
+
+        const total_pages = Math.ceil(total / limit);  // Calculate total pages
+
+        // Return the response with transactions and pagination info at the bottom
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
+            transactions,  // Actual transaction records
+            pagination: {  // Pagination info at the bottom
+                total,              // Total number of transactions
+                total_pages,        // Total pages available
+                current_page: parseInt(page),  // Current page
+                limit               // Number of records per page
+            }
+        });
     } catch (error) {
-      next(error);  // Pass error to centralized error handler
+        next(error);  // Pass error to centralized error handler
     }
-  });
+});
 
 
   // GET /api/coin/transactions/category - Fetch paginated transaction history by category
