@@ -248,9 +248,12 @@ router.get('/users', authenticateToken, async (req, res) => {
         // Prepare response data
         const responseData = {
             users,
-            currentPage: page,
-            totalPages,
-            totalUsers,
+            pagination: {
+                total: totalUsers,
+                total_pages: totalPages,
+                current_page: page,
+                limit: limit
+            }
         };
 
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, responseData);

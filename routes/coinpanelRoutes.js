@@ -487,7 +487,6 @@ const CategoryModel = require('../models/categoryModel');
 const swaggerJSDoc = require('swagger-jsdoc');
 
 
-
 // API to fetch users and their categorized transactions
 router.get('/users/userwise/transactions', authenticateToken, async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
@@ -526,25 +525,30 @@ router.get('/users/userwise/transactions', authenticateToken, async (req, res) =
                 user_id: user.user_id,
                 name: user.name,
                 email: user.email,
-                level_id: user.level_id,
                 status: user.status,
-                date: user.date,
                 categories: categorizedCoins
             });
         }
 
-        // Send paginated response
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
+        // Prepare pagination information
+        const pagination = {
             total: totalUsers,
-            page: page,
-            limit: limit,
-            users: userTransactionData
+            total_pages: Math.ceil(totalUsers / limit),
+            current_page: page,
+            limit: limit
+        };
+
+        // Send paginated response without nesting the user data under an additional 'data' object
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
+            users: userTransactionData, // Directly place users here
+            pagination: pagination
         });
     } catch (error) {
         console.error(error);
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
     }
 });
+
 
 
 
@@ -554,25 +558,37 @@ router.get('/users/paginated-transactions-history-by-category', async (req, res)
     const offset = (page - 1) * limit;
 
     try {
+        // Validate the category parameter
+        if (!category) {
+            return ERROR(res, RESPONSE_CODES.BAD_REQUEST, MESSAGES.INVALID_INPUT_PROVIDED, { error: "Category ID is required." });
+        }
+
         // Step 1: Get the paginated list of users who have some coins in the specified category
         const usersWithCoins = await TransactionHistoryModel.getUsersWithCategoryCoins(category, +limit, +offset);
 
         // Step 2: Get total count of users with coins in the category
         const totalUsers = await TransactionHistoryModel.getTotalUsersWithCategoryCoins(category);
 
+        // Prepare pagination information
+        const pagination = {
+            total: totalUsers,
+            total_pages: Math.ceil(totalUsers / limit),
+            current_page: +page,
+            limit: +limit
+        };
+
         // Step 3: Send the paginated response
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
-            total: totalUsers,
-            page: +page,
-            limit: +limit,
             category_id: category,
-            data: usersWithCoins,
+            users: usersWithCoins,
+            pagination: pagination // Make sure pagination is clear and well-defined
         });
     } catch (error) {
         console.error(error);
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
     }
 });
+
 
 
 // GET /api/coin/transactions - Fetch paginated transaction history
