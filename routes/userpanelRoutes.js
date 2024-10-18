@@ -221,7 +221,7 @@
 const express = require('express');
 const router = express.Router();  
 const authenticateToken = require('../middleware/authenticateToken'); 
-const { getUserList, getUserById, updateUserLevel, updateUserStatus, getTotalUserCount } = require('../models/userModel');
+const { getUserList, getUserById, updateUserLevel, updateUserStatus, getTotalUserCount, fetchUserProfileById } = require('../models/userModel');
 const { createLevel, getAllLevels, getLevelById, deleteLevelById, updateLevel } = require('../models/levelModel');
 const DocumentModel = require('../models/documentModel');
 const UserModel = require('../models/userModel');
@@ -402,5 +402,37 @@ router.put('/levels/edit/:levid', authenticateToken, async (req, res) => {
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
     }
 });
+
+
+// GET /api/user/profile/:userId - Fetch user profile details
+router.get('/user/apphome_profile/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const userProfileData = await fetchUserProfileById(userId);
+        if (!userProfileData) {
+            return res.status(404).json({
+                responseCode: RESPONSE_CODES.NOT_FOUND,
+                responseMessage: MESSAGES.USER_NOT_FOUND
+            });
+        }
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.USER_PROFILE_FETCH_SUCCESS,
+            data: userProfileData
+        });
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR
+        });
+    }
+});
+
+
+
+
 
 module.exports = router;
