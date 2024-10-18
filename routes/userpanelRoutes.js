@@ -1,3 +1,223 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management
+ */
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Fetch paginated user list
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number for pagination
+ *     responses:
+ *       200:
+ *         description: Successfully fetched user list
+ *       404:
+ *         description: No users found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/users/profile/{userId}:
+ *   get:
+ *     summary: Fetch user profile information
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user
+ *     responses:
+ *       200:
+ *         description: Successfully fetched user profile
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/levels/addlevel:
+ *   post:
+ *     summary: Add a new level
+ *     tags: [Levels]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               level_name:
+ *                 type: string
+ *               level_value:
+ *                 type: integer
+ *               created_by:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully added a new level
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/users/editlevel/{userid}:
+ *   put:
+ *     summary: Update user level
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               level:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: User level updated successfully
+ *       404:
+ *         description: User level update failed
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/users/changestatus/{userId}:
+ *   post:
+ *     summary: Change user status
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [VERIFIED, PENDING, REJECTED, BLOCKED, DELETED]
+ *     responses:
+ *       200:
+ *         description: User status updated successfully
+ *       400:
+ *         description: Invalid status
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/levels:
+ *   get:
+ *     summary: Fetch all level data
+ *     tags: [Levels]
+ *     responses:
+ *       200:
+ *         description: Successfully fetched level data
+ *       404:
+ *         description: No levels found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/levels/{levid}:
+ *   delete:
+ *     summary: Delete a level by levid
+ *     tags: [Levels]
+ *     parameters:
+ *       - in: path
+ *         name: levid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the level
+ *     responses:
+ *       200:
+ *         description: Successfully deleted the level
+ *       404:
+ *         description: Level not found
+ *       400:
+ *         description: Level has associated users
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/levels/edit/{levid}:
+ *   put:
+ *     summary: Edit level and update associated users
+ *     tags: [Levels]
+ *     parameters:
+ *       - in: path
+ *         name: levid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the level
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               level_name:
+ *                 type: string
+ *               level_value:
+ *                 type: integer
+ *               created_by:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Level updated successfully
+ *       404:
+ *         description: Level not found
+ *       500:
+ *         description: Server error
+ */
+
+
+
+
 const express = require('express');
 const router = express.Router();  
 const authenticateToken = require('../middleware/authenticateToken'); 

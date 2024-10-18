@@ -1,3 +1,222 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Roles
+ *   description: Role management for staff
+ */
+
+/**
+ * @swagger
+ * /roles:
+ *   post:
+ *     summary: Add a new role
+ *     tags: [Roles]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               access_list:
+ *                 type: array
+ *                 description: Access permissions for the role
+ *               role_name:
+ *                 type: string
+ *                 description: Name of the role
+ *               created_by:
+ *                 type: string
+ *                 description: Creator's ID
+ *     responses:
+ *       200:
+ *         description: Role successfully added
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /roles:
+ *   get:
+ *     summary: Get a list of all roles
+ *     tags: [Roles]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Roles fetched successfully
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /roles/{role_id}:
+ *   put:
+ *     summary: Edit an existing role
+ *     tags: [Roles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: role_id
+ *         required: true
+ *         description: ID of the role to edit
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               access_list:
+ *                 type: array
+ *                 description: Updated access permissions
+ *               role_name:
+ *                 type: string
+ *                 description: Updated name of the role
+ *     responses:
+ *       200:
+ *         description: Role updated successfully
+ *       404:
+ *         description: Role not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /roles/{role_id}:
+ *   delete:
+ *     summary: Delete an existing role
+ *     tags: [Roles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: role_id
+ *         required: true
+ *         description: ID of the role to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Role deleted successfully
+ *       400:
+ *         description: Role is associated with staff members
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Staff
+ *   description: Staff management
+ */
+
+/**
+ * @swagger
+ * /staffs:
+ *   post:
+ *     summary: Add a new staff member
+ *     tags: [Staff]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Staff member's name
+ *               email:
+ *                 type: string
+ *                 description: Staff member's email
+ *               password:
+ *                 type: string
+ *                 description: Password for the staff member
+ *               created_by:
+ *                 type: string
+ *                 description: ID of the creator
+ *               role:
+ *                 type: string
+ *                 description: Role assigned to the staff member
+ *               status:
+ *                 type: string
+ *                 description: Status of the staff (e.g., Active)
+ *     responses:
+ *       200:
+ *         description: Staff added successfully
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /staffs/{staff_id}/role:
+ *   put:
+ *     summary: Update the role of a staff member
+ *     tags: [Staff]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: staff_id
+ *         required: true
+ *         description: ID of the staff to update role
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               new_role:
+ *                 type: string
+ *                 description: New role to assign
+ *     responses:
+ *       200:
+ *         description: Role updated successfully
+ *       404:
+ *         description: Staff not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /staffs:
+ *   get:
+ *     summary: Fetch a paginated list of staff
+ *     tags: [Staff]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number to fetch
+ *     responses:
+ *       200:
+ *         description: Staff fetched successfully
+ *       500:
+ *         description: Server error
+ */
+
+
+
+
 // routes/staffspanelRoutes.js
 const express = require('express');
 const { addRole, getRoles, editRole, deleteRole } = require('../models/roleModel');
