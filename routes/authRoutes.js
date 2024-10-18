@@ -108,10 +108,11 @@ const express = require('express');
 const { getUserByEmail, createUser } = require('../models/userModel'); // Import your user model
 const { v4: uuidv4 } = require('uuid'); // For generating unique user_id
 const { RESPONSE_CODES, MESSAGES } = require('../utils/message'); // Import response codes and messages
-
-
-
 const router = express.Router();     
+const crypto = require('crypto');
+const { createTFA, getTFABySessionId, validateTFA } = require('../models/tfaModel');
+
+
 // POST /auth/login - User Login
 router.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
@@ -221,4 +222,105 @@ router.post('/auth/register', async (req, res) => {
 });
 
 
+
+// Helper function to generate random TFA code
+const generateTFACode = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+// Mock email sending function
+const sendEmail = (email, code) => {
+    console.log(`Email sent to ${email} with TFA code: ${code}`);
+};
+
+// POST /api/send-verification - Send verification code
+router.post('/auth/send-verification', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.BAD_REQUEST,
+            responseMessage: MESSAGES.INVALID_INPUT_PROVIDED
+        });
+    }
+
+    try {
+        const tfaCode = generateTFACode();
+        const sessionId = crypto.randomUUID();
+        const createdAt = new Date();
+        const expiredAt = new Date(createdAt.getTime() + 5 * 60 * 1000); // Expires in 5 minutes
+
+        // Save TFA record in the database
+        await createTFA(tfaCode, email, sessionId, expiredAt);
+
+        // Send the verification code via email
+        sendEmail(email, tfaCode);
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.TFA_CODE_SENT,
+            data: { session_id: sessionId }
+        });
+    } catch (error) {
+        console.error('Error sending verification code:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR
+        });
+    }
+});
+
+
+
+// POST /auth/verify-code - Verify the TFA code
+router.post('/auth/verify-code', async (req, res) => {
+    const { session_id, tfa_code } = req.body;
+
+    if (!session_id || !tfa_code) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.BAD_REQUEST,
+            responseMessage: MESSAGES.INVALID_INPUT_PROVIDED
+        });
+    }
+
+    try {
+        // Retrieve the TFA record by session ID
+        const tfaRecord = await getTFABySessionId(session_id);
+
+        if (!tfaRecord) {
+            return res.status(404).json({
+                responseCode: RESPONSE_CODES.NOT_FOUND,
+                responseMessage: MESSAGES.SESSION_NOT_FOUND
+            });
+        }
+
+        // Check if the code matches and hasn't expired
+        const now = new Date();
+        if (tfaRecord.tfa_code !== tfa_code) {
+            return res.status(401).json({
+                responseCode: RESPONSE_CODES.UNAUTHORIZED,
+                responseMessage: MESSAGES.INVALID_TFA_CODE
+            });
+        } else if (tfaRecord.expired_at < now) {
+            return res.status(400).json({
+                responseCode: RESPONSE_CODES.BAD_REQUEST,
+                responseMessage: MESSAGES.TFA_CODE_EXPIRED
+            });
+        }
+
+        // Mark the TFA as validated
+        await validateTFA(session_id);
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.TFA_VALIDATED
+        });
+    } catch (error) {
+        console.error('Error during code verification:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR
+        });
+    }
+});
+
 module.exports = router;
+
