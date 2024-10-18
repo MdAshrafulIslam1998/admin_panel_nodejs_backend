@@ -42,6 +42,10 @@ module.exports = {
     LOGIN_SUCCESS: 'Login successful.',
     USER_NOT_VERIFIED: 'User is not verified. Please complete verification.',
     USER_NOT_ELIGIBLE: 'User is not eligible to log in. Please contact support.',
+
+    NAME_EMAIL_PASSWORD_REQUIRED: 'Name, email, and password are required.',
+    EMAIL_ALREADY_EXISTS: 'Email already exists.',
+    SUCCESS: 'User registered successfully.',
   
 
     // Coin-related
