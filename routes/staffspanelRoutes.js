@@ -316,10 +316,15 @@ router.get('/staffs', authenticateToken, async (req, res, next) => {
         const total = await getTotalStaffCount();
 
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.STAFFS_FETCHED, {
-            total,
-            page,
-            limit,
-            data: staffs,
+            staffs,
+            pagination: {
+              total,
+              total_pages: Math.ceil(total / limit),
+              current_page: page,
+              limit
+            }
+           
+            
         });
     } catch (error) {
         next(error);
