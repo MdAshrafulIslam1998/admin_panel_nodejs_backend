@@ -163,7 +163,6 @@ router.post('/auth/login', async (req, res) => {
 });
 
 
-
 // POST /auth/register - User Registration
 router.post('/auth/register', async (req, res) => {
     const { name, email, password, phone, documents, dob, gender, address, session_id } = req.body;
@@ -172,7 +171,8 @@ router.post('/auth/register', async (req, res) => {
     if (!name || !email || !password || !session_id) {
         return res.status(400).json({
             responseCode: RESPONSE_CODES.VALIDATION_ERROR,
-            responseMessage: MESSAGES.NAME_EMAIL_PASSWORD_REQUIRED
+            responseMessage: MESSAGES.NAME_EMAIL_PASSWORD_REQUIRED,
+            data: { state: false } // Include state: false on validation failure
         });
     }
 
@@ -184,7 +184,8 @@ router.post('/auth/register', async (req, res) => {
         if (!tfaEntry) {
             return res.status(404).json({
                 responseCode: RESPONSE_CODES.NOT_FOUND,
-                responseMessage: MESSAGES.SESSION_NOT_FOUND
+                responseMessage: MESSAGES.SESSION_NOT_FOUND,
+                data: { state: false } // Include state: false when session not found
             });
         }
 
@@ -193,12 +194,14 @@ router.post('/auth/register', async (req, res) => {
             if (tfaEntry.status === 'EXPIRED') {
                 return res.status(403).json({
                     responseCode: RESPONSE_CODES.FORBIDDEN,
-                    responseMessage: MESSAGES.TFA_CODE_EXPIRED
+                    responseMessage: MESSAGES.TFA_CODE_EXPIRED,
+                    data: { state: false } // Include state: false when TFA expired
                 });
             } else {
                 return res.status(403).json({
                     responseCode: RESPONSE_CODES.FORBIDDEN,
-                    responseMessage: MESSAGES.INVALID_TFA_CODE
+                    responseMessage: MESSAGES.INVALID_TFA_CODE,
+                    data: { state: false } // Include state: false when TFA is invalid
                 });
             }
         }
@@ -208,7 +211,8 @@ router.post('/auth/register', async (req, res) => {
         if (existingUser) {
             return res.status(409).json({
                 responseCode: RESPONSE_CODES.UNAUTHORIZED,
-                responseMessage: MESSAGES.EMAIL_ALREADY_EXISTS
+                responseMessage: MESSAGES.EMAIL_ALREADY_EXISTS,
+                data: { state: false } // Include state: false when email already exists
             });
         }
 
@@ -224,7 +228,7 @@ router.post('/auth/register', async (req, res) => {
             documents: documents || null, // Optional
             user_id: userId,
             dob: dob || null, // Optional
-            gender: gender || null, // Default to 'OTHER' if not provided
+            gender: gender || 'OTHER', // Default to 'OTHER' if not provided
             address: address || null, // Optional
             level: null // Default to null as no level provided
         };
@@ -234,16 +238,19 @@ router.post('/auth/register', async (req, res) => {
 
         return res.status(201).json({
             responseCode: RESPONSE_CODES.SUCCESS,
-            responseMessage: MESSAGES.SUCCESS
+            responseMessage: MESSAGES.SUCCESS,
+            data: { state: true } // Include state: true on success
         });
     } catch (error) {
         console.error('Error during registration:', error);
         return res.status(500).json({
             responseCode: RESPONSE_CODES.SERVER_ERROR,
-            responseMessage: MESSAGES.SERVER_ERROR + error.message
+            responseMessage: MESSAGES.SERVER_ERROR + error.message,
+            data: { state: false } // Include state: false on server error
         });
     }
 });
+
 
 
 
