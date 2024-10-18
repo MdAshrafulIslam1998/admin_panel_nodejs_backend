@@ -45,7 +45,8 @@ module.exports = {
 
     NAME_EMAIL_PASSWORD_REQUIRED: 'Name, email, and password are required.',
     EMAIL_ALREADY_EXISTS: 'Email already exists.',
-    SUCCESS: 'User registered successfully.',
+    SUCCESS: 'Success',
+    REGISTRATION_SUCCESS: 'Registration successful.',
   
 
     // Coin-related
