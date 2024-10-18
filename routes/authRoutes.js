@@ -109,8 +109,9 @@ const { getUserByEmail, createUser } = require('../models/userModel'); // Import
 const { v4: uuidv4 } = require('uuid'); // For generating unique user_id
 const { RESPONSE_CODES, MESSAGES } = require('../utils/message'); // Import response codes and messages
 
-const router = express.Router();     
 
+
+const router = express.Router();     
 // POST /auth/login - User Login
 router.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
@@ -143,10 +144,13 @@ router.post('/auth/login', async (req, res) => {
         // User login successful, create JWT
         const token = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
         
+        // Modify the response to include the token under "data"
         return res.status(200).json({
             responseCode: RESPONSE_CODES.SUCCESS,
             responseMessage: MESSAGES.LOGIN_SUCCESS,
-            token
+            data: {
+                token
+            }
         });
     } catch (error) {
         console.error('Error during login:', error);
@@ -156,6 +160,7 @@ router.post('/auth/login', async (req, res) => {
         });
     }
 });
+
 
 
 

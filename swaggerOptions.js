@@ -12,7 +12,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000', // Server URL
+        url: 'https://www.projectzerotwofour.cloudns.ch', // Server URL
       },
     ],
   },

@@ -484,6 +484,7 @@ const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCateg
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
+const swaggerJSDoc = require('swagger-jsdoc');
 
 
 
@@ -544,6 +545,7 @@ router.get('/users/userwise/transactions', authenticateToken, async (req, res) =
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
     }
 });
+
 
 
 // GET /users/paginated-transactions-history-by-category
