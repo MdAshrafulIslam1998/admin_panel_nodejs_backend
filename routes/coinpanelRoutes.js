@@ -1,3 +1,479 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User and transaction management
+ */
+
+/**
+ * @swagger
+ * /users/userwise/transactions:
+ *   get:
+ *     summary: Fetch users and their categorized transactions
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: limit
+ *         in: query
+ *         description: Number of records per page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - name: page
+ *         in: query
+ *         description: Page number
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *     responses:
+ *       200:
+ *         description: Successfully fetched user transactions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       user_id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *                       level_id:
+ *                         type: integer
+ *                       status:
+ *                         type: string
+ *                       date:
+ *                         type: string
+ *                         format: date-time
+ *                       categories:
+ *                         type: object
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /users/paginated-transactions-history-by-category:
+ *   get:
+ *     summary: Fetch paginated transactions history by category
+ *     tags: [Users]
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         description: Page number
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - name: limit
+ *         in: query
+ *         description: Number of records per page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - name: category
+ *         in: query
+ *         description: Category ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully fetched transactions history by category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 category_id:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /alltransactions:
+ *   get:
+ *     summary: Fetch paginated transaction history
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         description: Page number
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *     responses:
+ *       200:
+ *         description: Successfully fetched transaction history
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 transactions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: No transactions found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /alltransactions/category:
+ *   get:
+ *     summary: Fetch paginated transaction history by category
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: cat_id
+ *         in: query
+ *         description: Category ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: page
+ *         in: query
+ *         description: Page number
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *     responses:
+ *       200:
+ *         description: Successfully fetched transaction history by category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 transactions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Invalid category ID
+ *       404:
+ *         description: No transactions found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /users/{user_id}/transactions:
+ *   get:
+ *     summary: Fetch all transaction lists for a specific user with pagination
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: user_id
+ *         in: path
+ *         required: true
+ *         description: ID of the user
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: Number of records per page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - name: page
+ *         in: query
+ *         description: Page number
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *     responses:
+ *       200:
+ *         description: Successfully fetched user transactions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user_id:
+ *                   type: string
+ *                 transactions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     total_pages:
+ *                       type: integer
+ *                     current_page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: No transactions found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /users/{user_id}/transactions-by-category:
+ *   get:
+ *     summary: Fetch user's transactions history by category with pagination
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: user_id
+ *         in: path
+ *         required: true
+ *         description: ID of the user
+ *         schema:
+ *           type: string
+ *       - name: cat_id
+ *         in: query
+ *         required: true
+ *         description: Category ID
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: Number of records per page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - name: page
+ *         in: query
+ *         description: Page number
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *     responses:
+ *       200:
+ *         description: Successfully fetched user's transactions by category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user_id:
+ *                   type: string
+ *                 category_id:
+ *                   type: string
+ *                 transactions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     total_pages:
+ *                       type: integer
+ *                     current_page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: No transactions found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Categories
+ *   description: Category management
+ */
+
+/**
+ * @swagger
+ * /categories/add:
+ *   post:
+ *     summary: Add a new category
+ *     tags: [Categories]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Category name
+ *               image:
+ *                 type: string
+ *                 description: Category image URL
+ *               created_by:
+ *                 type: string
+ *                 description: ID of the user who created the category
+ *     responses:
+ *       201:
+ *         description: Category successfully created
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     summary: Get all categories
+ *     tags: [Categories]
+ *     responses:
+ *       200:
+ *         description: Successfully fetched categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   image:
+ *                     type: string
+ *                   created_by:
+ *                     type: string
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /categories/{id}:
+ *   put:
+ *     summary: Update a category
+ *     tags: [Categories]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Category ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Category name
+ *               image:
+ *                 type: string
+ *                 description: Category image URL
+ *     responses:
+ *       200:
+ *         description: Category successfully updated
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /categories/{id}:
+ *   delete:
+ *     summary: Delete a category
+ *     tags: [Categories]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Category ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Category successfully deleted
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Server error
+ */
+
+
+
 const express = require('express');
 const router = express.Router();
 const userModel = require('../models/userModel');

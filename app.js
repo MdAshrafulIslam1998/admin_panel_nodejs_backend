@@ -6,6 +6,8 @@ const coinpanelRoutes = require('./routes/coinpanelRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const staffpanelRoutes = require('./routes/staffspanelRoutes');
 const authRoutes = require('./routes/authRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swaggerOptions'); // Import Swagger configuration
 
 
 dotenv.config();
@@ -13,6 +15,10 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve Swagger documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 
 // Register your routes
