@@ -238,7 +238,7 @@ router.post('/auth/register', async (req, res) => {
 
         return res.status(201).json({
             responseCode: RESPONSE_CODES.SUCCESS,
-            responseMessage: MESSAGES.SUCCESS,
+            responseMessage: MESSAGES.REGISTRATION_SUCCESS,
             data: { state: true } // Include state: true on success
         });
     } catch (error) {
