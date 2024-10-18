@@ -36,6 +36,14 @@ module.exports = {
     NO_DATA_FOUND: 'No data found',
     NOT_FOUND: 'Not found',
 
+
+    EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',
+    USER_NOT_VERIFIED: 'User is not verified. Please complete verification.',
+    LOGIN_SUCCESS: 'Login successful.',
+    USER_NOT_VERIFIED: 'User is not verified. Please complete verification.',
+    USER_NOT_ELIGIBLE: 'User is not eligible to log in. Please contact support.',
+  
+
     // Coin-related
     USER_LIST_FETCHED: 'User list fetched successfully',
     USER_LIST_FETCH_FAILED: 'Failed to fetch user list',

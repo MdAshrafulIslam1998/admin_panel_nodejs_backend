@@ -5,6 +5,7 @@ const userpanelRoutes = require('./routes/userpanelRoutes');
 const coinpanelRoutes = require('./routes/coinpanelRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const staffpanelRoutes = require('./routes/staffspanelRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 
 dotenv.config();
@@ -20,7 +21,7 @@ app.use('/api', userpanelRoutes);
 app.use('/api', coinpanelRoutes);
 app.use('/api', documentRoutes);
 app.use('/api/staffpanel', staffpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
-
+app.use('/api', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

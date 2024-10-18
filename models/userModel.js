@@ -101,7 +101,14 @@ const getTotalUserCount = async () => {
   return result[0].total;
 };
 
-
+const getUserByEmail = async (email) => {
+  const query = 
+      `SELECT user_id, name, email, phone, dob, gender, address, level, status, password 
+       FROM user 
+       WHERE email = ?`;
+  const [result] = await db.execute(query, [email]);
+  return result.length > 0 ? result[0] : null;
+};
 
 
 module.exports = {
@@ -112,5 +119,6 @@ module.exports = {
   updateUserLevel,
   getUsersByLevelId,
   updateUserStatus,
-  getUserList
+  getUserList,
+  getUserByEmail
 };
