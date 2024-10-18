@@ -35,6 +35,18 @@ const updateUserPassword = async (email, password) => {
     const [result] = await db.execute(query, [password, email]);
     return result.affectedRows > 0; // Returns true if the update was successful
   };
+
+
+  // Function to check if a TFA session is validated
+const checkTfaSession = async (sessionId) => {
+    const query = `
+        SELECT tfa_code, recipient_email, session_id, created_at, expired_at, status
+        FROM tfa
+        WHERE session_id = ? AND status = 'VALIDATED'
+    `;
+    const [result] = await db.execute(query, [sessionId]);
+    return result.length > 0 ? result[0] : null;  // Return TFA record if validated
+};
   
 
-module.exports = { createTFA, getTFABySessionId, validateTFA, updateUserPassword };
+module.exports = { createTFA, getTFABySessionId, validateTFA, updateUserPassword, checkTfaSession};
