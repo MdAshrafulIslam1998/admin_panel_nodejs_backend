@@ -111,6 +111,45 @@ const getUserByEmail = async (email) => {
 };
 
 
+
+// Function to check if a user already exists by email
+const checkUserByEmail = async (email) => {
+  const query = `SELECT * FROM user WHERE email = ?`;
+  const [result] = await db.execute(query, [email]);
+  return result.length > 0 ? result[0] : null;
+};
+
+// Function to create a new user
+const createUser = async (userData) => {
+  const query = `
+      INSERT INTO user (
+          name, email, password, phone, documents, user_id, dob, gender, address, level, status, approved_by, push_token, date
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const { name, email, password, phone, documents, user_id, dob, gender, address, level } = userData;
+
+  await db.execute(query, [
+      name,
+      email,
+      password,
+      phone || null,             // Optional fields set to null if not provided
+      documents || null,         // Optional fields set to null if not provided
+      user_id,                   // UUID for user_id
+      dob || null,               // Optional fields set to null if not provided
+      gender,                    // Required
+      address || null,           // Optional fields set to null if not provided
+      level || null,             // Optional fields set to null if not provided
+      'INITIATED',               // Default status
+      null,                      // approved_by - set to null as not provided
+      null,                      // push_token - set to null as not provided
+      new Date()                 // Set current timestamp
+  ]);
+
+  return { name, email }; // Return only the necessary information
+};
+
+
 module.exports = {
   getUserProfileById,
   getTotalUserCount,
@@ -120,5 +159,7 @@ module.exports = {
   getUsersByLevelId,
   updateUserStatus,
   getUserList,
-  getUserByEmail
+  getUserByEmail,
+  checkUserByEmail,
+  createUser
 };
