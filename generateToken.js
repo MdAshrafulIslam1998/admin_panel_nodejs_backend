@@ -15,6 +15,6 @@ if (!secretKey) {
 }
 
 // Generate the token with an expiration of 24 hours
-const token = jwt.sign(user, secretKey, { expiresIn: '24h' });
+const token = jwt.sign(user, secretKey, { expiresIn: '30h' });
 
 console.log('Generated JWT Token:', token);
