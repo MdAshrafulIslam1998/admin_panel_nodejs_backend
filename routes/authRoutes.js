@@ -110,7 +110,7 @@ const { v4: uuidv4 } = require('uuid'); // For generating unique user_id
 const { RESPONSE_CODES, MESSAGES } = require('../utils/message'); // Import response codes and messages
 const router = express.Router();     
 const crypto = require('crypto');
-const { createTFA, getTFABySessionId, validateTFA } = require('../models/tfaModel');
+const { createTFA, getTFABySessionId, validateTFA, updateUserPassword } = require('../models/tfaModel');
 
 
 // POST /auth/login - User Login
@@ -315,6 +315,45 @@ router.post('/auth/verify-code', async (req, res) => {
         });
     } catch (error) {
         console.error('Error during code verification:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR
+        });
+    }
+});
+
+
+// POST /api/reset-password - Reset Password
+router.post('/auth/reset-password', async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    // Validate input
+    if (!email || !newPassword) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.BAD_REQUEST,
+            responseMessage: MESSAGES.EMAIL_PASSWORD_REQUIRED
+        });
+    }
+
+    try {
+        // Fetch user by email
+        const user = await getUserByEmail(email);
+        if (!user) {
+            return res.status(404).json({
+                responseCode: RESPONSE_CODES.NOT_FOUND,
+                responseMessage: MESSAGES.USER_NOT_FOUND
+            });
+        }
+
+        // Update the password in the database (as plain text)
+        await updateUserPassword(email, newPassword);
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.PASSWORD_RESET_SUCCESS
+        });
+    } catch (error) {
+        console.error('Error resetting password:', error);
         return res.status(500).json({
             responseCode: RESPONSE_CODES.SERVER_ERROR,
             responseMessage: MESSAGES.SERVER_ERROR

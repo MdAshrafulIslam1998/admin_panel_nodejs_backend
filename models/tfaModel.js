@@ -28,4 +28,13 @@ const validateTFA = async (sessionId) => {
     await db.execute(query, [sessionId]);
 };
 
-module.exports = { createTFA, getTFABySessionId, validateTFA };
+
+
+const updateUserPassword = async (email, password) => {
+    const query = 'UPDATE user SET password = ? WHERE email = ?';
+    const [result] = await db.execute(query, [password, email]);
+    return result.affectedRows > 0; // Returns true if the update was successful
+  };
+  
+
+module.exports = { createTFA, getTFABySessionId, validateTFA, updateUserPassword };
