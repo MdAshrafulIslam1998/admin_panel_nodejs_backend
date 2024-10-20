@@ -239,7 +239,7 @@ router.post('/auth/register', async (req, res) => {
         return res.status(201).json({
             responseCode: RESPONSE_CODES.SUCCESS,
             responseMessage: MESSAGES.REGISTRATION_SUCCESS,
-            data: { state: true } // Include state: true on success
+            data: { user_id: userId } // Return user_id in response
         });
     } catch (error) {
         console.error('Error during registration:', error);
