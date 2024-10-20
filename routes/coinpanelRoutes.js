@@ -721,7 +721,7 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
 
 
 // API to fetch user's transactions history by category with pagination
-router.get('/users/:user_id/transactions-by-category', authenticateToken, async (req, res) => {
+router.get('/users/:user_id/transactions', authenticateToken, async (req, res) => {
     const user_id = req.params.user_id;
     const cat_id = req.query.cat_id;  // Category ID input from query params
     const limit = parseInt(req.query.limit) || 20;  // Default limit is 20
