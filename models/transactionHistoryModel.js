@@ -127,34 +127,34 @@ class TransactionHistoryModel {
         return rows[0].total;
     }
 
-
     // Fetch paginated transactions by user ID and category ID
-    static async getPaginatedTransactionsByUserIdAndCategory(userId, catId, limit, offset) {
-        const query = `
-            SELECT 
-                th.id,
-                th.cat_id,
-                c.name AS category_name,
-                c.image,
-                th.coin,
-                th.date,
-                th.name,
-                th.email,
-                th.created_by,
-                th.coin_type
-            FROM transaction_history th
-            JOIN categories c ON th.cat_id = c.id
-            WHERE th.uid = ? AND th.cat_id = ?
-            LIMIT ? OFFSET ?
-        `;
-        const [rows] = await db.execute(query, [userId, catId, limit, offset]);
-        return rows;
-    }
+static async getPaginatedTransactionsByUserIdAndCategory(userId, catId, limit, offset) {
+    const query = `
+        SELECT 
+            th.id,
+            th.cat_id,
+            c.name AS category_name,
+            c.image,
+            th.coin,
+            th.date,
+            th.name,
+            th.email,
+            th.created_by,
+            th.coin_type
+        FROM transaction_history th
+        JOIN categories c ON th.cat_id = c.id
+        WHERE th.uid = ? AND th.cat_id = ?  -- Correctly filtering by user_id and cat_id
+        LIMIT ? OFFSET ?
+    `;
+    const [rows] = await db.execute(query, [userId, catId, limit, offset]);
+    return rows;
+}
 
-    // Count total transactions for the user in a specific category
+
+    // Count total transactions for the user in a specific category// Count total transactions for the user in a specific category
     static async getTotalTransactionsByUserIdAndCategory(userId, catId) {
         const query = 'SELECT COUNT(*) as total FROM transaction_history WHERE uid = ? AND cat_id = ?';
-        const [rows] = await db.execute(query, [userId, catId]);
+        const [rows] = await db.execute(query, [userId, catId]);  // Correctly using userId and catId for filtering
         return rows[0].total;
     }
 
