@@ -150,7 +150,8 @@ router.post('/auth/login', async (req, res) => {
             responseCode: RESPONSE_CODES.SUCCESS,
             responseMessage: MESSAGES.LOGIN_SUCCESS,
             data: {
-                token
+                token,
+                user_id: user.user_id // Add the user_id here
             }
         });
     } catch (error) {
