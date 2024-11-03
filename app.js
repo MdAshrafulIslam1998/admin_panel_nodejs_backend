@@ -6,6 +6,8 @@ const coinpanelRoutes = require('./routes/coinpanelRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const staffpanelRoutes = require('./routes/staffspanelRoutes');
 const authRoutes = require('./routes/authRoutes');
+const agoraRoutes = require('./routes/agoraRoutes');
+
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./swaggerOptions'); // Import Swagger configuration
 
@@ -26,6 +28,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/api', userpanelRoutes);
 app.use('/api', coinpanelRoutes);
 app.use('/api', documentRoutes);
+app.use('/api', agoraRoutes); // Agora Related Routes
 app.use('/api/staffpanel', staffpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
 app.use('/api', authRoutes);
 
