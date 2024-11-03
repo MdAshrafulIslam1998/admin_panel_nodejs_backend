@@ -35,6 +35,8 @@ module.exports = {
     NOTIFICATION_CREATED_SUCCESSFULLY: 'Notification created successfully',
     NO_DATA_FOUND: 'No data found',
     NOT_FOUND: 'Not found',
+    TOKEN_GENERATE_SUCCESS : 'Token genereted successfully',
+    TOKEN_GENERATE_FAILED: 'Failed to generate Token',
 
 
     EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',
@@ -106,9 +108,11 @@ module.exports = {
     TFA_CODE_EXPIRED: 'The verification code has expired.',
     TFA_VALIDATED: 'Two-factor authentication validated successfully.',
     SESSION_NOT_FOUND: 'Session not found.',
-    INVALID_INPUT_PROVIDED: 'Invalid input provided.'
+    INVALID_INPUT_PROVIDED: 'Invalid input provided.',
 
-    
+    // Agora 
+    INVALID_TOKEN_INPUT: 'Invalid input: channel name and UID are required',
+
 
   },
   RESPONSE_CODES: {
