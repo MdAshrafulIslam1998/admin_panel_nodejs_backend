@@ -53,3 +53,4 @@ Thumbs.db
 # Ignore specific public keys or credentials (if applicable)
 *.pem
 *.key
+config/firebase-service-account.json
