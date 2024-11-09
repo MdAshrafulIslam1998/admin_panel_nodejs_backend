@@ -10,6 +10,7 @@ const agoraRoutes = require('./routes/agoraRoutes');
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./swaggerOptions'); // Import Swagger configuration
+const notificationRoutes = require('./routes/notificationRoutes');
 
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use('/api', documentRoutes);
 app.use('/api', agoraRoutes); // Agora Related Routes
 app.use('/api/staffpanel', staffpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
 app.use('/api', authRoutes);
+app.use('/api', notificationRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
