@@ -6,6 +6,7 @@ const DocumentModel = require('../models/documentModel');
 const authenticateToken = require('../middleware/authenticateToken');
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
+const SliderModel = require('../models/sliderModel');
 
 // POST /api/documents - Add a new document for a user
 router.post('/documents', authenticateToken, async (req, res) => {
