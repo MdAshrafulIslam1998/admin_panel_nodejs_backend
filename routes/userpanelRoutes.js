@@ -7,6 +7,8 @@ const {
     updateUserLevel,
     updateUserStatus,
     getTotalUserCount,
+    getVerifiedUsersWithCoins,
+    getTotalVerifiedUserCount,
     fetchUserProfileById,
 } = require("../models/userModel");
 const {
@@ -315,5 +317,41 @@ router.get("/user/apphome_profile/:userId", async (req, res) => {
         });
     }
 });
+
+// GET /api/user/verifiedusersweb - Fetch paginated verified user list
+router.get("/user/verifiedusersweb", authenticateToken, async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = (page - 1) * limit;
+
+        // Fetch total count of verified users for pagination
+        const totalVerifiedUsers = await getTotalVerifiedUserCount();
+        const totalPages = Math.ceil(totalVerifiedUsers / limit);
+
+        // Fetch paginated verified users with coin balances
+        const users = await getVerifiedUsersWithCoins(offset, limit);
+        
+        if (!users || users.length === 0) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+        }
+
+        // Prepare response data
+        const responseData = {
+            users,
+            pagination: {
+                total: totalVerifiedUsers,
+                total_pages: totalPages,
+                current_page: page,
+                limit: limit,
+            },
+        };
+
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, responseData);
+    } catch (error) {
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+    }
+});
+
 
 module.exports = router;

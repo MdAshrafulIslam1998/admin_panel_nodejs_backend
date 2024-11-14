@@ -28,7 +28,7 @@ const getUserList = async (offset, limit) => {
     LEFT JOIN 
       levels l ON u.level = l.levid  -- Join levels table based on level
     LIMIT ? OFFSET ?`;
-  
+
   const [result] = await db.execute(query, [limit, offset]);
   return result;
 };
@@ -47,7 +47,7 @@ const getUserProfileById = async (userId) => {
       status 
     FROM user 
     WHERE user_id = ?`;
-  
+
   const [result] = await db.execute(query, [userId]);
   return result.length > 0 ? result[0] : null;
 };
@@ -57,7 +57,7 @@ const updateUserLevel = async (userId, newLevel) => {
   // Validate that the newLevel exists in the levels table
   const [levelCheck] = await db.execute('SELECT levid FROM levels WHERE levid = ?', [newLevel]);
   if (levelCheck.length === 0) {
-      throw new Error('Invalid level ID'); // or return null
+    throw new Error('Invalid level ID'); // or return null
   }
 
   const query = `
@@ -102,8 +102,8 @@ const getTotalUserCount = async () => {
 };
 
 const getUserByEmail = async (email) => {
-  const query = 
-      `SELECT user_id, name, email, phone, dob, gender, address, level, status, password 
+  const query =
+    `SELECT user_id, name, email, phone, dob, gender, address, level, status, password 
        FROM user 
        WHERE email = ?`;
   const [result] = await db.execute(query, [email]);
@@ -130,20 +130,20 @@ const createUser = async (userData) => {
   const { name, email, password, phone, documents, user_id, dob, gender, address, level } = userData;
 
   await db.execute(query, [
-      name,
-      email,
-      password,
-      phone || null,             // Optional fields set to null if not provided
-      documents || null,         // Optional fields set to null if not provided
-      user_id,                   // UUID for user_id
-      dob || null,               // Optional fields set to null if not provided
-      gender,                    // Required
-      address || null,           // Optional fields set to null if not provided
-      level || null,             // Optional fields set to null if not provided
-      'INITIATED',               // Default status
-      null,                      // approved_by - set to null as not provided
-      null,                      // push_token - set to null as not provided
-      new Date()                 // Set current timestamp
+    name,
+    email,
+    password,
+    phone || null,             // Optional fields set to null if not provided
+    documents || null,         // Optional fields set to null if not provided
+    user_id,                   // UUID for user_id
+    dob || null,               // Optional fields set to null if not provided
+    gender,                    // Required
+    address || null,           // Optional fields set to null if not provided
+    level || null,             // Optional fields set to null if not provided
+    'INITIATED',               // Default status
+    null,                      // approved_by - set to null as not provided
+    null,                      // push_token - set to null as not provided
+    new Date()                 // Set current timestamp
   ]);
 
   return { name, email }; // Return only the necessary information
@@ -162,7 +162,7 @@ const fetchUserProfileById = async (userId) => {
   const userProfile = userResult.length > 0 ? userResult[0] : null;
 
   if (!userProfile) {
-      return null; // User not found
+    return null; // User not found
   }
 
   // Query to get the level name based on level ID
@@ -195,6 +195,38 @@ const fetchUserProfileById = async (userId) => {
   return userProfile;
 };
 
+const getVerifiedUsersWithCoins = async (offset, limit) => {
+  const query = `
+      SELECT 
+          u.user_id,
+          u.name,
+          u.email,
+          u.level AS level_id,
+          l.level_name,
+          u.status,
+          u.date,
+          COALESCE(SUM(CASE WHEN th.coin_type = 'PRIMARY' THEN th.coin ELSE 0 END), 0) AS \`primary\`,
+          COALESCE(SUM(CASE WHEN th.coin_type = 'SECONDARY' THEN th.coin ELSE 0 END), 0) AS secondary
+      FROM user u
+      LEFT JOIN levels l ON u.level = l.levid
+      LEFT JOIN transaction_history th ON u.user_id = th.uid
+      WHERE u.status = 'VERIFIED'
+      GROUP BY u.user_id
+      LIMIT ? OFFSET ?;
+  `;
+
+  const [users] = await db.execute(query, [limit, offset]);
+  return users;
+};
+
+
+// Count total verified users for pagination
+const getTotalVerifiedUserCount = async () => {
+  const query = `SELECT COUNT(*) AS total FROM user WHERE status = 'VERIFIED'`;
+  const [result] = await db.execute(query);
+  return result[0].total;
+};
+
 
 
 // Function to update user password
@@ -210,6 +242,8 @@ module.exports = {
   getUserList,
   getUserByEmail,
   checkUserByEmail,
+  getTotalVerifiedUserCount,
+  getVerifiedUsersWithCoins,
   fetchUserProfileById,
   createUser
 };
