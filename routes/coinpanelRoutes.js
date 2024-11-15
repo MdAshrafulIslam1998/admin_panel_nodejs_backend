@@ -314,7 +314,6 @@ router.delete('/categories/:id', authenticateToken, async (req, res) => {
     }
 });
 
-// GET /api/categories - Fetch paginated categories
 router.get('/categories', authenticateToken, async (req, res) => {
     const limit = 15;
     const page = parseInt(req.query.page) || 1;
@@ -324,14 +323,13 @@ router.get('/categories', authenticateToken, async (req, res) => {
         const categories = await CategoryModel.getPaginatedCategories(limit, offset);
         const totalCategories = await CategoryModel.getTotalCategories();
 
-        // Modify response to have pagination data in a separate object
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.CATEGORY_LIST_FETCHED, {
-            categories,  // List of categories
+            categories, // Now includes bgcolor
             pagination: {
-                total: totalCategories,           // Total categories available
-                total_pages: Math.ceil(totalCategories / limit),  // Total number of pages
-                current_page: page,               // Current page
-                limit: limit                      // Limit per page
+                total: totalCategories,
+                total_pages: Math.ceil(totalCategories / limit),
+                current_page: page,
+                limit: limit
             }
         });
     } catch (error) {
@@ -339,6 +337,7 @@ router.get('/categories', authenticateToken, async (req, res) => {
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.CATEGORY_LIST_FAILED, error.message);
     }
 });
+
 
 router.get('/amountdetailsweb', async (req, res, next) => {
     try {

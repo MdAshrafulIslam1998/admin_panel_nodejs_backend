@@ -149,12 +149,11 @@ const createUser = async (userData) => {
   return { name, email }; // Return only the necessary information
 };
 
-
 // Function to fetch user profile by user ID
 const fetchUserProfileById = async (userId) => {
   // Query to get user details
   const userQuery = `
-      SELECT name AS username, email, phone, dob, gender, address, level, profile_pic
+      SELECT name AS username, email, phone, dob, gender, address, level
       FROM user
       WHERE user_id = ?
   `;
@@ -191,6 +190,16 @@ const fetchUserProfileById = async (userId) => {
   `;
   const [secondaryCoinsResult] = await db.execute(secondaryCoinsQuery, [userId]);
   userProfile.total_secondary_coins = secondaryCoinsResult[0].total_secondary_coins || 0;
+
+  // Query to get the profile picture path from the documents table
+  const profilePicQuery = `
+      SELECT path
+      FROM documents
+      WHERE uid = ? AND doc_type = 'SELFIE'
+      LIMIT 1
+  `;
+  const [profilePicResult] = await db.execute(profilePicQuery, [userId]);
+  userProfile.profile_pic = profilePicResult.length > 0 ? profilePicResult[0].path : null;
 
   return userProfile;
 };

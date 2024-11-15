@@ -66,6 +66,8 @@ module.exports = {
      NO_TRANSACTIONS_FOUND: 'No transactions found',
      TRANSACTION_HISTORY_FETCH_SUCCESS: 'Transaction history fetched successfully',
      INVALID_CATEGORY_ID: 'Invalid or missing category ID',  // New message
+
+     USER_PROFILE_FETCH_SUCCESS: 'User profile fetched successfully',
      
     
     // Category-related
