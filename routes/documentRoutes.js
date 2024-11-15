@@ -234,5 +234,66 @@ router.get('/sliders/user/:uid', async (req, res) => {
     }
 });
 
+// GET /api/sliders/userwithall/:uid - Fetch paginated list of sliders for a specific user + sliders for 'ALL'
+router.get('/sliders/userwithall/:uid', async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+    const { uid } = req.params;
+    const offset = (page - 1) * limit;
+
+    try {
+        // Fetch sliders for the specific user
+        const userSliders = await SliderModel.getSlidersForUser(uid, parseInt(limit), parseInt(offset));
+        // Fetch sliders where send_type is 'ALL'
+        const allSliders = await SliderModel.getAllSlidersWithTypeAll(parseInt(limit), parseInt(offset));
+
+        // Merge both sets of sliders (user-specific and 'ALL' sliders)
+        const combinedSliders = [...userSliders, ...allSliders];
+
+        // Calculate the total count for the combined sliders
+        const totalUserSliders = await SliderModel.getSlidersForUserCount(uid);
+        const totalAllSliders = await SliderModel.getAllSlidersWithTypeAllCount();
+        const total = totalUserSliders + totalAllSliders;
+
+        // Pagination details
+        const totalPages = Math.ceil(total / limit);
+
+        if (combinedSliders.length === 0) {
+            return res.status(404).json({
+                responseCode: RESPONSE_CODES.NOT_FOUND,
+                responseMessage: MESSAGES.SLIDERS_NOT_FOUND,
+                data: null,
+                pagination: {
+                    total: 0,
+                    total_pages: 0,
+                    current_page: parseInt(page),
+                    limit: parseInt(limit)
+                }
+            });
+        }
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.SLIDERS_FETCHED,
+            data: {
+                sliders: combinedSliders,
+                pagination: {
+                    total: total,
+                    total_pages: totalPages,
+                    current_page: parseInt(page),
+                    limit: parseInt(limit)
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching sliders for user and ALL:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR + error.message,
+            data: null
+        });
+    }
+});
+
+
 
 module.exports = router;
