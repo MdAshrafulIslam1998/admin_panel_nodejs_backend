@@ -44,29 +44,29 @@ class TransactionHistoryModel {
     }
 
     // Fetch categorized transactions by category and coin type for a specific user
-        static async getTransactionsCategorizedByCategory(userId) {
-            const query = `
+    static async getTransactionsCategorizedByCategory(userId) {
+        const query = `
                 SELECT cat_id, coin_type, SUM(coin) as total_coins
                 FROM transaction_history
                 WHERE uid = ?
                 GROUP BY cat_id, coin_type
             `;
-            const [rows] = await db.execute(query, [userId]);
-            return rows;
-        }
+        const [rows] = await db.execute(query, [userId]);
+        return rows;
+    }
 
 
 
-     // Check if there are any transactions associated with the category ID
-     static async checkTransactionHistoryByCategoryId(catId) {
+    // Check if there are any transactions associated with the category ID
+    static async checkTransactionHistoryByCategoryId(catId) {
         const query = 'SELECT COUNT(*) as count FROM transaction_history WHERE cat_id = ?';
         const [rows] = await db.execute(query, [catId]);
         return rows[0].count > 0; // Returns true if there are associated transactions
     }
 
 
-     // Fetch users who used coins in a specific category
-     static async getUsersWithCategoryCoins(category, limit, offset) {
+    // Fetch users who used coins in a specific category
+    static async getUsersWithCategoryCoins(category, limit, offset) {
         const query = `
             SELECT u.user_id, u.name, u.email, u.level, u.status, u.date,
                 SUM(CASE WHEN th.coin_type = 'PRIMARY' THEN th.coin ELSE 0 END) AS primary_total,
@@ -128,8 +128,8 @@ class TransactionHistoryModel {
     }
 
     // Fetch paginated transactions by user ID and category ID
-static async getPaginatedTransactionsByUserIdAndCategory(userId, catId, limit, offset) {
-    const query = `
+    static async getPaginatedTransactionsByUserIdAndCategory(userId, catId, limit, offset) {
+        const query = `
         SELECT 
             th.id,
             th.cat_id,
@@ -146,9 +146,9 @@ static async getPaginatedTransactionsByUserIdAndCategory(userId, catId, limit, o
         WHERE th.uid = ? AND th.cat_id = ?  -- Correctly filtering by user_id and cat_id
         LIMIT ? OFFSET ?
     `;
-    const [rows] = await db.execute(query, [userId, catId, limit, offset]);
-    return rows;
-}
+        const [rows] = await db.execute(query, [userId, catId, limit, offset]);
+        return rows;
+    }
 
 
     // Count total transactions for the user in a specific category// Count total transactions for the user in a specific category
@@ -160,9 +160,66 @@ static async getPaginatedTransactionsByUserIdAndCategory(userId, catId, limit, o
 
 
 
+    static async getPaginatedVerifiedUsers(limit, offset) {
+        const query = `
+            SELECT 
+                u.user_id,
+                u.name,
+                u.email,
+                u.status,
+                u.level AS level_id,
+                l.level_name
+            FROM 
+                user u
+            JOIN 
+                levels l ON u.level = l.levid
+            WHERE 
+                u.status = 'VERIFIED'
+            ORDER BY 
+                u.name ASC
+            LIMIT ? OFFSET ?
+        `;
+        const [users] = await db.execute(query, [limit, offset]);
+        return users;
+    }
+
+    static async getTransactionDetailsForUsers(userIds) {
+        if (!userIds.length) return [];
+        const placeholders = userIds.map(() => '?').join(', '); // Dynamically generate (?, ?, ?)
+        const query = `
+            SELECT 
+                th.uid AS user_id,
+                th.cat_id,
+                th.coin_type,
+                SUM(th.coin) AS total_coin
+            FROM 
+                transaction_history th
+            WHERE 
+                th.uid IN (${placeholders})
+            GROUP BY 
+                th.uid, th.cat_id, th.coin_type
+        `;
+        const [transactions] = await db.execute(query, userIds); // Pass the array directly
+        return transactions;
+    }
 
 
+    static async getTotalVerifiedUsersCount() {
+        const query = `SELECT COUNT(*) as total FROM user WHERE status = 'VERIFIED'`;
+        const [result] = await db.execute(query);
+        return result[0].total;
+    }
+
+    static async getAllCategories() {
+        const query = 'SELECT id, name FROM categories';
+        const [categories] = await db.execute(query);
+        return categories;
+    }
     
+
+
+
+
 }
 
 

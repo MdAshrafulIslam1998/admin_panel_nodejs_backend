@@ -340,4 +340,69 @@ router.get('/categories', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/amountdetailsweb', async (req, res, next) => {
+    try {
+        // Extract pagination params
+        const { page = 1, limit = 10 } = req.query;
+        const offset = (page - 1) * limit;
+
+        // Fetch paginated verified users
+        const [users, total] = await Promise.all([
+            TransactionHistoryModel.getPaginatedVerifiedUsers(parseInt(limit), parseInt(offset)),
+            TransactionHistoryModel.getTotalVerifiedUsersCount()
+        ]);
+
+        if (users.length === 0) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_USERS_FOUND);
+        }
+
+        // Extract user IDs
+        const userIds = users.map(user => user.user_id);
+
+        // Fetch transaction details for these users
+        const transactions = await TransactionHistoryModel.getTransactionDetailsForUsers(userIds);
+
+        // Fetch all categories
+        const categories = await TransactionHistoryModel.getAllCategories();
+        const categoryMap = Object.fromEntries(categories.map(cat => [cat.id, cat.name])); // Map cat_id to name
+
+        // Shape the data: Add transactions to their respective users
+        const userMap = users.map(user => {
+            const userTransactions = transactions.filter(t => t.user_id === user.user_id);
+            const amount = {};
+
+            // Organize transactions by category name and coin type
+            userTransactions.forEach(t => {
+                const categoryName = categoryMap[t.cat_id] || `Unknown (${t.cat_id})`;
+                if (!amount[categoryName]) {
+                    amount[categoryName] = { PRIMARY: 0, SECONDARY: 0 };
+                }
+                amount[categoryName][t.coin_type] = t.total_coin;
+            });
+
+            return {
+                ...user,
+                amount
+            };
+        });
+
+        // Calculate pagination details
+        const totalPages = Math.ceil(total / limit);
+
+        // Return the response
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
+            users: userMap,
+            pagination: {
+                total,
+                total_pages: totalPages,
+                current_page: parseInt(page),
+                limit: parseInt(limit)
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 module.exports = router;
