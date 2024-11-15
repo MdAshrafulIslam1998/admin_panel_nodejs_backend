@@ -8,30 +8,33 @@ class CategoryModel {
         return rows;
     }
 
-    static async addCategory(name, image, created_by) {
+    static async addCategory(name, image, created_by, bgcolor) {
         const query = `
-            INSERT INTO categories (name, image, created_by)
-            VALUES (?, ?, ?)
+            INSERT INTO categories (name, image, created_by, bgcolor)
+            VALUES (?, ?, ?, ?)
         `;
-        const [result] = await db.execute(query, [name, image, created_by]);
+        const [result] = await db.execute(query, [name, image, created_by, bgcolor]);
         return result;
     }
 
-    static async updateCategory(id, name, image, createdBy) {
+
+    static async updateCategory(id, name, image, created_by, bgcolor) {
         const query = `
             UPDATE categories 
-            SET name = ?, image = ?, created_by = ? 
+            SET name = ?, image = ?, created_by = ?, bgcolor = ? 
             WHERE id = ?
         `;
-        const [result] = await db.execute(query, [name, image, createdBy, id]);
+        const [result] = await db.execute(query, [name, image, created_by, bgcolor, id]);
         return result;
     }
+
 
     static async deleteCategory(id) {
         const query = 'DELETE FROM categories WHERE id = ?';
         const [result] = await db.execute(query, [id]);
         return result;
     }
+
 
     static async getPaginatedCategories(limit, offset) {
         const query = `

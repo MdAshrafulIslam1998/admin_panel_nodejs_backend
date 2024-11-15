@@ -259,14 +259,15 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
 
 // API to add a category
 router.post('/categories/add', async (req, res) => {
-    const { name, image, created_by } = req.body;
+    const { name, image, created_by, bgcolor } = req.body;
 
+    // Validate required fields
     if (!name || !created_by) {
         return ERROR(res, RESPONSE_CODES.BAD_REQUEST, MESSAGES.CATEGORY_ADD_VALIDATION_ERROR);
     }
 
     try {
-        const result = await CategoryModel.addCategory(name, image, created_by);
+        const result = await CategoryModel.addCategory(name, image, created_by, bgcolor || null);
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.CATEGORY_ADDED_SUCCESS, { id: result.insertId });
     } catch (error) {
         console.error(error);
@@ -274,13 +275,14 @@ router.post('/categories/add', async (req, res) => {
     }
 });
 
+
 // API to update category
 router.put('/categories/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
-    const { name, image, created_by } = req.body;
+    const { name, image, created_by, bgcolor } = req.body;
 
     try {
-        const result = await CategoryModel.updateCategory(id, name, image, created_by);
+        const result = await CategoryModel.updateCategory(id, name, image, created_by, bgcolor);
         if (result.affectedRows > 0) {
             SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.CATEGORY_UPDATE_SUCCESS);
         } else {
@@ -291,6 +293,7 @@ router.put('/categories/:id', authenticateToken, async (req, res) => {
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.CATEGORY_UPDATE_FAILED, error.message);
     }
 });
+
 
 // DELETE /api/categories/:id - Delete a category
 router.delete('/categories/:id', authenticateToken, async (req, res) => {
@@ -313,6 +316,7 @@ router.delete('/categories/:id', authenticateToken, async (req, res) => {
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.CATEGORY_DELETE_FAILED, error.message);
     }
 });
+
 
 router.get('/categories', authenticateToken, async (req, res) => {
     const limit = 15;
