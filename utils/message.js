@@ -101,6 +101,9 @@ module.exports = {
     STAFFS_FETCHED: 'Staff list fetched successfully',
     STAFF_NOT_FOUND: 'Staff not found',
 
+    SLIDERS_NOT_FOUND: 'Sliders not found',
+    SLIDERS_FETCHED: 'Sliders fetched successfully',
+
     
    
     PASSWORD_RESET_SUCCESS: 'Password reset successful.',

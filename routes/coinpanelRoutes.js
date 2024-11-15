@@ -190,12 +190,10 @@ router.get('/alltransactions/category', authenticateToken, async (req, res, next
 });
 
 
-
-// API to fetch transaction lists for a specific user with optional category filtering and pagination
 router.get('/users/:user_id/transactions', authenticateToken, async (req, res) => {
     const user_id = req.params.user_id;
-    const cat_id = req.query.cat_id; // Optional category ID from query parameters
-    const limit = parseInt(req.query.limit) || 20;  // Default limit is 20
+    const cat_id = req.query.cat_id;
+    const limit = parseInt(req.query.limit) || 20;
     const page = parseInt(req.query.page) || 1;
     const offset = (page - 1) * limit;
 
@@ -204,23 +202,19 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
         let totalTransactions;
 
         if (cat_id) {
-            // Fetch transactions filtered by user_id and cat_id (category)
             transactions = await TransactionHistoryModel.getPaginatedTransactionsByUserIdAndCategory(user_id, cat_id, limit, offset);
             totalTransactions = await TransactionHistoryModel.getTotalTransactionsByUserIdAndCategory(user_id, cat_id);
         } else {
-            // Fetch all transactions for the user without category filtering
             transactions = await TransactionHistoryModel.getPaginatedTransactionsByUserId(user_id, limit, offset);
             totalTransactions = await TransactionHistoryModel.getTotalTransactionsByUserId(user_id);
         }
 
         const totalPages = Math.ceil(totalTransactions / limit);
 
-        // Check if any transactions were found
         if (transactions.length === 0) {
             return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
         }
 
-        // Prepare paginated response
         const userTransactionData = {
             user_id: user_id,
             transactions: transactions.map(transaction => ({
@@ -229,6 +223,7 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
                     id: transaction.cat_id,
                     name: transaction.category_name,
                     image: transaction.image,
+                    bgcolor: transaction.bgcolor, // Add bgcolor here
                 },
                 coin: transaction.coin,
                 date: transaction.date,
@@ -245,13 +240,13 @@ router.get('/users/:user_id/transactions', authenticateToken, async (req, res) =
             }
         };
 
-        // Send the response with paginated transactions
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, userTransactionData);
     } catch (error) {
         console.error(error);
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
     }
 });
+
 
 
 

@@ -110,6 +110,7 @@ class TransactionHistoryModel {
                 th.cat_id,
                 c.name AS category_name,
                 c.image,
+                c.bgcolor,  -- Include bgcolor here
                 th.coin,
                 th.date,
                 th.name,
@@ -126,6 +127,7 @@ class TransactionHistoryModel {
     }
 
 
+
     // Count total transactions for the user
     static async getTotalTransactionsByUserId(userId) {
         const query = 'SELECT COUNT(*) as total FROM transaction_history WHERE uid = ?';
@@ -136,25 +138,27 @@ class TransactionHistoryModel {
     // Fetch paginated transactions by user ID and category ID
     static async getPaginatedTransactionsByUserIdAndCategory(userId, catId, limit, offset) {
         const query = `
-        SELECT 
-            th.id,
-            th.cat_id,
-            c.name AS category_name,
-            c.image,
-            th.coin,
-            th.date,
-            th.name,
-            th.email,
-            th.created_by,
-            th.coin_type
-        FROM transaction_history th
-        JOIN categories c ON th.cat_id = c.id
-        WHERE th.uid = ? AND th.cat_id = ?  -- Correctly filtering by user_id and cat_id
-        LIMIT ? OFFSET ?
-    `;
+            SELECT 
+                th.id,
+                th.cat_id,
+                c.name AS category_name,
+                c.image,
+                c.bgcolor,  -- Include bgcolor here
+                th.coin,
+                th.date,
+                th.name,
+                th.email,
+                th.created_by,
+                th.coin_type
+            FROM transaction_history th
+            JOIN categories c ON th.cat_id = c.id
+            WHERE th.uid = ? AND th.cat_id = ?
+            LIMIT ? OFFSET ?
+        `;
         const [rows] = await db.execute(query, [userId, catId, limit, offset]);
         return rows;
     }
+
 
 
     // Count total transactions for the user in a specific category// Count total transactions for the user in a specific category
