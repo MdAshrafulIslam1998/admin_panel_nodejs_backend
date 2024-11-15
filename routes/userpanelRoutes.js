@@ -10,6 +10,8 @@ const {
     getVerifiedUsersWithCoins,
     getTotalVerifiedUserCount,
     getPendingUsers,
+    getBlockedUsers,
+    getTotalBlockedUserCount,
     getTotalPendingUserCount,
     fetchUserProfileById,
 } = require("../models/userModel");
@@ -378,6 +380,41 @@ router.get("/user/pendingusersweb", authenticateToken, async (req, res) => {
             users,
             pagination: {
                 total: totalPendingUsers,
+                total_pages: totalPages,
+                current_page: page,
+                limit: limit,
+            },
+        };
+
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, responseData);
+    } catch (error) {
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+    }
+});
+
+// GET /api/user/pendingusersweb - Fetch paginated pending user list
+router.get("/user/blockedusersweb", authenticateToken, async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = (page - 1) * limit;
+
+        // Fetch total count of pending users for pagination
+        const totalBlockedUsers = await getTotalBlockedUserCount();
+        const totalPages = Math.ceil(totalBlockedUsers / limit);
+
+        // Fetch paginated pending users
+        const users = await getBlockedUsers(offset, limit);
+
+        if (!users || users.length === 0) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+        }
+
+        // Prepare response data
+        const responseData = {
+            users,
+            pagination: {
+                total: totalBlockedUsers,
                 total_pages: totalPages,
                 current_page: page,
                 limit: limit,
