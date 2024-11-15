@@ -9,7 +9,13 @@ class TransactionHistoryModel {
 
     static async getPaginatedTransactions(limit, offset) {
         const query = `
-            SELECT * FROM transaction_history
+            SELECT 
+                th.*,
+                c.name AS category_name
+            FROM 
+                transaction_history th
+            LEFT JOIN 
+                categories c ON th.cat_id = c.id
             LIMIT ? OFFSET ?
         `;
         const [rows] = await db.execute(query, [limit, offset]);
@@ -215,7 +221,7 @@ class TransactionHistoryModel {
         const [categories] = await db.execute(query);
         return categories;
     }
-    
+
 
 
 
