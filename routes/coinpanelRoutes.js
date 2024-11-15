@@ -116,13 +116,14 @@ router.get('/users/paginated-transactions-history-by-category', async (req, res)
 
 router.get('/alltransactions', authenticateToken, async (req, res, next) => {
     try {
-        const { page = 1 } = req.query;  // Defaults to page 1 if not provided
-        const limit = 10;
-        const offset = (page - 1) * limit;
+        const { page = 1, limit = 10 } = req.query; // Fetch `page` and `limit` from query params, with defaults
+        const parsedLimit = parseInt(limit);       // Parse limit as an integer
+        const parsedPage = parseInt(page);         // Parse page as an integer
+        const offset = (parsedPage - 1) * parsedLimit;
 
         // Fetch the paginated transaction history with category name and total count
         const [transactions, total] = await Promise.all([
-            TransactionHistoryModel.getPaginatedTransactions(limit, offset),
+            TransactionHistoryModel.getPaginatedTransactions(parsedLimit, offset),
             TransactionHistoryModel.getTotalTransactions()
         ]);
 
@@ -130,7 +131,7 @@ router.get('/alltransactions', authenticateToken, async (req, res, next) => {
             return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
         }
 
-        const total_pages = Math.ceil(total / limit);  // Calculate total pages
+        const total_pages = Math.ceil(total / parsedLimit);  // Calculate total pages
 
         // Return the response with transactions and pagination info
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
@@ -138,14 +139,15 @@ router.get('/alltransactions', authenticateToken, async (req, res, next) => {
             pagination: {  // Pagination info at the bottom
                 total,              // Total number of transactions
                 total_pages,        // Total pages available
-                current_page: parseInt(page),  // Current page
-                limit               // Number of records per page
+                current_page: parsedPage,  // Current page
+                limit: parsedLimit        // Number of records per page
             }
         });
     } catch (error) {
         next(error);  // Pass error to centralized error handler
     }
 });
+
 
 
 // GET /api/coin/transactions/category - Fetch paginated transaction history by category
