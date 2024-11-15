@@ -295,7 +295,6 @@ router.put("/levels/edit/:levid", authenticateToken, async (req, res) => {
     }
 });
 
-// GET /api/user/profile/:userId - Fetch user profile details
 router.get("/user/apphome_profile/:userId", async (req, res) => {
     const userId = req.params.userId;
 
@@ -314,13 +313,18 @@ router.get("/user/apphome_profile/:userId", async (req, res) => {
             data: userProfileData,
         });
     } catch (error) {
-        console.error("Error fetching user profile:", error);
+        console.error("Error fetching user profile:", error); // Logs full error details to the server console
+
+        // Return the raw error message in the response for debugging (use only in development)
         return res.status(500).json({
             responseCode: RESPONSE_CODES.SERVER_ERROR,
             responseMessage: MESSAGES.SERVER_ERROR,
+            error: error.message, // Include the raw error message
+            stack: error.stack,  // Optionally include the stack trace
         });
     }
 });
+
 
 // GET /api/user/verifiedusersweb - Fetch paginated verified user list
 router.get("/user/verifiedusersweb", authenticateToken, async (req, res) => {

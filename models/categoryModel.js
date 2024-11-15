@@ -3,7 +3,7 @@ const db = require('../config/db.config'); // Adjust the path as necessary
 class CategoryModel {
     // Fetch all categories
     static async getAllCategories() {
-        const query = 'SELECT id, name, image, created_by FROM categories';
+        const query = 'SELECT id, name, image, created_by, bgcolor FROM categories';
         const [rows] = await db.execute(query);
         return rows;
     }
@@ -35,13 +35,14 @@ class CategoryModel {
 
     static async getPaginatedCategories(limit, offset) {
         const query = `
-            SELECT id, name, image, created_by 
+            SELECT id, name, image, created_by, bgcolor
             FROM categories 
             LIMIT ? OFFSET ?
         `;
         const [rows] = await db.execute(query, [limit, offset]);
         return rows;
     }
+
 
     static async getTotalCategories() {
         const query = 'SELECT COUNT(*) as total FROM categories';
@@ -50,9 +51,9 @@ class CategoryModel {
     }
 
 
-  
 
-   
+
+
 }
 
 module.exports = CategoryModel;
