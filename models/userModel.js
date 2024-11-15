@@ -228,6 +228,32 @@ const getTotalVerifiedUserCount = async () => {
 };
 
 
+// New function to get paginated pending users
+const getPendingUsers = async (offset, limit) => {
+  const query = `
+      SELECT 
+          u.user_id,
+          u.name,
+          u.email,
+          u.status,
+          u.date
+      FROM user u
+      WHERE u.status = 'PENDING'
+      GROUP BY u.user_id
+      LIMIT ? OFFSET ?;
+  `;
+
+  const [users] = await db.execute(query, [limit, offset]);
+  return users;
+};
+
+// Count total pending users for pagination
+const getTotalPendingUserCount = async () => {
+  const query = `SELECT COUNT(*) AS total FROM user WHERE status = 'PENDING'`;
+  const [result] = await db.execute(query);
+  return result[0].total;
+};
+
 
 // Function to update user password
 
@@ -245,5 +271,7 @@ module.exports = {
   getTotalVerifiedUserCount,
   getVerifiedUsersWithCoins,
   fetchUserProfileById,
+  getTotalPendingUserCount,
+  getPendingUsers,
   createUser
 };
