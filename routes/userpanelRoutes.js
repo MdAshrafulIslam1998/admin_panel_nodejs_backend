@@ -21,11 +21,13 @@ const {
     getLevelById,
     deleteLevelById,
     updateLevel,
+    getUserLevels,
 } = require("../models/levelModel");
 const DocumentModel = require("../models/documentModel");
 const UserModel = require("../models/userModel");
 const { SUCCESS, ERROR } = require("../middleware/handler");
 const { MESSAGES, RESPONSE_CODES } = require("../utils/message");
+const LevelModel = require("../models/levelModel");
 
 // GET /api/users - Fetch paginated user list
 router.get("/users", authenticateToken, async (req, res) => {
@@ -114,12 +116,20 @@ router.get("/users/profile/:userId", authenticateToken, async (req, res) => {
     }
 });
 
+
 // POST /api/levels/addlevel - Add a new level
 router.post("/levels/addlevel", authenticateToken, async (req, res) => {
     try {
-        const { level_name, level_value, created_by } = req.body;
+        const { level_name, level_value, min_thresh, max_thresh, created_by } = req.body;
 
-        if (!level_name || level_value === undefined || !created_by) {
+        // Validate that all required fields are provided
+        if (
+            !level_name ||
+            level_value === undefined ||
+            min_thresh === undefined ||
+            max_thresh === undefined ||
+            !created_by
+        ) {
             return ERROR(
                 res,
                 RESPONSE_CODES.BAD_REQUEST,
@@ -127,12 +137,28 @@ router.post("/levels/addlevel", authenticateToken, async (req, res) => {
             );
         }
 
-        const levelId = await createLevel({ level_name, level_value, created_by });
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVEL_ADDED_SUCCESSFULLY, {
+        // Call the model to create the level
+        const levelId = await createLevel({
             level_name,
             level_value,
+            min_thresh,
+            max_thresh,
             created_by,
         });
+
+        // Return success response
+        SUCCESS(
+            res,
+            RESPONSE_CODES.SUCCESS,
+            MESSAGES.LEVEL_ADDED_SUCCESSFULLY,
+            {
+                level_name,
+                level_value,
+                min_thresh,
+                max_thresh,
+                created_by,
+            }
+        );
     } catch (error) {
         ERROR(
             res,
@@ -142,6 +168,7 @@ router.post("/levels/addlevel", authenticateToken, async (req, res) => {
         );
     }
 });
+
 
 // PUT /api/users/editlevel/:userid - Update user level
 router.put("/users/editlevel/:userid", authenticateToken, async (req, res) => {
@@ -266,12 +293,15 @@ router.delete("/levels/:levid", authenticateToken, async (req, res) => {
 // PUT /api/levels/edit/:levid - Edit level and update associated users
 router.put("/levels/edit/:levid", authenticateToken, async (req, res) => {
     const { levid } = req.params;
-    const { level_name, level_value, created_by } = req.body;
+    const { level_name, level_value, min_thresh, max_thresh, created_by } = req.body;
 
     try {
+        // Update the level with new fields
         const levelUpdated = await updateLevel(levid, {
             level_name,
             level_value,
+            min_thresh,
+            max_thresh,
             created_by,
         });
 
@@ -279,11 +309,15 @@ router.put("/levels/edit/:levid", authenticateToken, async (req, res) => {
             return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.LEVEL_NOT_FOUND);
         }
 
-        const usersUpdated = await UserModel.updateUsersLevelByLevid(levid);
+        // Update users associated with the level
+        const usersUsedThisLevel = await UserModel.updateUsersLevelByLevid(levid);
+
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVEL_UPDATED_SUCCESSFULLY, {
             level_name,
             level_value,
-            usersUpdated,
+            min_thresh,
+            max_thresh,
+            usersUsedThisLevel: usersUsedThisLevel,
         });
     } catch (error) {
         ERROR(
@@ -294,6 +328,39 @@ router.put("/levels/edit/:levid", authenticateToken, async (req, res) => {
         );
     }
 });
+
+
+
+// GET /api/levels/user/:userId - Get all levels for a user
+router.get("/levels/user/:userId", authenticateToken, async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        // Fetch a single level associated with the user
+        const level = await LevelModel.getUserSingleLevel(userId);
+
+        if (!level) {
+            return ERROR(
+                res,
+                RESPONSE_CODES.NOT_FOUND,
+                MESSAGES.NO_LEVELS_FOUND_FOR_USER
+            );
+        }
+
+        // Return the single level in response
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVELS_FETCHED_SUCCESSFULLY, level);
+    } catch (error) {
+        ERROR(
+            res,
+            RESPONSE_CODES.SERVER_ERROR,
+            MESSAGES.SERVER_ERROR,
+            error.message
+        );
+    }
+});
+
+
+
 
 router.get("/user/apphome_profile/:userId", async (req, res) => {
     const userId = req.params.userId;

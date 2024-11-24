@@ -107,6 +107,9 @@ module.exports = {
     
    
     PASSWORD_RESET_SUCCESS: 'Password reset successful.',
+
+    NO_LEVELS_FOUND_FOR_USER: 'No levels found for the user',
+    LEVELS_FETCHED_SUCCESSFULLY: 'Levels fetched successfully',
     
 
     TFA_CODE_SENT: 'Verification code sent successfully.',
