@@ -21,7 +21,7 @@ const {
     getLevelById,
     deleteLevelById,
     updateLevel,
-    getUserLevels,
+    getUserLevelWithXP
 } = require("../models/levelModel");
 const DocumentModel = require("../models/documentModel");
 const UserModel = require("../models/userModel");
@@ -331,13 +331,12 @@ router.put("/levels/edit/:levid", authenticateToken, async (req, res) => {
 
 
 
-// GET /api/levels/user/:userId - Get all levels for a user
 router.get("/levels/user/:userId", authenticateToken, async (req, res) => {
     const { userId } = req.params;
 
     try {
-        // Fetch a single level associated with the user
-        const level = await LevelModel.getUserSingleLevel(userId);
+        // Fetch the user's level with XP calculation
+        const level = await LevelModel.getUserLevelWithXP(userId);
 
         if (!level) {
             return ERROR(
@@ -347,17 +346,21 @@ router.get("/levels/user/:userId", authenticateToken, async (req, res) => {
             );
         }
 
-        // Return the single level in response
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVELS_FETCHED_SUCCESSFULLY, level);
+        // Send the level and XP in the desired response structure
+        res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.LEVELS_FETCHED_SUCCESSFULLY,
+            data: level
+        });
     } catch (error) {
-        ERROR(
-            res,
-            RESPONSE_CODES.SERVER_ERROR,
-            MESSAGES.SERVER_ERROR,
-            error.message
-        );
+        res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR,
+            error: error.message
+        });
     }
 });
+
 
 
 
