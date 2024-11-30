@@ -7,6 +7,7 @@ const authenticateToken = require('../middleware/authenticateToken');
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
 const SliderModel = require('../models/sliderModel');
+const MetaServiceModel = require('../models/metaServiceModel');
 
 // POST /api/documents - Add a new document for a user
 router.post('/documents', authenticateToken, async (req, res) => {
@@ -295,5 +296,28 @@ router.get('/sliders/userwithall/:uid', async (req, res) => {
 });
 
 
+
+
+router.get('/meta-service/:feature_code', async (req, res) => {
+    const { feature_code } = req.params;
+
+    try {
+        const featureData = await MetaServiceModel.getFeatureByCode(feature_code);
+
+        if (!featureData) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+        }
+
+        // Return data as-is
+        res.json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: "Meta service data fetched successfully",
+            data: featureData
+        });
+    } catch (error) {
+        console.error(error);
+        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+    }
+});
 
 module.exports = router;
