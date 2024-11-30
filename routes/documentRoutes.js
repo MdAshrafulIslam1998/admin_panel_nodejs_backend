@@ -9,6 +9,71 @@ const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
 const SliderModel = require('../models/sliderModel');
 const MetaServiceModel = require('../models/metaServiceModel');
 
+
+// File Server 
+
+
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+const mysql = require('mysql2/promise');
+
+// MySQL Connection Pool (you'll need to replace with your actual DB config)
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+// Configure multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, 'files_server');
+        
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        // Generate unique filename with UUID and original extension
+        const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
+        cb(null, uniqueFilename);
+    }
+});
+
+// File filter to validate file types
+const fileFilter = (req, file, cb) => {
+    // Allow only image files
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only JPEG, PNG, GIF, and WEBP are allowed.'), false);
+    }
+};
+
+// Configure multer upload
+const upload = multer({ 
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 1 * 1024 * 1024 // 1MB file size limit
+    }
+}).array('documents', 5); // Allow up to 5 files per upload
+
+
+
+
+
 // POST /api/documents - Add a new document for a user
 router.post('/documents', authenticateToken, async (req, res) => {
     try {
@@ -319,5 +384,58 @@ router.get('/meta-service/:feature_code', async (req, res) => {
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
     }
 });
+
+
+// Single file upload route (for backwards compatibility)
+router.post('/upload-document', authenticateToken, (req, res) => {
+    upload(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({
+                status: false,
+                message: err.message,
+                data: null
+            });
+        }
+
+        // Log the entire request body and files for debugging
+        console.log('Request Body:', req.body);
+        console.log('Request Files:', req.files);
+
+        // Check if files are uploaded using the 'documents' key
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({
+                status: false,
+                message: 'No document uploaded',
+                data: null
+            });
+        }
+
+        const file = req.files[0];
+        
+        // Get doc_type from request body, default to 'default'
+        const docType = req.body.doc_type || 'default';
+        
+        // Use path.basename to get just the filename, not the full path
+        const filename = path.basename(file.filename);
+        
+        // Construct the URL path (adjust the base URL as needed)
+        const fileUrl = `/files_server/${filename}`;
+
+        res.json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: 'Document uploaded successfully',
+            data: {
+                url: fileUrl,
+                doc_type: docType,
+                originalName: file.originalname,
+                mimetype: file.mimetype,
+                size: file.size
+            }
+        });
+    });
+});
+
+
+
 
 module.exports = router;
