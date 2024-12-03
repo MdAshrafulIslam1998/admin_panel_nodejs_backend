@@ -10,10 +10,8 @@ const SliderModel = require('../models/sliderModel');
 const MetaServiceModel = require('../models/metaServiceModel');
 
 
+
 // File Server 
-
-
-const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -31,18 +29,54 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+const logError = (error) => {
+    const logPath = path.join(process.cwd(), 'log.txt');
+    const timestamp = new Date().toISOString();
+    const logEntry = `${timestamp} - ERROR: ${error.message}\n${error.stack}\n\n`;
+
+    // Append to log file
+    fs.appendFile(logPath, logEntry, (err) => {
+        if (err) {
+            console.error('Failed to write to log file', err);
+        }
+    });
+};
+
+
+// Enhanced logging function
+const logEvent = (type, message, additionalData = {}) => {
+    const logPath = path.join(process.cwd(), 'log.txt');
+    const timestamp = new Date().toISOString();
+    
+    // Prepare log entry with additional context
+    const logEntry = JSON.stringify({
+        timestamp,
+        type,
+        message,
+        ...additionalData
+    }) + '\n';
+
+    // Append to log file
+    fs.appendFile(logPath, logEntry, (err) => {
+        if (err) {
+            console.error('Failed to write to log file', err);
+        }
+    });
+};
+
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, 'files_server');
-        
+        const uploadPath = path.resolve(process.cwd(), 'files_server');
+
         // Create directory if it doesn't exist
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
         }
-        
+
         cb(null, uploadPath);
     },
+
     filename: (req, file, cb) => {
         // Generate unique filename with UUID and original extension
         const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
@@ -62,7 +96,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 // Configure multer upload
-const upload = multer({ 
+const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
@@ -390,6 +424,13 @@ router.get('/meta-service/:feature_code', async (req, res) => {
 router.post('/upload-document', authenticateToken, (req, res) => {
     upload(req, res, async (err) => {
         if (err) {
+
+            logEvent('UPLOAD_ERROR', 'Document upload failed', {
+                errorMessage: err.message,
+                requestBody: req.body
+            });
+
+
             return res.status(400).json({
                 status: false,
                 message: err.message,
@@ -400,6 +441,8 @@ router.post('/upload-document', authenticateToken, (req, res) => {
         // Log the entire request body and files for debugging
         console.log('Request Body:', req.body);
         console.log('Request Files:', req.files);
+        console.log('Current Working Directory:', process.cwd());
+        console.log('Upload Path:', path.resolve(process.cwd(), 'files_server'));
 
         // Check if files are uploaded using the 'documents' key
         if (!req.files || req.files.length === 0) {
@@ -411,13 +454,22 @@ router.post('/upload-document', authenticateToken, (req, res) => {
         }
 
         const file = req.files[0];
-        
+        logEvent('UPLOAD_SUCCESS', 'Document uploaded successfully', {
+            filename: file.filename,
+            originalName: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size,
+            Current_Working_Directory: process.cwd(),
+            Upload_Path: path.resolve(process.cwd(), 'files_server'),
+            docType: req.body.doc_type || 'default'
+        });
+
         // Get doc_type from request body, default to 'default'
         const docType = req.body.doc_type || 'default';
-        
+
         // Use path.basename to get just the filename, not the full path
         const filename = path.basename(file.filename);
-        
+
         // Construct the URL path (adjust the base URL as needed)
         const fileUrl = `/files_server/${filename}`;
 
@@ -434,6 +486,19 @@ router.post('/upload-document', authenticateToken, (req, res) => {
         });
     });
 });
+
+// You can also add global error logging
+process.on('uncaughtException', (error) => {
+    logError(error);
+    // Optionally, you might want to exit the process
+    // process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    logError(new Error(`Unhandled Rejection at: ${promise}, reason: ${reason}`));
+});
+
+
 
 
 

@@ -11,6 +11,10 @@ const agoraRoutes = require('./routes/agoraRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./swaggerOptions'); // Import Swagger configuration
 const notificationRoutes = require('./routes/notificationRoutes');
+const path = require('path');
+const staticFilesPath = path.join(__dirname, 'files_server');
+
+
 
 
 dotenv.config();
@@ -29,6 +33,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/api', userpanelRoutes);
 app.use('/api', coinpanelRoutes);
 app.use('/api', documentRoutes);
+app.use('/files_server', express.static(path.join(__dirname, 'files_server')));
 app.use('/api', agoraRoutes); // Agora Related Routes
 app.use('/api/staffpanel', staffpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
 app.use('/api', authRoutes);
