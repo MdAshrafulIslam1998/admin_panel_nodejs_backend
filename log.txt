@@ -1,0 +1,64 @@
+2024-12-01T08:51:47.703Z - ERROR: app is not defined
+ReferenceError: app is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\documentRoutes.js:511:1)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:6:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-01T08:52:25.298Z - ERROR: logDocumentAccess is not defined
+ReferenceError: logDocumentAccess is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:37:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
+    at node:internal/main/run_main_module:28:49
+
+2024-12-01T08:52:27.582Z - ERROR: logDocumentAccess is not defined
+ReferenceError: logDocumentAccess is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:37:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
+    at node:internal/main/run_main_module:28:49
+
+2024-12-01T08:53:41.916Z - ERROR: logDocumentAccess is not defined
+ReferenceError: logDocumentAccess is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:37:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
+    at node:internal/main/run_main_module:28:49
+
+2024-12-01T08:53:49.292Z - ERROR: logDocumentAccess is not defined
+ReferenceError: logDocumentAccess is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:37:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
+    at node:internal/main/run_main_module:28:49
+
+{"timestamp":"2024-12-01T08:53:56.661Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"679bdeeb-6701-4137-a436-06fb4d5b0692.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"docType":"default"}
+{"timestamp":"2024-12-01T09:07:44.687Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"bbad05eb-80fd-4a9e-8141-f920a111307c.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","docType":"default"}
+{"timestamp":"2024-12-01T09:13:37.055Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"de4ab551-f212-4bb8-b7f8-69a11a874c7b.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","docType":"default"}
+
+{"timestamp":"2024-12-01T09:16:13.106Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"c54bebc8-040e-42dc-b41f-3ef49c092304.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","Static_Files_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\routes\\files_server","docType":"default"}
+
+
+{"timestamp":"2024-12-01T09:18:33.812Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"e699c1d8-5bdd-4721-bf99-42da7b1696c0.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","Static_Files_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\routes\\files_server","docType":"default"}
+
+
+{"timestamp":"2024-12-01T09:19:22.772Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"320c8653-8177-478d-89f3-da0b5d69d884.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","docType":"default"}
