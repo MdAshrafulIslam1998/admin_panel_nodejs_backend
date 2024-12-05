@@ -47,6 +47,8 @@ module.exports = {
 
     EMAIL_SENT_SUCCESS: 'Email sent successfully.',
     EMAIL_SEND_FAILED: 'Failed to send email.',
+    GMAIL_APPPASS_UPDATE_FAILED: 'Failed to update gamil apppass credentials.',
+    GMAIL_APPPASS_UPDATE_SUCCESS: 'Gmail apppass credentials updated successfully.',
 
 
     EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',

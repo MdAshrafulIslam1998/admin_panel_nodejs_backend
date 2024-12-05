@@ -183,7 +183,7 @@ router.post('/auth/send-verification', async (req, res) => {
         await createTFA(tfaCode, email, sessionId, expiredAt);
 
         // Send the verification code via email
-        const subject = 'Your GlobiPay Verification Code';
+        const subject = 'Your GlobiPay Verification Code❗';
         const html = `
     <!DOCTYPE html>
 <html lang="en">
