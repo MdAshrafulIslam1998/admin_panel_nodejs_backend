@@ -128,7 +128,7 @@ router.post('/auth/register', async (req, res) => {
             documents: documents || null, // Optional
             user_id: userId,
             dob: dob || null, // Optional
-            gender: gender || 'OTHER', // Default to 'OTHER' if not provided
+            gender: gender || null, // Default to 'OTHER' if not provided
             address: address || null, // Optional
             level: null // Default to null as no level provided
         };

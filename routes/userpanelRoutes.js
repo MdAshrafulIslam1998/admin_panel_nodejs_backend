@@ -14,7 +14,8 @@ const {
     getTotalBlockedUserCount,
     getTotalPendingUserCount,
     fetchUserProfileById,
-    updateUserStatusPending
+    updateUserStatusPending,
+    updateUserDetails
 } = require("../models/userModel");
 const {
     createLevel,
@@ -537,6 +538,39 @@ router.patch("/user/update_status/:userId", async (req, res) => {
         }
     } catch (error) {
         console.error("Error in update_status API:", error);
+
+        return res.status(500).json({
+            responseCode: "E500000",
+            responseMessage: MESSAGES.SERVER_ERROR,
+            error: error.message,
+            stack: error.stack,
+        });
+    }
+});
+
+
+router.put("/user/add_details/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    const userDetails = req.body; // Extract data from the request body
+
+    try {
+        const updatedUser = await updateUserDetails(userId, userDetails);
+
+        if (!updatedUser) {
+            return res.status(404).json({
+                responseCode: "E404000",
+                responseMessage: MESSAGES.USER_NOT_FOUND,
+                data: null,
+            });
+        }
+
+        return res.status(200).json({
+            responseCode: "S100000",
+            responseMessage: MESSAGES.USER_DETAILS_UPDATED,
+            data: updatedUser,
+        });
+    } catch (error) {
+        console.error("Error in add_details API:", error);
 
         return res.status(500).json({
             responseCode: "E500000",

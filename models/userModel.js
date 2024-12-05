@@ -325,6 +325,64 @@ const getTotalBlockedUserCount = async () => {
 };
 
 
+const updateUserDetails = async (userId, userDetails) => {
+  // Destructure fields from userDetails
+  const { phone, dob, gender, address } = userDetails;
+
+  // Check if the user exists
+  const userQuery = `
+      SELECT user_id, phone, dob, gender, address, documents
+      FROM user
+      WHERE user_id = ?
+  `;
+  const [userResult] = await db.execute(userQuery, [userId]);
+
+  if (userResult.length === 0) {
+      return null; // User not found
+  }
+
+  // Fetch documents for the user
+  const documentsQuery = `
+      SELECT doc_type, path
+      FROM documents
+      WHERE uid = ?
+  `;
+  const [documentsResult] = await db.execute(documentsQuery, [userId]);
+
+  // Convert documents to JSON format: { doc_type: path }
+  const documentsJson = {};
+  documentsResult.forEach(doc => {
+      documentsJson[doc.doc_type] = doc.path;
+  });
+
+  // Update the user table
+  const updateQuery = `
+      UPDATE user
+      SET phone = ?, dob = ?, gender = ?, address = ?, documents = ?
+      WHERE user_id = ?
+  `;
+  await db.execute(updateQuery, [
+      phone,
+      dob,
+      gender,
+      address,
+      JSON.stringify(documentsJson),
+      userId,
+  ]);
+
+  // Return the updated data
+  return {
+      user_id: userId,
+      phone,
+      dob,
+      gender,
+      address,
+      documents: documentsJson,
+  };
+};
+
+
+
 // Function to update user password
 
 module.exports = {
@@ -346,5 +404,6 @@ module.exports = {
   getTotalPendingUserCount,
   getPendingUsers,
   createUser,
-  updateUserStatusPending
+  updateUserStatusPending,
+  updateUserDetails
 };
