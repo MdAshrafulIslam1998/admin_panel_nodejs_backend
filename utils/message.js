@@ -37,6 +37,8 @@ module.exports = {
     NOT_FOUND: 'Not found',
     TOKEN_GENERATE_SUCCESS : 'Token genereted successfully',
     TOKEN_GENERATE_FAILED: 'Failed to generate Token',
+    STATUS_UPDATED_SUCCESS: 'Status updated successfully',
+    STATUS_NOT_INITIATED: 'Status is not INITIATED',
 
 
     EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',

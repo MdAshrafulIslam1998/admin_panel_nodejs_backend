@@ -14,6 +14,7 @@ const {
     getTotalBlockedUserCount,
     getTotalPendingUserCount,
     fetchUserProfileById,
+    updateUserStatusPending
 } = require("../models/userModel");
 const {
     createLevel,
@@ -500,6 +501,52 @@ router.get("/user/blockedusersweb", authenticateToken, async (req, res) => {
         ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
     }
 });
+
+router.patch("/user/update_status/:userId", async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const result = await updateUserStatusPending(userId);
+
+        if (!result) {
+            return res.status(404).json({
+                responseCode: "E404000",
+                responseMessage: MESSAGES.USER_NOT_FOUND,
+                data: null,
+            });
+        }
+
+        if (result.statusChanged) {
+            return res.status(200).json({
+                responseCode: "S100000",
+                responseMessage: MESSAGES.STATUS_UPDATED_SUCCESS,
+                data: {
+                    user_id: result.user_id,
+                    status: result.status,
+                },
+            });
+        } else {
+            return res.status(400).json({
+                responseCode: "E400000",
+                responseMessage: MESSAGES.STATUS_NOT_INITIATED,
+                data: {
+                    user_id: result.user_id,
+                    status: result.status,
+                },
+            });
+        }
+    } catch (error) {
+        console.error("Error in update_status API:", error);
+
+        return res.status(500).json({
+            responseCode: "E500000",
+            responseMessage: MESSAGES.SERVER_ERROR,
+            error: error.message,
+            stack: error.stack,
+        });
+    }
+});
+
 
 
 module.exports = router;

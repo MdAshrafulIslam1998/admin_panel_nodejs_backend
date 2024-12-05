@@ -263,6 +263,39 @@ const getTotalPendingUserCount = async () => {
   return result[0].total;
 };
 
+const updateUserStatusPending = async (userId) => {
+  // Query to fetch the current user status
+  const statusQuery = `
+      SELECT user_id, status
+      FROM user
+      WHERE user_id = ?
+  `;
+  const [statusResult] = await db.execute(statusQuery, [userId]);
+
+  if (statusResult.length === 0) {
+      return null; // Return null to let the endpoint handle the response
+  }
+
+  const user = statusResult[0];
+  let statusChanged = false; // Flag to track if status was updated
+
+  if (user.status === "INITIATED") {
+      // Update status to PENDING
+      const updateStatusQuery = `
+          UPDATE user
+          SET status = 'PENDING'
+          WHERE user_id = ?
+      `;
+      await db.execute(updateStatusQuery, [userId]);
+
+      user.status = "PENDING"; // Update the status in the returned object
+      statusChanged = true; // Set flag to true, indicating the update
+  }
+
+  return { ...user, statusChanged }; // Return user data along with the flag
+};
+
+
 
 
 
@@ -312,5 +345,6 @@ module.exports = {
   fetchUserProfileById,
   getTotalPendingUserCount,
   getPendingUsers,
-  createUser
+  createUser,
+  updateUserStatusPending
 };
