@@ -15,7 +15,8 @@ const {
     getTotalPendingUserCount,
     fetchUserProfileById,
     updateUserStatusPending,
-    updateUserDetails
+    updateUserDetails,
+    updateUserColumns
 } = require("../models/userModel");
 const {
     createLevel,
@@ -583,4 +584,60 @@ router.put("/user/add_details/:userId", async (req, res) => {
 
 
 
+router.put("/user/update_columns/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    const updates = req.body; // Data to update
+
+    try {
+        const result = await updateUserColumns(userId, updates);
+
+        if (result.error === "INVALID_COLUMNS") {
+            return res.status(400).json({
+                responseCode: "E400001",
+                responseMessage: MESSAGES.INVALID_COLUMNS,
+                data: result.details,
+            });
+        }
+
+        if (result.error === "TYPE_MISMATCH") {
+            return res.status(400).json({
+                responseCode: "E400002",
+                responseMessage: MESSAGES.TYPE_MISMATCH,
+                data: result.details,
+            });
+        }
+
+        if (result.error === "USER_NOT_FOUND") {
+            return res.status(404).json({
+                responseCode: "E404000",
+                responseMessage: MESSAGES.USER_NOT_FOUND,
+                data: null,
+            });
+        }
+
+        if (result.error === "NO_UPDATES") {
+            return res.status(400).json({
+                responseCode: "E400003",
+                responseMessage: MESSAGES.NO_UPDATES_PROVIDED,
+                data: null,
+            });
+        }
+
+        return res.status(200).json({
+            responseCode: "S100000",
+            responseMessage: MESSAGES.UPDATE_SUCCESS_FULLY,
+            data: result.updatedUser,
+        });
+    } catch (error) {
+        console.error("Error in update_columns API:", error);
+
+        return res.status(500).json({
+            responseCode: "E500000",
+            responseMessage: MESSAGES.SERVER_ERROR,
+            error: error.message,
+        });
+    }
+});
+
 module.exports = router;
+

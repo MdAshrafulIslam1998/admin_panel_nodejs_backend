@@ -273,23 +273,23 @@ const updateUserStatusPending = async (userId) => {
   const [statusResult] = await db.execute(statusQuery, [userId]);
 
   if (statusResult.length === 0) {
-      return null; // Return null to let the endpoint handle the response
+    return null; // Return null to let the endpoint handle the response
   }
 
   const user = statusResult[0];
   let statusChanged = false; // Flag to track if status was updated
 
   if (user.status === "INITIATED") {
-      // Update status to PENDING
-      const updateStatusQuery = `
+    // Update status to PENDING
+    const updateStatusQuery = `
           UPDATE user
           SET status = 'PENDING'
           WHERE user_id = ?
       `;
-      await db.execute(updateStatusQuery, [userId]);
+    await db.execute(updateStatusQuery, [userId]);
 
-      user.status = "PENDING"; // Update the status in the returned object
-      statusChanged = true; // Set flag to true, indicating the update
+    user.status = "PENDING"; // Update the status in the returned object
+    statusChanged = true; // Set flag to true, indicating the update
   }
 
   return { ...user, statusChanged }; // Return user data along with the flag
@@ -338,7 +338,7 @@ const updateUserDetails = async (userId, userDetails) => {
   const [userResult] = await db.execute(userQuery, [userId]);
 
   if (userResult.length === 0) {
-      return null; // User not found
+    return null; // User not found
   }
 
   // Fetch documents for the user
@@ -352,7 +352,7 @@ const updateUserDetails = async (userId, userDetails) => {
   // Convert documents to JSON format: { doc_type: path }
   const documentsJson = {};
   documentsResult.forEach(doc => {
-      documentsJson[doc.doc_type] = doc.path;
+    documentsJson[doc.doc_type] = doc.path;
   });
 
   // Update the user table
@@ -362,23 +362,97 @@ const updateUserDetails = async (userId, userDetails) => {
       WHERE user_id = ?
   `;
   await db.execute(updateQuery, [
-      phone,
-      dob,
-      gender,
-      address,
-      JSON.stringify(documentsJson),
-      userId,
+    phone,
+    dob,
+    gender,
+    address,
+    JSON.stringify(documentsJson),
+    userId,
   ]);
 
   // Return the updated data
   return {
-      user_id: userId,
-      phone,
-      dob,
-      gender,
-      address,
-      documents: documentsJson,
+    user_id: userId,
+    phone,
+    dob,
+    gender,
+    address,
+    documents: documentsJson,
   };
+};
+
+const updateUserColumns = async (userId, updates) => {
+  // Step 1: Fetch column structure of the user table
+  const tableStructureQuery = `DESCRIBE user`;
+  const [columns] = await db.execute(tableStructureQuery);
+
+  // Map column names to their types
+  const validColumns = {};
+  columns.forEach((col) => {
+    validColumns[col.Field] = col.Type;
+  });
+
+  // Step 2: Validate columns in the request body
+  const invalidColumns = [];
+  const mismatchedColumns = [];
+  const valuesToUpdate = [];
+
+  for (const [key, value] of Object.entries(updates)) {
+    if (!validColumns[key]) {
+      invalidColumns.push(key); // Column not found in the table
+    } else {
+      // Validate type (simplified: handle enums and general types)
+      const columnType = validColumns[key];
+      const isStringType = columnType.startsWith("varchar") || columnType.startsWith("char") || columnType.startsWith("text") || columnType.startsWith("enum");
+      const isNumberType = columnType.startsWith("int") || columnType.startsWith("decimal") || columnType.startsWith("float");
+      const isEnumType = columnType.startsWith("enum");
+
+      if (
+        (isStringType && typeof value !== "string") ||
+        (isNumberType && typeof value !== "number") ||
+        (isEnumType && typeof value !== "string")
+      ) {
+        mismatchedColumns.push({ column: key, expected: columnType, received: typeof value });
+      } else {
+        valuesToUpdate.push({ column: key, value });
+      }
+    }
+  }
+
+  // Step 3: Handle errors
+  if (invalidColumns.length > 0) {
+    return { error: "INVALID_COLUMNS", details: invalidColumns };
+  }
+
+  if (mismatchedColumns.length > 0) {
+    return { error: "TYPE_MISMATCH", details: mismatchedColumns };
+  }
+
+  // Step 4: If no errors, update the database
+  if (valuesToUpdate.length > 0) {
+    const updateQuery = `
+          UPDATE user
+          SET ${valuesToUpdate.map((v) => `${v.column} = ?`).join(", ")}
+          WHERE user_id = ?
+      `;
+    const params = [...valuesToUpdate.map((v) => v.value), userId];
+
+    const [updateResult] = await db.execute(updateQuery, params);
+
+    if (updateResult.affectedRows === 0) {
+      return { error: "USER_NOT_FOUND", details: `No user found with user_id: ${userId}` };
+    }
+
+    // Fetch the updated user data
+    const fetchUpdatedUserQuery = `
+          SELECT * FROM user WHERE user_id = ?
+      `;
+    const [updatedUser] = await db.execute(fetchUpdatedUserQuery, [userId]);
+
+    return { updatedUser: updatedUser[0] };
+  }
+
+  return { error: "NO_UPDATES", details: "No valid data provided for update." };
 };
 
 
@@ -405,5 +479,6 @@ module.exports = {
   getPendingUsers,
   createUser,
   updateUserStatusPending,
-  updateUserDetails
+  updateUserDetails,
+  updateUserColumns
 };
