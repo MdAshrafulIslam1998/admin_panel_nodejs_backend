@@ -40,6 +40,10 @@ module.exports = {
     STATUS_UPDATED_SUCCESS: 'Status updated successfully',
     STATUS_NOT_INITIATED: 'Status is not INITIATED',
     USER_DETAILS_UPDATED: 'User details updated successfully',
+    INVALID_COLUMNS: 'Invalid columns provided in the request body.',
+    TYPE_MISMATCH: 'Type mismatch for some columns in the request body.',
+    NO_UPDATES_PROVIDED: 'No updates provided in the request body.',
+    UPDATE_SUCCESS_FULLY: 'User updated successfully.',
 
 
     EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',
