@@ -45,6 +45,9 @@ module.exports = {
     NO_UPDATES_PROVIDED: 'No updates provided in the request body.',
     UPDATE_SUCCESS_FULLY: 'User updated successfully.',
 
+    EMAIL_SENT_SUCCESS: 'Email sent successfully.',
+    EMAIL_SEND_FAILED: 'Failed to send email.',
+
 
     EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',
     USER_NOT_VERIFIED: 'User is not verified. Please complete verification.',

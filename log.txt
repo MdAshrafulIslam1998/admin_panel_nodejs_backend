@@ -64,3 +64,459 @@ ReferenceError: logDocumentAccess is not defined
 {"timestamp":"2024-12-01T09:19:22.772Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"320c8653-8177-478d-89f3-da0b5d69d884.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","docType":"default"}
 {"timestamp":"2024-12-04T13:39:19.165Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"d3746388-8a8a-4dd7-8f57-b58b5171c50f.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","docType":"default"}
 {"timestamp":"2024-12-04T13:49:32.432Z","type":"UPLOAD_SUCCESS","message":"Document uploaded successfully","filename":"3daf6d53-f11c-4ba5-a3fb-7eeed11b6493.png","originalName":"Screenshot_2.png","mimetype":"image/png","size":22509,"Current_Working_Directory":"D:\\My codes\\Github\\admin_panel_nodejs_backend","Upload_Path":"D:\\My codes\\Github\\admin_panel_nodejs_backend\\files_server","docType":"default"}
+2024-12-05T16:51:55.287Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:12.215Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:19.052Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:25.677Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:29.983Z - ERROR: Unexpected token ';'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:13
+const { sendEmail } = ; // Import the email sender
+                      ^
+
+SyntaxError: Unexpected token ';'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:32.671Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:35.186Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:39.651Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T16:52:46.168Z - ERROR: Identifier 'sendEmail' has already been declared
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:163
+const sendEmail = (email, code) => {
+      ^
+
+SyntaxError: Identifier 'sendEmail' has already been declared
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T17:21:48.464Z - ERROR: await is only valid in async functions and the top level bodies of modules
+D:\My codes\Github\admin_panel_nodejs_backend\utils\emailSender.js:30
+        await transporter.sendMail(mailOptions);
+        ^^^^^
+
+SyntaxError: await is only valid in async functions and the top level bodies of modules
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:13:23)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T17:27:33.442Z - ERROR: await is only valid in async functions and the top level bodies of modules
+D:\My codes\Github\admin_panel_nodejs_backend\utils\emailSender.js:40
+        const info = await transporter.sendMail(mailOptions);
+                     ^^^^^
+
+SyntaxError: await is only valid in async functions and the top level bodies of modules
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:13:23)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T17:34:36.073Z - ERROR: generateVerificationCode is not defined
+ReferenceError: generateVerificationCode is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\utils\emailSender.js:55:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:13:23)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-05T17:34:38.447Z - ERROR: generateVerificationCode is not defined
+ReferenceError: generateVerificationCode is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\utils\emailSender.js:54:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:13:23)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-05T17:43:48.545Z - ERROR: Cannot find module './path/to/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './path/to/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:43:51.221Z - ERROR: Cannot find module './path/to'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './path/to'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:43:56.778Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:44:17.341Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:44:20.605Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:46:46.827Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:47:00.381Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:47:02.532Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:47:19.170Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:48:49.164Z - ERROR: Unexpected token '<'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:188
+        const html = <!DOCTYPE html>
+                     ^
+
+SyntaxError: Unexpected token '<'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T17:48:52.134Z - ERROR: Unexpected token '<'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:188
+        const html = <!DOCTYPE html>
+                     ^
+
+SyntaxError: Unexpected token '<'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:8:20)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-05T17:48:53.392Z - ERROR: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/verificationEmailTemplate'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-05T17:49:09.994Z - ERROR: Cannot find module './utils/'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './utils/'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\authRoutes.js:14:35)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+

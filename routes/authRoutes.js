@@ -10,7 +10,8 @@ const { RESPONSE_CODES, MESSAGES } = require('../utils/message'); // Import resp
 const router = express.Router();
 const crypto = require('crypto');
 const { createTFA, getTFABySessionId, validateTFA, updateUserPassword, checkTfaSession } = require('../models/tfaModel');
-
+const { sendEmail } = require('../utils/emailSender'); // Import the email sender
+require('dotenv').config();
 
 // POST /auth/login - User Login
 router.post('/auth/login', async (req, res) => {
@@ -159,10 +160,7 @@ router.post('/auth/register', async (req, res) => {
 // Helper function to generate random TFA code
 const generateTFACode = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// Mock email sending function
-const sendEmail = (email, code) => {
-    console.log(`Email sent to ${email} with TFA code: ${code}`);
-};
+
 
 // POST /api/send-verification - Send verification code
 router.post('/auth/send-verification', async (req, res) => {
@@ -185,7 +183,112 @@ router.post('/auth/send-verification', async (req, res) => {
         await createTFA(tfaCode, email, sessionId, expiredAt);
 
         // Send the verification code via email
-        sendEmail(email, tfaCode);
+        const subject = 'Your GlobiPay Verification Code';
+        const html = `
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobiPay Verification</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .email-container {
+            max-width: 500px;
+            width: 100%;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #e0e6ed;
+        }
+        .logo {
+            margin-bottom: 20px;
+        }
+        .verification-title {
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+        .verification-code {
+            background-color: #f0f4ff;
+            border: 2px dashed #007BFF;
+            color: #007BFF;
+            font-size: 28px;
+            font-weight: 700;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            letter-spacing: 4px;
+            margin: 20px 0;
+        }
+        .instruction {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .warning {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            color: #999;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="logo">
+    <img 
+        src="https://www.projectzerotwofour.cloudns.ch/files_server/app_logo.png" 
+        alt="GlobiPay" 
+        width="162" 
+        height="105" 
+    />
+</div>
+        
+        <h2 class="verification-title">Verify Your Account</h2>
+        
+        <p class="instruction">
+            <strong>Security Verification</strong><br>
+            The verification code will expire in 5 minutes.
+        </p>
+        
+        <div class="verification-code">
+            ${tfaCode}
+        </div>
+        
+        <p class="instruction">
+            Enter this code on the verification page to complete your account creation process.
+            Do not share this code with anyone.
+        </p>
+        
+        <p class="warning">
+            If you did not request this verification, please contact our support immediately.
+        </p>
+        
+        <div class="footer">
+            © 2024 GlobiPay | Secure Verification Service
+        </div>
+    </div>
+</body>
+</html>
+`;
+        await sendEmail(email, subject, html);
+
 
         return res.status(200).json({
             responseCode: RESPONSE_CODES.SUCCESS,
