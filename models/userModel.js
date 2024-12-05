@@ -153,7 +153,7 @@ const createUser = async (userData) => {
 const fetchUserProfileById = async (userId) => {
   // Query to get user details
   const userQuery = `
-      SELECT name AS username, email, phone, dob, gender, address, level
+      SELECT user_id,name AS username, email, phone, dob, gender, address, level, status, approved_by
       FROM user
       WHERE user_id = ?
   `;
