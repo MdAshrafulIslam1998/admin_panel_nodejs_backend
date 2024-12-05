@@ -13,6 +13,7 @@ const swaggerDocs = require('./swaggerOptions'); // Import Swagger configuration
 const notificationRoutes = require('./routes/notificationRoutes');
 const path = require('path');
 const staticFilesPath = path.join(__dirname, 'files_server');
+const gmailAppPassRoutes = require('./routes/gmailAppPassRoutes'); // Import the new route
 
 
 
@@ -28,11 +29,13 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 
+
 // Register your routes
 
 app.use('/api', userpanelRoutes);
 app.use('/api', coinpanelRoutes);
 app.use('/api', documentRoutes);
+app.use(gmailAppPassRoutes); // Register the route
 app.use('/files_server', express.static(path.join(__dirname, 'files_server')));
 app.use('/api', agoraRoutes); // Agora Related Routes
 app.use('/api/staffpanel', staffpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
