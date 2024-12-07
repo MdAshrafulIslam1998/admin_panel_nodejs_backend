@@ -33,6 +33,8 @@ module.exports = {
     INVALID_STATUS: "Invalid status value provided.",
     MISSING_REQUIRED_FIELDS: "Required fields are missing.",
     NOTIFICATION_CREATED_SUCCESSFULLY: 'Notification created successfully',
+    NOTIFICATION_CREATED_FAILED: 'FAILED to creat Notification',
+
     NO_DATA_FOUND: 'No data found',
     NOT_FOUND: 'Not found',
     TOKEN_GENERATE_SUCCESS : 'Token genereted successfully',
