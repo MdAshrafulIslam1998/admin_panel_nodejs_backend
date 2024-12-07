@@ -6,6 +6,8 @@ const notificationRoutes = require('./routes/notificationRoutes');
 
 dotenv.config();
 
+// its a comment
+
 const app = express();
 app.use(express.json());
 
@@ -15,7 +17,7 @@ app.use('/api', notificationRoutes);
 
 
 
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
