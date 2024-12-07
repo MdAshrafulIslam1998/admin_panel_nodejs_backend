@@ -1,6 +1,7 @@
 const db = require('../config/db.config');
 
 // Insert new notification into the database
+// this is a comment
 const createNotification = async (notificationData) => {
   const { content, type, created_by, send_type, send_to, action, image_path, uid } = notificationData;
   
