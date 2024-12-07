@@ -13,6 +13,7 @@ const app = express();
 app.use(express.json());
 
 // User panel routes
+// lets see
 app.use('/api', userRoutes);
 app.use('/api', notificationRoutes);
 
