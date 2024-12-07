@@ -7,6 +7,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 dotenv.config();
 
 // its a comment
+// naother commit
 
 const app = express();
 app.use(express.json());
