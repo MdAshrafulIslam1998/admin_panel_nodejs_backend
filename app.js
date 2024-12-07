@@ -7,6 +7,7 @@ const documentRoutes = require('./routes/documentRoutes');
 const staffpanelRoutes = require('./routes/staffspanelRoutes');
 const authRoutes = require('./routes/authRoutes');
 const agoraRoutes = require('./routes/agoraRoutes');
+const cors = require('cors'); // Import the CORS middleware
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./swaggerOptions'); // Import Swagger configuration
@@ -21,6 +22,7 @@ const gmailAppPassRoutes = require('./routes/gmailAppPassRoutes'); // Import the
 dotenv.config();
 
 const app = express();
+app.use(cors()); // Enable CORS for all origins
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
