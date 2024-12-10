@@ -746,3 +746,31 @@ Require stack:
     at Module._load (node:internal/modules/cjs/loader:1023:12)
     at Module.require (node:internal/modules/cjs/loader:1235:19)
 
+2024-12-08T17:01:43.714Z - ERROR: Cannot find module './routes/'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module './routes/'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:19:25)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
+
+2024-12-08T17:01:59.476Z - ERROR: app.use() requires a middleware function
+TypeError: app.use() requires a middleware function
+    at Function.use (D:\My codes\Github\admin_panel_nodejs_backend\node_modules\express\lib\application.js:217:11)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:40:5)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
+    at node:internal/main/run_main_module:28:49
+

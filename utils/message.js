@@ -61,6 +61,8 @@ module.exports = {
     EMAIL_ALREADY_EXISTS: 'Email already exists.',
     SUCCESS: 'Success',
     REGISTRATION_SUCCESS: 'Registration successful.',
+
+    STAFF_INACTIVE: 'Staff is inactive. Please contact support.',
   
 
     // Coin-related
