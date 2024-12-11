@@ -214,6 +214,7 @@ const getVerifiedUsersWithCoins = async (offset, limit) => {
           l.level_name,
           u.status,
           u.date,
+          u.phone,
           COALESCE(SUM(CASE WHEN th.coin_type = 'PRIMARY' THEN th.coin ELSE 0 END), 0) AS \`primary\`,
           COALESCE(SUM(CASE WHEN th.coin_type = 'SECONDARY' THEN th.coin ELSE 0 END), 0) AS secondary
       FROM user u

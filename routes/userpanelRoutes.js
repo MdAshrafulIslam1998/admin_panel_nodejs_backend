@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const db = require('../config/db.config');
 const authenticateToken = require("../middleware/authenticateToken");
 const {
     getUserList,
@@ -399,27 +400,70 @@ router.get("/user/apphome_profile/:userId", async (req, res) => {
 });
 
 
-// GET /api/user/verifiedusersweb - Fetch paginated verified user list
-router.get("/user/verifiedusersweb", authenticateToken, async (req, res) => {
+
+
+router.get("/user/verifiedusersweb/:staff_id", authenticateToken, async (req, res) => {
+    const { staff_id } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const roleFieldAccess = {
+        1: ["user_id", "name", "email", "level_id", "phone","level_name", "status", "date", "primary", "secondary"], // admin 
+        3: ["user_id", "name", "level_id", "level_name", "status", "date","primary", "secondary"], //subadmin 
+        4: ["user_id", "name",  "level_id", "level_name", "status", "date","primary", "secondary"], //moderator 
+        
+        
+    };
+
     try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const offset = (page - 1) * limit;
+        // Fetch staff role
+        const [rows] = await db.execute(
+            "SELECT role FROM staffs WHERE staff_id = ?",
+            [staff_id]
+        );
+        const staff = rows[0];
+
+        if (!staff) {
+            console.log(`Staff not found for staff_id: ${staff_id}`);
+            return res.status(404).json({
+                responseCode: "S100001",
+                responseMessage: "Staff not found",
+            });
+        }
+
+        const role = parseInt(staff.role, 10);
+        console.log(`Retrieved role for staff_id ${staff_id}: ${role}`);
+
+        const allowedFields = roleFieldAccess[role];
+        if (!allowedFields) {
+            console.log(`Unauthorized access attempt by role: ${role}`);
+            return res.status(403).json({
+                responseCode: "S100002",
+                responseMessage: "Role not authorized to access data",
+            });
+        }
 
         // Fetch total count of verified users for pagination
         const totalVerifiedUsers = await getTotalVerifiedUserCount();
         const totalPages = Math.ceil(totalVerifiedUsers / limit);
 
-        // Fetch paginated verified users with coin balances
+        // Fetch users
         const users = await getVerifiedUsersWithCoins(offset, limit);
 
-        if (!users || users.length === 0) {
-            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-        }
+        // Filter fields based on role access
+        const filteredUsers = users.map(user => {
+            const filteredUser = {};
+            allowedFields.forEach(field => {
+                if (user[field] !== undefined) {
+                    filteredUser[field] = user[field];
+                }
+            });
+            return filteredUser;
+        });
 
-        // Prepare response data
         const responseData = {
-            users,
+            users: filteredUsers,
             pagination: {
                 total: totalVerifiedUsers,
                 total_pages: totalPages,
@@ -428,11 +472,26 @@ router.get("/user/verifiedusersweb", authenticateToken, async (req, res) => {
             },
         };
 
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USER_LIST_FETCH_SUCCESSFULLY, responseData);
+        return SUCCESS(
+            res,
+            RESPONSE_CODES.SUCCESS,
+            MESSAGES.USER_LIST_FETCH_SUCCESSFULLY,
+            responseData
+        );
     } catch (error) {
-        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.SERVER_ERROR, error.message);
+        console.error(`Error occurred: ${error.message}`);
+        return ERROR(
+            res,
+            RESPONSE_CODES.SERVER_ERROR,
+            MESSAGES.SERVER_ERROR,
+            error.message
+        );
     }
 });
+
+
+
+
 
 // GET /api/user/pendingusersweb - Fetch paginated pending user list
 router.get("/user/pendingusersweb", authenticateToken, async (req, res) => {
