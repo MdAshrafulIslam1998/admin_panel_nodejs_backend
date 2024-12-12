@@ -5,7 +5,7 @@ const userModel = require('../models/userModel');
 const message = require('../utils/message');
 const authenticateToken = require('../middleware/authenticateToken');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
-const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCategory, getTransactionCountByCategory } = require('../models/coinModel');
+const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCategory, getTransactionCountByCategory, addTransactionHistory } = require('../models/coinModel');
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
@@ -399,6 +399,34 @@ router.get('/amountdetailsweb', async (req, res, next) => {
         });
     } catch (error) {
         next(error);
+    }
+});
+
+
+router.post('/transaction/add', authenticateToken, async (req, res) => {
+    const { catId, uid, primary_coin, secondary_coin, createdBy } = req.body;
+
+    // Validate input
+    if (!catId || !uid || primary_coin == null || secondary_coin == null || !createdBy) {
+        return res.status(400).json({
+            responseCode: "BAD404",
+            responseMessage: MESSAGES.VALIDATION_ERROR
+        });
+    }
+
+    try {
+        const result = await addTransactionHistory(catId, uid, primary_coin, secondary_coin, createdBy);
+        return res.status(200).json({
+            responseCode: "S100000",
+            responseMessage: MESSAGES.TRANSACTION_ADDED_SUCCESS,
+            data: result
+        });
+    } catch (error) {
+        console.error('Error adding transaction:', error.message);
+        return res.status(500).json({
+            responseCode: "E500000",
+            responseMessage: "Internal server error: " + error.message
+        });
     }
 });
 

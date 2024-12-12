@@ -118,6 +118,9 @@ module.exports = {
     SLIDERS_NOT_FOUND: 'Sliders not found',
     SLIDERS_FETCHED: 'Sliders fetched successfully',
 
+
+    TRANSACTION_ADDED_SUCCESS: 'Transaction added successfully',
+
     
    
     PASSWORD_RESET_SUCCESS: 'Password reset successful.',
