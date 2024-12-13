@@ -412,8 +412,6 @@ router.get("/user/verifiedusersweb/:staff_id", authenticateToken, async (req, re
         1: ["user_id", "name", "email", "level_id", "phone", "level_name", "status", "date", "primary", "secondary"], // admin 
         3: ["user_id", "name", "level_id", "level_name", "status", "date", "primary", "secondary"], //subadmin 
         4: ["user_id", "name", "level_id", "level_name", "status", "date", "primary", "secondary"], //moderator 
-
-
     };
 
     try {
