@@ -17,6 +17,7 @@ const staticFilesPath = path.join(__dirname, 'files_server');
 const gmailAppPassRoutes = require('./routes/gmailAppPassRoutes'); // Import the new route
 
 const staffAuthRoutes = require('./routes/staffAuthRoutes');
+const templateRoutes = require('./routes/templateRoutes');
 
 
 dotenv.config();
@@ -38,12 +39,14 @@ app.use('/api', userpanelRoutes);
 app.use('/api', coinpanelRoutes);
 app.use('/api', documentRoutes);
 app.use('/api', staffAuthRoutes);
+app.use('/api', templateRoutes);
 app.use(gmailAppPassRoutes); // Register the route
 app.use('/files_server', express.static(path.join(__dirname, 'files_server')));
 app.use('/api', agoraRoutes); // Agora Related Routes
 app.use('/api/staffpanel', staffpanelRoutes); // This registers all routes from userpanelRoutes.js under /api
 app.use('/api', authRoutes);
 app.use('/api', notificationRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

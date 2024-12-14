@@ -774,3 +774,102 @@ TypeError: app.use() requires a middleware function
     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
     at node:internal/main/run_main_module:28:49
 
+2024-12-14T18:48:20.218Z - ERROR: authenticateToken is not defined
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\templateRoutes.js:9:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-14T18:48:24.244Z - ERROR: authenticateToken is not defined
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\templateRoutes.js:9:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-14T18:48:28.299Z - ERROR: authenticateToken is not defined
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\templateRoutes.js:9:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-14T18:48:49.262Z - ERROR: authenticateToken is not defined
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\templateRoutes.js:9:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-14T18:49:20.205Z - ERROR: authenticateToken is not defined
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\templateRoutes.js:9:26)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-14T18:57:51.777Z - ERROR: missing ) after argument list
+D:\My codes\Github\admin_panel_nodejs_backend\routes\templateRoutes.js:76
+router.put('/templates/:uid', authenticateToken async (req, res) => {
+                              ^^^^^^^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-14T18:58:12.151Z - ERROR: missing ) after argument list
+D:\My codes\Github\admin_panel_nodejs_backend\routes\templateRoutes.js:112
+router.delete('/templates/:uid',authenticateToken async (req, res) => {
+                                ^^^^^^^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+

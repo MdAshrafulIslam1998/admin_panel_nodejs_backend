@@ -6,10 +6,10 @@ module.exports = {
     USERNAME_TAKEN: 'Username is already taken',
     ERROR: 'Error : ',
     PROVIDE_VALID_CREDENTIAL: 'Please provide a valid credential',
-    BAD_REQUEST : 'Bad Requst',
-    SERVER_ERROR : 'Server Error',
-    USER_NOT_FOUND : 'User not found',
-    USER_SUCCESS_DETAILS : 'User details found successfully',
+    BAD_REQUEST: 'Bad Requst',
+    SERVER_ERROR: 'Server Error',
+    USER_NOT_FOUND: 'User not found',
+    USER_SUCCESS_DETAILS: 'User details found successfully',
     USER_LIST_FETCH_SUCCESSFULLY: 'User list fetched successfully',
     NO_USERS_FOUND: 'No users found',
     PROFILE_FETCH_SUCCESS: "User profile fetched successfully",
@@ -35,7 +35,7 @@ module.exports = {
     NOTIFICATION_CREATED_SUCCESSFULLY: 'Notification created successfully',
     NO_DATA_FOUND: 'No data found',
     NOT_FOUND: 'Not found',
-    TOKEN_GENERATE_SUCCESS : 'Token genereted successfully',
+    TOKEN_GENERATE_SUCCESS: 'Token genereted successfully',
     TOKEN_GENERATE_FAILED: 'Failed to generate Token',
     STATUS_UPDATED_SUCCESS: 'Status updated successfully',
     STATUS_NOT_INITIATED: 'Status is not INITIATED',
@@ -44,6 +44,15 @@ module.exports = {
     TYPE_MISMATCH: 'Type mismatch for some columns in the request body.',
     NO_UPDATES_PROVIDED: 'No updates provided in the request body.',
     UPDATE_SUCCESS_FULLY: 'User updated successfully.',
+
+    TEMPLATES_FETCHED: 'Message templates fetched successfully',
+    TEMPLATE_ADDED: 'Message template added successfully',
+    TEMPLATES_BY_CATEGORY_FETCHED: 'Message templates fetched by category successfully',
+    TEMPLATE_UPDATED: 'Message template updated successfully',
+    TEMPLATE_DELETED: 'Message template deleted successfully',
+    TEMPLATE_NOT_FOUND: 'Message template not found',
+    MISSING_FIELDS: 'Required fields are missing',
+
 
     EMAIL_SENT_SUCCESS: 'Email sent successfully.',
     EMAIL_SEND_FAILED: 'Failed to send email.',
@@ -61,7 +70,7 @@ module.exports = {
     META_SERVICE_DELETED: 'Meta service deleted successfully.',
 
     USERWISE_TRANSACTION_HISTORY_FETCHED: 'User-wise transaction history fetched successfully.',
-    
+
 
 
     EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',
@@ -76,7 +85,7 @@ module.exports = {
     REGISTRATION_SUCCESS: 'Registration successful.',
 
     STAFF_INACTIVE: 'Staff is inactive. Please contact support.',
-  
+
 
     // Coin-related
     USER_LIST_FETCHED: 'User list fetched successfully',
@@ -89,14 +98,14 @@ module.exports = {
     // Transaction-related
     TRANSACTION_HISTORY_FETCHED: 'Transaction history fetched successfully',
     TRANSACTION_HISTORY_FAILED: 'Failed to fetch transaction history',
-     // New messages for transaction history
-     NO_TRANSACTIONS_FOUND: 'No transactions found',
-     TRANSACTION_HISTORY_FETCH_SUCCESS: 'Transaction history fetched successfully',
-     INVALID_CATEGORY_ID: 'Invalid or missing category ID',  // New message
+    // New messages for transaction history
+    NO_TRANSACTIONS_FOUND: 'No transactions found',
+    TRANSACTION_HISTORY_FETCH_SUCCESS: 'Transaction history fetched successfully',
+    INVALID_CATEGORY_ID: 'Invalid or missing category ID',  // New message
 
-     USER_PROFILE_FETCH_SUCCESS: 'User profile fetched successfully',
-     
-    
+    USER_PROFILE_FETCH_SUCCESS: 'User profile fetched successfully',
+
+
     // Category-related
     CATEGORY_ADDED_SUCCESS: 'Category added successfully',
     CATEGORY_ADD_FAILED: 'Failed to add category',
@@ -111,12 +120,12 @@ module.exports = {
     CATEGORY_LIST_FETCHED: 'Categories fetched successfully',
     CATEGORY_LIST_FAILED: 'Failed to fetch categories',
 
-     // Document-related
-     DOCUMENT_ADDED_SUCCESSFULLY: 'Document added successfully',
-     DOCUMENT_ADD_FAILED: 'Failed to add the document',
-     DOCUMENT_INVALID_INPUT: 'Invalid input: doc_type, uid, and path are required',
+    // Document-related
+    DOCUMENT_ADDED_SUCCESSFULLY: 'Document added successfully',
+    DOCUMENT_ADD_FAILED: 'Failed to add the document',
+    DOCUMENT_INVALID_INPUT: 'Invalid input: doc_type, uid, and path are required',
 
-     ROLE_ADDED: 'Role added successfully',
+    ROLE_ADDED: 'Role added successfully',
     ROLES_FETCHED: 'Roles fetched successfully',
     ROLE_UPDATED: 'Role updated successfully',
     ROLE_DELETED: 'Role deleted successfully',
@@ -134,13 +143,13 @@ module.exports = {
 
     TRANSACTION_ADDED_SUCCESS: 'Transaction added successfully',
 
-    
-   
+
+
     PASSWORD_RESET_SUCCESS: 'Password reset successful.',
 
     NO_LEVELS_FOUND_FOR_USER: 'No levels found for the user',
     LEVELS_FETCHED_SUCCESSFULLY: 'Levels fetched successfully',
-    
+
 
     TFA_CODE_SENT: 'Verification code sent successfully.',
     INVALID_TFA_CODE: 'Invalid verification code.',
@@ -160,15 +169,15 @@ module.exports = {
     UNAUTHORIZED: 'UN10001',
     FORBIDDEN: 'E00002',
     NOT_FOUND: 'E00003',
-    BAD_REQUEST :'BAD404',
-    SERVER_ERROR :'SV1000',
+    BAD_REQUEST: 'BAD404',
+    SERVER_ERROR: 'SV1000',
     LEVEL_HAS_ASSOCIATED_USERS: 'LAU409',
-    MAXIMUM_LIMIT_REACHED :'TRX404'
-    
+    MAXIMUM_LIMIT_REACHED: 'TRX404'
+
   },
 
-  ACCESS_STATUS : {
-    APPROVED : 'APPROVED',
-    DENIED : 'DENIED'
+  ACCESS_STATUS: {
+    APPROVED: 'APPROVED',
+    DENIED: 'DENIED'
   }
 };
