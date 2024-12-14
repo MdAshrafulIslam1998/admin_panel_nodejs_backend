@@ -421,6 +421,37 @@ router.get('/meta-service/:feature_code', async (req, res) => {
 });
 
 
+// POST /meta-service/add - Add a new meta service entry
+router.post('/meta-service/add', authenticateToken ,async (req, res) => {
+    const { featureCode, type, content } = req.body;
+
+    // Validate required fields
+    if (!featureCode || !type) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.BAD_REQUEST,
+            responseMessage: MESSAGES.MISSING_REQUIRED_FIELDS,
+        });
+    }
+
+    try {
+        const newMetaService = await MetaServiceModel.addMetaService(featureCode, type, content);
+
+        return res.status(201).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.META_SERVICE_ADDED,
+            data: newMetaService,
+        });
+    } catch (error) {
+        console.error('Error adding meta service:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR + error.message,
+        });
+    }
+});
+
+
+
 // Single file upload route (for backwards compatibility)
 router.post('/upload-document', authenticateToken, (req, res) => {
     upload(req, res, async (err) => {
