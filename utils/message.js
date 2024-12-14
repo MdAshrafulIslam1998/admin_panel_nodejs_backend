@@ -53,6 +53,8 @@ module.exports = {
     SLIDER_ID_REQUIRED: 'Slider ID is required.',
     SLIDER_NOT_FOUND: 'Slider not found.',
     SLIDER_DELETED_SUCCESS: 'Slider deleted successfully.',
+
+    USERWISE_TRANSACTION_HISTORY_FETCHED: 'User-wise transaction history fetched successfully.',
     
 
 

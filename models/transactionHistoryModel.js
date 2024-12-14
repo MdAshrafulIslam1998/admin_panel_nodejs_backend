@@ -61,6 +61,27 @@ class TransactionHistoryModel {
         return rows;
     }
 
+    static async getTransactionsCategorizedWithCategoryName(userId) {
+        const query = `
+            SELECT 
+                th.cat_id,
+                c.name AS category_name,
+                th.coin_type,
+                SUM(th.coin) AS total_coins
+            FROM 
+                transaction_history th
+            LEFT JOIN 
+                categories c ON th.cat_id = c.id
+            WHERE 
+                th.uid = ?
+            GROUP BY 
+                th.cat_id, th.coin_type
+        `;
+        const [rows] = await db.execute(query, [userId]);
+        return rows;
+    }
+    
+
 
 
     // Check if there are any transactions associated with the category ID

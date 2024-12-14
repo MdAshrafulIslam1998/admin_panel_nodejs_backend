@@ -5,75 +5,116 @@ const userModel = require('../models/userModel');
 const message = require('../utils/message');
 const authenticateToken = require('../middleware/authenticateToken');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
-const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCategory, getTransactionCountByCategory, addTransactionHistory } = require('../models/coinModel');
+const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCategory, getTransactionCountByCategory, addTransactionHistory  } = require('../models/coinModel');
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
 const swaggerJSDoc = require('swagger-jsdoc');
 const db = require('../config/db.config');
-
-
-// API to fetch users and their categorized transactions
-router.get('/users/userwise/transactions', authenticateToken, async (req, res) => {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-    const offset = (page - 1) * limit;
-
+router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (req, res, next) => {
     try {
-        // Fetch paginated users from the user table
-        const users = await userModel.getUserList(offset, limit);
-        const totalUsers = await userModel.getTotalUserCount();
+        const { staff_id } = req.params; // Get staff_id from the route params
+        const { page = 1, limit = 10 } = req.query; // Fetch pagination parameters
+        const parsedLimit = parseInt(limit);
+        const parsedPage = parseInt(page);
+        const offset = (parsedPage - 1) * parsedLimit;
 
-        // Prepare an array to store the user details along with their transaction data
-        let userTransactionData = [];
+        // Role-based field access
+        const roleFieldAccess = {
+            1: ["user_id", "name", "email", "status", "categories"], // Admin
+            3: ["user_id", "name", "status", "categories"],          // Subadmin
+            4: ["user_id", "name", "status", "categories"],          // Moderator
+        };
 
-        for (const user of users) {
-            // Fetch categorized transactions for each user
-            const transactions = await TransactionHistoryModel.getTransactionsCategorizedByCategory(user.user_id);
+        // Fetch the staff's role from the database
+        const [staffRows] = await db.execute(
+            "SELECT role FROM staffs WHERE staff_id = ?",
+            [staff_id]
+        );
+        const staff = staffRows[0];
 
-            // Structure to hold the categorized coin totals
-            let categorizedCoins = {};
-
-            transactions.forEach((transaction) => {
-                const { cat_id, coin_type, total_coins } = transaction;
-
-                // Initialize category data if it doesn't exist
-                if (!categorizedCoins[cat_id]) {
-                    categorizedCoins[cat_id] = { PRIMARY: 0, SECONDARY: 0 };
-                }
-
-                // Add coins to the corresponding coin_type (PRIMARY/SECONDARY)
-                categorizedCoins[cat_id][coin_type] = total_coins;
+        if (!staff) {
+            return res.status(404).json({
+                responseCode: "S100001",
+                responseMessage: "Staff not found",
             });
+        }
 
-            // Prepare user data structure for the response
-            userTransactionData.push({
+        const role = parseInt(staff.role, 10);
+        const allowedFields = roleFieldAccess[role];
+
+        if (!allowedFields) {
+            return res.status(403).json({
+                responseCode: "S100002",
+                responseMessage: "Role not authorized to access data",
+            });
+        }
+
+        // Fetch users and total count
+        const [users, totalUsers] = await Promise.all([
+            userModel.getUserList(offset, parsedLimit),
+            userModel.getTotalUserCount(),
+        ]);
+
+        if (users.length === 0) {
+            return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_USERS_FOUND);
+        }
+
+        // Prepare data for each user with categorized transactions and category names
+        const userTransactionData = await Promise.all(users.map(async (user) => {
+            // Fetch transactions categorized by category for each user, including category name
+            const transactions = await TransactionHistoryModel.getTransactionsCategorizedWithCategoryName(user.user_id);
+
+            // Structure transactions into categorized coins with category name
+            const categorizedCoins = transactions.reduce((acc, transaction) => {
+                const { cat_id, category_name, coin_type, total_coins } = transaction;
+                if (!acc[cat_id]) {
+                    acc[cat_id] = { name: category_name, PRIMARY: 0, SECONDARY: 0 };
+                }
+                acc[cat_id][coin_type] = total_coins;
+                return acc;
+            }, {});
+
+            // Structure user data with transaction categories
+            const userData = {
                 user_id: user.user_id,
                 name: user.name,
                 email: user.email,
                 status: user.status,
-                categories: categorizedCoins
+                categories: categorizedCoins,
+            };
+
+            // Filter fields based on role
+            const filteredUserData = {};
+            allowedFields.forEach(field => {
+                if (userData[field] !== undefined) {
+                    filteredUserData[field] = userData[field];
+                }
             });
-        }
 
-        // Prepare pagination information
-        const pagination = {
-            total: totalUsers,
-            total_pages: Math.ceil(totalUsers / limit),
-            current_page: page,
-            limit: limit
-        };
+            return filteredUserData;
+        }));
 
-        // Send paginated response without nesting the user data under an additional 'data' object
-        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
-            users: userTransactionData, // Directly place users here
-            pagination: pagination
+        // Calculate total pages for pagination
+        const totalPages = Math.ceil(totalUsers / parsedLimit);
+
+        // Return response with user-wise data and pagination
+        SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USERWISE_TRANSACTION_HISTORY_FETCHED, {
+            users: userTransactionData,
+            pagination: {
+                total: totalUsers,
+                total_pages: totalPages,
+                current_page: parsedPage,
+                limit: parsedLimit,
+            },
         });
     } catch (error) {
-        console.error(error);
-        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
+        console.error(`Error fetching userwise transactions: ${error.message}`);
+        next(error); // Pass error to centralized error handler
     }
 });
+
+
 
 
 
