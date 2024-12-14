@@ -20,6 +20,24 @@ class MetaServiceModel {
             content,
         };
     }
+
+    // Fetch meta services with pagination
+    static async getPaginatedMetaServices(limit, offset) {
+        const query = `
+            SELECT service_id, feature_code, type, CAST(content AS CHAR) AS content
+            FROM meta_service
+            LIMIT ? OFFSET ?
+        `;
+        const countQuery = `SELECT COUNT(*) AS total FROM meta_service`;
+
+        const [rows] = await db.execute(query, [limit, offset]);
+        const [countResult] = await db.execute(countQuery);
+
+        return {
+            services: rows,
+            total: countResult[0].total,
+        };
+    }
 }
 
 module.exports = MetaServiceModel;

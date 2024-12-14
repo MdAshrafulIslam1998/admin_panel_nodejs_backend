@@ -55,6 +55,8 @@ module.exports = {
     SLIDER_DELETED_SUCCESS: 'Slider deleted successfully.',
     META_SERVICE_ADDED: 'Meta service added successfully.',
 
+    META_SERVICES_FETCHED: 'Meta services fetched successfully.',
+
     USERWISE_TRANSACTION_HISTORY_FETCHED: 'User-wise transaction history fetched successfully.',
     
 

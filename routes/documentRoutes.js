@@ -451,6 +451,42 @@ router.post('/meta-service/add', authenticateToken ,async (req, res) => {
 });
 
 
+// GET /meta-service - Fetch all meta services (paginated)
+router.get('/meta-service', authenticateToken,async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+
+    // Convert query params to numbers and calculate offset
+    const parsedLimit = parseInt(limit, 10);
+    const parsedPage = parseInt(page, 10);
+    const offset = (parsedPage - 1) * parsedLimit;
+
+    try {
+        const { services, total } = await MetaServiceModel.getPaginatedMetaServices(parsedLimit, offset);
+
+        const totalPages = Math.ceil(total / parsedLimit);
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.META_SERVICES_FETCHED,
+            data: {
+                services,
+                pagination: {
+                    total,
+                    total_pages: totalPages,
+                    current_page: parsedPage,
+                    limit: parsedLimit,
+                },
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching meta services:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR + error.message,
+        });
+    }
+});
+
 
 // Single file upload route (for backwards compatibility)
 router.post('/upload-document', authenticateToken, (req, res) => {
