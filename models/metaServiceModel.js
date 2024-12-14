@@ -38,6 +38,13 @@ class MetaServiceModel {
             total: countResult[0].total,
         };
     }
+
+
+    static async deleteMetaService(serviceId) {
+        const query = `DELETE FROM meta_service WHERE service_id = ?`;
+        const [result] = await db.execute(query, [serviceId]);
+        return result.affectedRows > 0; // Returns true if deletion was successful
+    }
 }
 
 module.exports = MetaServiceModel;

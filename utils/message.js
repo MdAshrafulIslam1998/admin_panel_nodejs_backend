@@ -56,6 +56,9 @@ module.exports = {
     META_SERVICE_ADDED: 'Meta service added successfully.',
 
     META_SERVICES_FETCHED: 'Meta services fetched successfully.',
+    MISSING_SERVICE_ID: 'Missing service ID.',
+    META_SERVICE_NOT_FOUND: 'Meta service not found.',
+    META_SERVICE_DELETED: 'Meta service deleted successfully.',
 
     USERWISE_TRANSACTION_HISTORY_FETCHED: 'User-wise transaction history fetched successfully.',
     

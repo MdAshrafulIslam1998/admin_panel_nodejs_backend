@@ -488,6 +488,43 @@ router.get('/meta-service', authenticateToken,async (req, res) => {
 });
 
 
+
+// DELETE /meta-service/:serviceId - Delete a meta service by service_id
+router.delete('/meta-service/:serviceId',authenticateToken, async (req, res) => {
+    const { serviceId } = req.params;
+
+    // Validate serviceId
+    if (!serviceId) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.BAD_REQUEST,
+            responseMessage: MESSAGES.MISSING_SERVICE_ID,
+        });
+    }
+
+    try {
+        const isDeleted = await MetaServiceModel.deleteMetaService(serviceId);
+
+        if (!isDeleted) {
+            return res.status(404).json({
+                responseCode: RESPONSE_CODES.NOT_FOUND,
+                responseMessage: MESSAGES.META_SERVICE_NOT_FOUND,
+            });
+        }
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.META_SERVICE_DELETED,
+        });
+    } catch (error) {
+        console.error('Error deleting meta service:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR + error.message,
+        });
+    }
+});
+
+
 // Single file upload route (for backwards compatibility)
 router.post('/upload-document', authenticateToken, (req, res) => {
     upload(req, res, async (err) => {
