@@ -4,17 +4,20 @@ const { v4: uuidv4 } = require('uuid'); // For generating unique UIDs
 
 class TemplateModel {
     // Fetch all message templates
+    // Fetch all message templates
     static async getAllTemplates() {
         const query = `
-            SELECT 
-                t.uid, t.title, t.description, t.category_id, t.create_date, t.created_by,
-                c.name AS category_name
-            FROM templates t
-            LEFT JOIN categories c ON t.category_id = c.id
-        `;
+        SELECT 
+            t.uid, t.title, t.description, t.category_id, t.create_date, t.created_by,
+            c.name AS category_name
+        FROM templates t
+        LEFT JOIN categories c ON t.category_id = c.id
+        ORDER BY t.create_date DESC
+    `;
         const [rows] = await db.execute(query);
         return rows;
     }
+
 
     // Add a new message template
     static async addTemplate(title, description, categoryId, createdBy) {
@@ -28,18 +31,21 @@ class TemplateModel {
     }
 
     // Fetch templates by category
+    // Fetch templates by category, sorted by latest first
     static async getTemplatesByCategoryId(categoryId) {
         const query = `
-            SELECT 
-                t.uid, t.title, t.description, t.category_id, t.create_date, t.created_by,
-                c.name AS category_name
-            FROM templates t
-            LEFT JOIN categories c ON t.category_id = c.id
-            WHERE t.category_id = ?
-        `;
+        SELECT 
+            t.uid, t.title, t.description, t.category_id, t.create_date, t.created_by,
+            c.name AS category_name
+        FROM templates t
+        LEFT JOIN categories c ON t.category_id = c.id
+        WHERE t.category_id = ?
+        ORDER BY t.create_date DESC
+    `;
         const [rows] = await db.execute(query, [categoryId]);
         return rows;
     }
+
     // Edit a message template
     // Update templateModel.js
     static async updateTemplateByUid(uid, title, description, categoryId) {
