@@ -10,6 +10,7 @@ const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
 const swaggerJSDoc = require('swagger-jsdoc');
+const db = require('../config/db.config');
 
 
 // API to fetch users and their categorized transactions
@@ -114,39 +115,84 @@ router.get('/users/paginated-transactions-history-by-category', async (req, res)
     }
 });
 
-router.get('/alltransactions', authenticateToken, async (req, res, next) => {
+router.get('/alltransactions/:staff_id', authenticateToken, async (req, res, next) => {
     try {
-        const { page = 1, limit = 10 } = req.query; // Fetch `page` and `limit` from query params, with defaults
-        const parsedLimit = parseInt(limit);       // Parse limit as an integer
-        const parsedPage = parseInt(page);         // Parse page as an integer
+        const { staff_id } = req.params; // Get staff_id from route parameter
+        const { page = 1, limit = 10 } = req.query; // Fetch `page` and `limit` from query params
+        const parsedLimit = parseInt(limit);
+        const parsedPage = parseInt(page);
         const offset = (parsedPage - 1) * parsedLimit;
 
-        // Fetch the paginated transaction history with category name and total count
+        // Define role-based access to fields
+        const roleFieldAccess = {
+            1: ["id", "cat_id", "uid", "coin", "date", "name", "email", "created_by", "coin_type", "category_name"], // Admin
+            3: ["id", "cat_id", "uid", "coin", "date", "name", "created_by", "coin_type", "category_name"],          // Subadmin
+            4: ["id", "cat_id", "uid", "coin", "date", "name", "created_by", "coin_type", "category_name"],         // Moderator
+        };
+
+        // Fetch the staff role from the database
+        const [staffRows] = await db.execute(
+            "SELECT role FROM staffs WHERE staff_id = ?",
+            [staff_id]
+        );
+        const staff = staffRows[0];
+
+        if (!staff) {
+            return res.status(404).json({
+                responseCode: "S100001",
+                responseMessage: "Staff not found",
+            });
+        }
+
+        const role = parseInt(staff.role, 10);
+        const allowedFields = roleFieldAccess[role];
+
+        if (!allowedFields) {
+            return res.status(403).json({
+                responseCode: "S100002",
+                responseMessage: "Role not authorized to access data",
+            });
+        }
+
+        // Fetch transactions and total count
         const [transactions, total] = await Promise.all([
             TransactionHistoryModel.getPaginatedTransactions(parsedLimit, offset),
-            TransactionHistoryModel.getTotalTransactions()
+            TransactionHistoryModel.getTotalTransactions(),
         ]);
 
         if (transactions.length === 0) {
             return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_TRANSACTIONS_FOUND);
         }
 
-        const total_pages = Math.ceil(total / parsedLimit);  // Calculate total pages
+        // Filter transactions based on allowed fields
+        const filteredTransactions = transactions.map(transaction => {
+            const filteredTransaction = {};
+            allowedFields.forEach(field => {
+                if (transaction[field] !== undefined) {
+                    filteredTransaction[field] = transaction[field];
+                }
+            });
+            return filteredTransaction;
+        });
 
-        // Return the response with transactions and pagination info
+        const total_pages = Math.ceil(total / parsedLimit);
+
+        // Return the response with filtered transactions and pagination info
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCH_SUCCESS, {
-            transactions,  // Transactions with category names
-            pagination: {  // Pagination info at the bottom
-                total,              // Total number of transactions
-                total_pages,        // Total pages available
-                current_page: parsedPage,  // Current page
-                limit: parsedLimit        // Number of records per page
-            }
+            transactions: filteredTransactions,
+            pagination: {
+                total,
+                total_pages,
+                current_page: parsedPage,
+                limit: parsedLimit,
+            },
         });
     } catch (error) {
-        next(error);  // Pass error to centralized error handler
+        console.error(`Error fetching transactions: ${error.message}`);
+        next(error); // Pass error to centralized error handler
     }
 });
+
 
 
 
