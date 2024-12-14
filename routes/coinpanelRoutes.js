@@ -5,12 +5,14 @@ const userModel = require('../models/userModel');
 const message = require('../utils/message');
 const authenticateToken = require('../middleware/authenticateToken');
 const { MESSAGES, RESPONSE_CODES } = require('../utils/message');
-const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCategory, getTransactionCountByCategory, addTransactionHistory  } = require('../models/coinModel');
+const { getTransactionHistory, getTransactionCount, getTransactionHistoryByCategory, getTransactionCountByCategory, addTransactionHistory } = require('../models/coinModel');
 const { SUCCESS, ERROR } = require('../middleware/handler');
 const TransactionHistoryModel = require('../models/transactionHistoryModel');
 const CategoryModel = require('../models/categoryModel');
 const swaggerJSDoc = require('swagger-jsdoc');
 const db = require('../config/db.config');
+
+
 router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (req, res, next) => {
     try {
         const { staff_id } = req.params; // Get staff_id from the route params
@@ -65,15 +67,15 @@ router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (r
             // Fetch transactions categorized by category for each user, including category name
             const transactions = await TransactionHistoryModel.getTransactionsCategorizedWithCategoryName(user.user_id);
 
-            // Structure transactions into categorized coins with category name
-            const categorizedCoins = transactions.reduce((acc, transaction) => {
+            // Structure transactions into categorized coins as an array
+            const categorizedCoins = Object.entries(transactions.reduce((acc, transaction) => {
                 const { cat_id, category_name, coin_type, total_coins } = transaction;
                 if (!acc[cat_id]) {
-                    acc[cat_id] = { name: category_name, PRIMARY: 0, SECONDARY: 0 };
+                    acc[cat_id] = { id: cat_id, name: category_name, PRIMARY: 0, SECONDARY: 0 };
                 }
                 acc[cat_id][coin_type] = total_coins;
                 return acc;
-            }, {});
+            }, {})).map(([key, value]) => value);
 
             // Structure user data with transaction categories
             const userData = {
@@ -81,8 +83,9 @@ router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (r
                 name: user.name,
                 email: user.email,
                 status: user.status,
-                categories: categorizedCoins,
+                categories: categorizedCoins, // Now it's an array
             };
+
 
             // Filter fields based on role
             const filteredUserData = {};
