@@ -47,7 +47,7 @@ const logError = (error) => {
 const logEvent = (type, message, additionalData = {}) => {
     const logPath = path.join(process.cwd(), 'log.txt');
     const timestamp = new Date().toISOString();
-    
+
     // Prepare log entry with additional context
     const logEntry = JSON.stringify({
         timestamp,
@@ -140,8 +140,8 @@ router.post('/documents', authenticateToken, async (req, res) => {
 
 
 // POST /api/sliders - Add a new slider
-router.post('/sliders', async (req, res) => {
-    const { title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture } = req.body;
+router.post('/sliders', authenticateToken, async (req, res) => {
+    const { title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture, bgColor} = req.body;
 
     // Validate input
     if (!title || !created_by || !send_type) {
@@ -163,7 +163,8 @@ router.post('/sliders', async (req, res) => {
             from_date: from_date || null,
             to_date: to_date || null,
             slider_index: slider_index || null,
-            picture
+            picture,
+            bgColor: bgColor || null,
         };
 
         // Create new slider
@@ -496,6 +497,42 @@ process.on('uncaughtException', (error) => {
 
 process.on('unhandledRejection', (reason, promise) => {
     logError(new Error(`Unhandled Rejection at: ${promise}, reason: ${reason}`));
+});
+
+
+// POST /sliders/delete - Delete a slider
+router.post('/sliders/delete', authenticateToken, async (req, res) => {
+    const { id } = req.body;
+
+    // Validate input
+    if (!id) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.BAD_REQUEST,
+            responseMessage: MESSAGES.SLIDER_ID_REQUIRED,
+        });
+    }
+
+    try {
+        const wasDeleted = await SliderModel.deleteSliderById(id);
+
+        if (!wasDeleted) {
+            return res.status(404).json({
+                responseCode: RESPONSE_CODES.NOT_FOUND,
+                responseMessage: MESSAGES.SLIDER_NOT_FOUND,
+            });
+        }
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.SLIDER_DELETED_SUCCESS,
+        });
+    } catch (error) {
+        console.error('Error deleting slider:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR + error.message,
+        });
+    }
 });
 
 

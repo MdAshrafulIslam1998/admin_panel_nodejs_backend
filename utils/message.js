@@ -50,6 +50,11 @@ module.exports = {
     GMAIL_APPPASS_UPDATE_FAILED: 'Failed to update gamil apppass credentials.',
     GMAIL_APPPASS_UPDATE_SUCCESS: 'Gmail apppass credentials updated successfully.',
 
+    SLIDER_ID_REQUIRED: 'Slider ID is required.',
+    SLIDER_NOT_FOUND: 'Slider not found.',
+    SLIDER_DELETED_SUCCESS: 'Slider deleted successfully.',
+    
+
 
     EMAIL_PASSWORD_REQUIRED: 'Email and password are required.',
     USER_NOT_VERIFIED: 'User is not verified. Please complete verification.',

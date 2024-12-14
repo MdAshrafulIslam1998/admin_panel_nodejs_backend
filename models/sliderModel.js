@@ -3,10 +3,10 @@ const db = require('../config/db.config');
 
 class SliderModel {
     static async createSlider(sliderData) {
-        const { title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture } = sliderData;
+        const { title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture, bgColor } = sliderData;
         const [result] = await db.execute(
-            'INSERT INTO sliders (title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture]
+            'INSERT INTO sliders (title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture, bgColor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture, bgColor]
         );
         return result.insertId; // Return the ID of the newly inserted slider
     }
@@ -49,6 +49,13 @@ class SliderModel {
     static async getSlidersForUserCount(uid) {
         const [rows] = await db.execute('SELECT COUNT(*) AS total FROM sliders WHERE send_to = ?', [uid]);
         return rows[0].total;
+    }
+
+    // Delete a slider by ID
+    static async deleteSliderById(sliderId) {
+        const query = 'DELETE FROM sliders WHERE id = ?';
+        const [result] = await db.execute(query, [sliderId]);
+        return result.affectedRows > 0; // Returns true if a row was deleted
     }
 
 
