@@ -7,9 +7,10 @@ const router = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
 
 // 1. Fetch all message templates
-router.get('/templates', authenticateToken, async (req, res) => {
+router.get('/templates',authenticateToken, async (req, res) => {
     try {
-        const templates = await TemplateModel.fetchAllTemplates();
+        const templates = await TemplateModel.getAllTemplates();
+
         return res.status(200).json({
             responseCode: RESPONSE_CODES.SUCCESS,
             responseMessage: MESSAGES.TEMPLATES_FETCHED,
@@ -23,6 +24,7 @@ router.get('/templates', authenticateToken, async (req, res) => {
         });
     }
 });
+
 
 // 2. Add a new message template
 router.post('/templates/add', authenticateToken, async (req, res) => {
@@ -52,11 +54,12 @@ router.post('/templates/add', authenticateToken, async (req, res) => {
 });
 
 // 3. Fetch templates by category
-router.get('/templates/category/:categoryId', authenticateToken, async (req, res) => {
+router.get('/templates/category/:categoryId',authenticateToken, async (req, res) => {
     const { categoryId } = req.params;
 
     try {
-        const templates = await TemplateModel.fetchTemplatesByCategory(categoryId);
+        const templates = await TemplateModel.getTemplatesByCategoryId(categoryId);
+
         return res.status(200).json({
             responseCode: RESPONSE_CODES.SUCCESS,
             responseMessage: MESSAGES.TEMPLATES_BY_CATEGORY_FETCHED,
@@ -70,6 +73,7 @@ router.get('/templates/category/:categoryId', authenticateToken, async (req, res
         });
     }
 });
+
 
 // 4. Edit a message template
 // Update the PUT /templates/:uid route in templateRoutes.js

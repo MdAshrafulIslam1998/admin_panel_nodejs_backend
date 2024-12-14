@@ -4,8 +4,14 @@ const { v4: uuidv4 } = require('uuid'); // For generating unique UIDs
 
 class TemplateModel {
     // Fetch all message templates
-    static async fetchAllTemplates() {
-        const query = `SELECT id, title, uid, description, category_id, create_date, created_by FROM templates`;
+    static async getAllTemplates() {
+        const query = `
+            SELECT 
+                t.uid, t.title, t.description, t.category_id, t.create_date, t.created_by,
+                c.name AS category_name
+            FROM templates t
+            LEFT JOIN categories c ON t.category_id = c.id
+        `;
         const [rows] = await db.execute(query);
         return rows;
     }
@@ -22,16 +28,18 @@ class TemplateModel {
     }
 
     // Fetch templates by category
-    static async fetchTemplatesByCategory(categoryId) {
+    static async getTemplatesByCategoryId(categoryId) {
         const query = `
-            SELECT id, title, uid, description, category_id, create_date, created_by 
-            FROM templates 
-            WHERE category_id = ?
+            SELECT 
+                t.uid, t.title, t.description, t.category_id, t.create_date, t.created_by,
+                c.name AS category_name
+            FROM templates t
+            LEFT JOIN categories c ON t.category_id = c.id
+            WHERE t.category_id = ?
         `;
         const [rows] = await db.execute(query, [categoryId]);
         return rows;
     }
-
     // Edit a message template
     // Update templateModel.js
     static async updateTemplateByUid(uid, title, description, categoryId) {
