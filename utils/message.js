@@ -45,6 +45,8 @@ module.exports = {
     NO_UPDATES_PROVIDED: 'No updates provided in the request body.',
     UPDATE_SUCCESS_FULLY: 'User updated successfully.',
 
+    
+
     TEMPLATES_FETCHED: 'Message templates fetched successfully',
     TEMPLATE_ADDED: 'Message template added successfully',
     TEMPLATES_BY_CATEGORY_FETCHED: 'Message templates fetched by category successfully',
@@ -52,6 +54,8 @@ module.exports = {
     TEMPLATE_DELETED: 'Message template deleted successfully',
     TEMPLATE_NOT_FOUND: 'Message template not found',
     MISSING_FIELDS: 'Required fields are missing',
+
+    FEATURE_CODE_ALREADY_EXISTS: 'Feature code already exists',
 
 
     EMAIL_SENT_SUCCESS: 'Email sent successfully.',
@@ -172,7 +176,8 @@ module.exports = {
     BAD_REQUEST: 'BAD404',
     SERVER_ERROR: 'SV1000',
     LEVEL_HAS_ASSOCIATED_USERS: 'LAU409',
-    MAXIMUM_LIMIT_REACHED: 'TRX404'
+    MAXIMUM_LIMIT_REACHED: 'TRX404',
+    CONFLICT: 'CF404',
 
   },
 

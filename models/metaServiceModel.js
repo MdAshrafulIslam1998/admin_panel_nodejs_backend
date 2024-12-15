@@ -7,11 +7,21 @@ class MetaServiceModel {
         return rows.length ? rows[0] : null;
     }
 
+    // Check if a feature code already exists
+    static async getMetaServiceByFeatureCode(featureCode) {
+        const query = `
+        SELECT * FROM meta_service WHERE feature_code = ?
+    `;
+        const [rows] = await db.execute(query, [featureCode]);
+        return rows.length > 0 ? rows[0] : null;
+    }
+
+    // Add a new meta service entry
     static async addMetaService(featureCode, type, content) {
         const query = `
-            INSERT INTO meta_service (feature_code, type, content) 
-            VALUES (?, ?, ?)
-        `;
+        INSERT INTO meta_service (feature_code, type, content) 
+        VALUES (?, ?, ?)
+    `;
         const [result] = await db.execute(query, [featureCode, type, content]);
         return {
             service_id: result.insertId,
@@ -20,7 +30,6 @@ class MetaServiceModel {
             content,
         };
     }
-
     // Fetch meta services with pagination
     static async getPaginatedMetaServices(limit, offset) {
         const query = `

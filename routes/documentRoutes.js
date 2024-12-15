@@ -141,7 +141,7 @@ router.post('/documents', authenticateToken, async (req, res) => {
 
 // POST /api/sliders - Add a new slider
 router.post('/sliders', authenticateToken, async (req, res) => {
-    const { title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture, bgColor} = req.body;
+    const { title, subtitle, created_by, send_type, send_to, action, from_date, to_date, slider_index, picture, bgColor } = req.body;
 
     // Validate input
     if (!title || !created_by || !send_type) {
@@ -422,7 +422,7 @@ router.get('/meta-service/:feature_code', async (req, res) => {
 
 
 // POST /meta-service/add - Add a new meta service entry
-router.post('/meta-service/add', authenticateToken ,async (req, res) => {
+router.post('/meta-service/add', authenticateToken, async (req, res) => {
     const { featureCode, type, content } = req.body;
 
     // Validate required fields
@@ -434,6 +434,15 @@ router.post('/meta-service/add', authenticateToken ,async (req, res) => {
     }
 
     try {
+        const existingService = await MetaServiceModel.getMetaServiceByFeatureCode(featureCode);
+
+        if (existingService) {
+            return res.status(409).json({
+                responseCode: RESPONSE_CODES.CONFLICT,
+                responseMessage: MESSAGES.FEATURE_CODE_ALREADY_EXISTS,
+            });
+        }
+
         const newMetaService = await MetaServiceModel.addMetaService(featureCode, type, content);
 
         return res.status(201).json({
@@ -451,8 +460,9 @@ router.post('/meta-service/add', authenticateToken ,async (req, res) => {
 });
 
 
+
 // GET /meta-service - Fetch all meta services (paginated)
-router.get('/meta-service', authenticateToken,async (req, res) => {
+router.get('/meta-service', authenticateToken, async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
 
     // Convert query params to numbers and calculate offset
@@ -490,7 +500,7 @@ router.get('/meta-service', authenticateToken,async (req, res) => {
 
 
 // DELETE /meta-service/:serviceId - Delete a meta service by service_id
-router.delete('/meta-service/:serviceId',authenticateToken, async (req, res) => {
+router.delete('/meta-service/:serviceId', authenticateToken, async (req, res) => {
     const { serviceId } = req.params;
 
     // Validate serviceId
