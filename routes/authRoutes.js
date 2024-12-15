@@ -4,7 +4,7 @@
 // routes/authRoutes.js
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const { getUserByEmail, createUser } = require('../models/userModel'); // Import your user model
+const { getUserByEmail, createUser, updatePushToken } = require('../models/userModel'); // Import your user model
 const { v4: uuidv4 } = require('uuid'); // For generating unique user_id
 const { RESPONSE_CODES, MESSAGES } = require('../utils/message'); // Import response codes and messages
 const router = express.Router();
@@ -13,15 +13,17 @@ const { createTFA, getTFABySessionId, validateTFA, updateUserPassword, checkTfaS
 const { sendEmail } = require('../utils/emailSender'); // Import the email sender
 require('dotenv').config();
 
+
+
 // POST /auth/login - User Login
 router.post('/auth/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, pushToken } = req.body;
 
-    // Check if email and password were provided
-    if (!email || !password) {
+    // Check if email, password, and pushToken were provided
+    if (!email || !password || !pushToken) {
         return res.status(400).json({
             responseCode: RESPONSE_CODES.BAD_REQUEST,
-            responseMessage: MESSAGES.EMAIL_PASSWORD_REQUIRED
+            responseMessage: MESSAGES.EMAIL_PASSWORD_TOKEN_REQUIRED
         });
     }
 
@@ -42,16 +44,18 @@ router.post('/auth/login', async (req, res) => {
             });
         }
 
+        // Update the pushToken in the database
+        await updatePushToken(user.user_id, pushToken);
+
         // User login successful, create JWT
         const token = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        // Modify the response to include the token under "data"
         return res.status(200).json({
             responseCode: RESPONSE_CODES.SUCCESS,
             responseMessage: MESSAGES.LOGIN_SUCCESS,
             data: {
                 token,
-                user_id: user.user_id // Add the user_id here
+                user_id: user.user_id
             }
         });
     } catch (error) {

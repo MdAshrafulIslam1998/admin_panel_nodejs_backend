@@ -111,6 +111,13 @@ const getUserByEmail = async (email) => {
 };
 
 
+// Function to update the pushToken in the database
+const updatePushToken = async (userId, pushToken) => {
+  const query = `UPDATE user SET push_token = ? WHERE user_id = ?`;
+  await db.execute(query, [pushToken, userId]);
+};
+
+
 
 // Function to check if a user already exists by email
 const checkUserByEmail = async (email) => {
@@ -481,5 +488,6 @@ module.exports = {
   createUser,
   updateUserStatusPending,
   updateUserDetails,
+  updatePushToken,
   updateUserColumns
 };

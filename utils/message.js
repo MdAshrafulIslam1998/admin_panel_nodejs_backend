@@ -136,6 +136,8 @@ module.exports = {
     ROLE_ASSOCIATED_WITH_STAFF: 'Cannot delete this role, it has associated staff',
     ROLE_NOT_FOUND: 'Role not found',
 
+    EMAIL_PASSWORD_TOKEN_REQUIRED: 'Email, password, and pushToken are required.',
+
     STAFF_ADDED: 'Staff added successfully',
     STAFF_ROLE_UPDATED: 'Staff role updated successfully',
     STAFFS_FETCHED: 'Staff list fetched successfully',
