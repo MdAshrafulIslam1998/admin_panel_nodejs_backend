@@ -12,8 +12,7 @@ const CategoryModel = require('../models/categoryModel');
 const swaggerJSDoc = require('swagger-jsdoc');
 const db = require('../config/db.config');
 
-
-router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (req, res, next) => {
+router.get('/alltransactions/userwise/:staff_id', authenticateToken, async (req, res, next) => {
     try {
         const { staff_id } = req.params; // Get staff_id from the route params
         const { page = 1, limit = 10 } = req.query; // Fetch pagination parameters
@@ -21,11 +20,11 @@ router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (r
         const parsedPage = parseInt(page);
         const offset = (parsedPage - 1) * parsedLimit;
 
-        // Role-based field access
+        // Define role-based access to fields
         const roleFieldAccess = {
-            1: ["user_id", "name", "email", "status", "categories"], // Admin
-            3: ["user_id", "name", "status", "categories"],          // Subadmin
-            4: ["user_id", "name", "status", "categories"],          // Moderator
+            1: ["id", "cat_id", "uid", "coin", "date", "name", "email", "created_by", "coin_type", "category_name"], // Admin
+            3: ["id", "cat_id", "uid", "coin", "date", "name", "created_by", "coin_type", "category_name"],          // Subadmin
+            4: ["id", "cat_id", "uid", "coin", "date", "name", "created_by", "coin_type", "category_name"],         // Moderator
         };
 
         // Fetch the staff's role from the database
@@ -52,7 +51,7 @@ router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (r
             });
         }
 
-        // Fetch users and total count
+        // Fetch users and transactions data
         const [users, totalUsers] = await Promise.all([
             userModel.getUserList(offset, parsedLimit),
             userModel.getTotalUserCount(),
@@ -62,48 +61,50 @@ router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (r
             return ERROR(res, RESPONSE_CODES.NOT_FOUND, MESSAGES.NO_USERS_FOUND);
         }
 
-        // Prepare data for each user with categorized transactions and category names
-        const userTransactionData = await Promise.all(users.map(async (user) => {
-            // Fetch transactions categorized by category for each user, including category name
-            const transactions = await TransactionHistoryModel.getTransactionsCategorizedWithCategoryName(user.user_id);
+        // Prepare transactions data based on the new requirements
+        const transactions = await Promise.all(users.map(async (user) => {
+            // Fetch transactions categorized by category for each user
+            const transactionsData = await TransactionHistoryModel.getTransactionsCategorizedWithCategoryName(user.user_id);
 
-            // Structure transactions into categorized coins as an array
-            const categorizedCoins = Object.entries(transactions.reduce((acc, transaction) => {
-                const { cat_id, category_name, coin_type, total_coins } = transaction;
-                if (!acc[cat_id]) {
-                    acc[cat_id] = { id: cat_id, name: category_name, PRIMARY: 0, SECONDARY: 0 };
-                }
-                acc[cat_id][coin_type] = total_coins;
-                return acc;
-            }, {})).map(([key, value]) => value);
+            // Combine the coin data into the required string format
+            const coin = transactionsData.map(transaction => {
+                const { category_name, PRIMARY, SECONDARY } = transaction;
+                return `${category_name} : \nprimary ${PRIMARY || 0}\nsecondary ${SECONDARY || 0}`;
+            }).join("\n\n");
 
-            // Structure user data with transaction categories
-            const userData = {
-                user_id: user.user_id,
+
+
+
+            const transaction = {
+                id: 0, // Hardcoded
+                cat_id: 0, // Hardcoded
+                uid: user.user_id,
+                coin, // Formatted string
+                date: new Date().toISOString(), // Current date
                 name: user.name,
                 email: user.email,
-                status: user.status,
-                categories: categorizedCoins, // Now it's an array
+                created_by: "Globipay", // Hardcoded
+                coin_type: "primary & secondary", // Hardcoded
+                category_name: "all", // Hardcoded
             };
 
-
-            // Filter fields based on role
-            const filteredUserData = {};
+            // Filter transaction fields based on role access
+            const filteredTransaction = {};
             allowedFields.forEach(field => {
-                if (userData[field] !== undefined) {
-                    filteredUserData[field] = userData[field];
+                if (transaction[field] !== undefined) {
+                    filteredTransaction[field] = transaction[field];
                 }
             });
 
-            return filteredUserData;
+            return filteredTransaction;
         }));
 
         // Calculate total pages for pagination
         const totalPages = Math.ceil(totalUsers / parsedLimit);
 
-        // Return response with user-wise data and pagination
+        // Return the restructured response
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.USERWISE_TRANSACTION_HISTORY_FETCHED, {
-            users: userTransactionData,
+            transactions,
             pagination: {
                 total: totalUsers,
                 total_pages: totalPages,
@@ -120,44 +121,87 @@ router.get('/users/userwise/transactions/:staff_id', authenticateToken, async (r
 
 
 
-
-
-// GET /users/paginated-transactions-history-by-category
-router.get('/users/paginated-transactions-history-by-category', async (req, res) => {
-    const { page = 1, limit = 10, category } = req.query; // Take the category ID as input
-    const offset = (page - 1) * limit;
-
+// GET /alltransactions/categorywise
+router.get('/alltransactions/categorywise/:staff_id', authenticateToken, async (req, res, next) => {
     try {
-        // Validate the category parameter
+        const { staff_id } = req.params;
+        const { page = 1, limit = 10, category } = req.query;
+        const parsedLimit = parseInt(limit);
+        const parsedPage = parseInt(page);
+        const offset = (parsedPage - 1) * parsedLimit;
+
         if (!category) {
             return ERROR(res, RESPONSE_CODES.BAD_REQUEST, MESSAGES.INVALID_INPUT_PROVIDED, { error: "Category ID is required." });
         }
 
-        // Step 1: Get the paginated list of users who have some coins in the specified category
-        const usersWithCoins = await TransactionHistoryModel.getUsersWithCategoryCoins(category, +limit, +offset);
-
-        // Step 2: Get total count of users with coins in the category
-        const totalUsers = await TransactionHistoryModel.getTotalUsersWithCategoryCoins(category);
-
-        // Prepare pagination information
-        const pagination = {
-            total: totalUsers,
-            total_pages: Math.ceil(totalUsers / limit),
-            current_page: +page,
-            limit: +limit
+        const roleFieldAccess = {
+            1: ["id", "cat_id", "uid", "coin", "date", "name", "email", "created_by", "coin_type", "category_name"], // Admin
+            3: ["id", "cat_id", "uid", "coin", "date", "name", "created_by", "coin_type", "category_name"],          // Subadmin
+            4: ["id", "cat_id", "uid", "coin", "date", "name", "created_by", "coin_type", "category_name"],         // Moderator
         };
 
-        // Step 4: Send the response with the users list and pagination at the bottom
+        const [staffRows] = await db.execute("SELECT role FROM staffs WHERE staff_id = ?", [staff_id]);
+        const staff = staffRows[0];
+
+        if (!staff) {
+            return res.status(404).json({
+                responseCode: "S100001",
+                responseMessage: "Staff not found",
+            });
+        }
+
+        const role = parseInt(staff.role, 10);
+        const allowedFields = roleFieldAccess[role];
+
+        if (!allowedFields) {
+            return res.status(403).json({
+                responseCode: "S100002",
+                responseMessage: "Role not authorized to access data",
+            });
+        }
+
+        const usersWithCoins = await TransactionHistoryModel.getUsersWithCategoryCoins(category, parsedLimit, offset);
+        const categoryName = await TransactionHistoryModel.getCategoryNameById(category);
+        const totalUsers = await TransactionHistoryModel.getTotalUsersWithCategoryCoins(category);
+
+        const formattedUsers = usersWithCoins.map(user => {
+            const userObject = {
+                id: 0,
+                cat_id: category,
+                uid: user.user_id,
+                coin: `primary_total: ${user.primary_total || 0}\nsecondary_total: ${user.secondary_total || 0}`,
+                date: user.date || new Date().toISOString(),
+                name: user.name,
+                email: user.email, // Ensure email is included
+                created_by: "Globipay",
+                coin_type: "primary and secondary",
+                category_name: categoryName || "Unknown",
+            };
+
+            return Object.fromEntries(
+                Object.entries(userObject).filter(([key]) => allowedFields.includes(key))
+            );
+        });
+
+        const pagination = {
+            total: totalUsers,
+            total_pages: Math.ceil(totalUsers / parsedLimit),
+            current_page: parsedPage,
+            limit: parsedLimit,
+        };
+
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.TRANSACTION_HISTORY_FETCHED, {
-            category_id: category,
-            users: usersWithCoins,
-            pagination // Put pagination at the bottom of the response data
+            transactions: formattedUsers,
+            pagination,
         });
     } catch (error) {
-        console.error(error);
-        ERROR(res, RESPONSE_CODES.SERVER_ERROR, MESSAGES.TRANSACTION_HISTORY_FAILED, error.message);
+        console.error(`Error fetching category-wise transactions: ${error.message}`);
+        next(error);
     }
 });
+
+
+
 
 router.get('/alltransactions/:staff_id', authenticateToken, async (req, res, next) => {
     try {

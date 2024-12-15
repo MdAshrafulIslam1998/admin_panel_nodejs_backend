@@ -61,26 +61,27 @@ class TransactionHistoryModel {
         return rows;
     }
 
+
     static async getTransactionsCategorizedWithCategoryName(userId) {
         const query = `
-            SELECT 
-                th.cat_id,
-                c.name AS category_name,
-                th.coin_type,
-                SUM(th.coin) AS total_coins
-            FROM 
-                transaction_history th
-            LEFT JOIN 
-                categories c ON th.cat_id = c.id
-            WHERE 
-                th.uid = ?
-            GROUP BY 
-                th.cat_id, th.coin_type
-        `;
+        SELECT 
+            th.cat_id,
+            c.name AS category_name,
+            SUM(CASE WHEN th.coin_type = 'PRIMARY' THEN th.coin ELSE 0 END) AS \`PRIMARY\`,
+            SUM(CASE WHEN th.coin_type = 'SECONDARY' THEN th.coin ELSE 0 END) AS \`SECONDARY\`
+        FROM 
+            transaction_history th
+        LEFT JOIN 
+            categories c ON th.cat_id = c.id
+        WHERE 
+            th.uid = ?
+        GROUP BY 
+            th.cat_id
+    `;
         const [rows] = await db.execute(query, [userId]);
         return rows;
     }
-    
+
 
 
 
@@ -92,36 +93,54 @@ class TransactionHistoryModel {
     }
 
 
-    // Fetch users who used coins in a specific category
     static async getUsersWithCategoryCoins(category, limit, offset) {
         const query = `
-            SELECT u.user_id, u.name, u.email, u.level, u.status, u.date,
+            SELECT 
+                u.user_id, u.name, u.email, u.level, u.status, u.date,
                 SUM(CASE WHEN th.coin_type = 'PRIMARY' THEN th.coin ELSE 0 END) AS primary_total,
                 SUM(CASE WHEN th.coin_type = 'SECONDARY' THEN th.coin ELSE 0 END) AS secondary_total
-            FROM user u
-            JOIN transaction_history th ON u.user_id = th.uid
-            WHERE th.cat_id = ?
-            GROUP BY u.user_id
-            HAVING primary_total > 0 OR secondary_total > 0
+            FROM 
+                user u
+            JOIN 
+                transaction_history th ON u.user_id = th.uid
+            WHERE 
+                th.cat_id = ?
+            GROUP BY 
+                u.user_id
+            HAVING 
+                primary_total > 0 OR secondary_total > 0
             LIMIT ? OFFSET ?
         `;
-        const [result] = await db.execute(query, [category, limit, offset]);
-        return result;
+        const [rows] = await db.execute(query, [category, limit, offset]);
+        return rows;
     }
+
+
+    static async getCategoryNameById(categoryId) {
+        const query = `SELECT name FROM categories WHERE id = ?`;
+        const [rows] = await db.execute(query, [categoryId]);
+        return rows.length ? rows[0].name : null;
+    }
+
+
+
+
 
     // Count the total number of users with coin transactions in the specific category
     static async getTotalUsersWithCategoryCoins(category) {
         const query = `
-            SELECT COUNT(DISTINCT u.user_id) AS total
-            FROM user u
-            JOIN transaction_history th ON u.user_id = th.uid
-            WHERE th.cat_id = ?
-            AND (th.coin_type = 'PRIMARY' OR th.coin_type = 'SECONDARY')
+            SELECT 
+                COUNT(DISTINCT u.user_id) AS total
+            FROM 
+                user u
+            JOIN 
+                transaction_history th ON u.user_id = th.uid
+            WHERE 
+                th.cat_id = ?
         `;
-        const [result] = await db.execute(query, [category]);
-        return result[0].total;
+        const [rows] = await db.execute(query, [category]);
+        return rows.length ? rows[0].total : 0;
     }
-
 
     // Fetch paginated transactions with category name and image by user ID
     static async getPaginatedTransactionsByUserId(userId, limit, offset) {
