@@ -69,9 +69,10 @@ router.get("/notifications", authenticateToken, async (req, res) => {
 });
 
 
-
+// instant notification
 router.post("/notifications/send", authenticateToken, async (req, res) => {
-  const { token, title, details, rich_media_url, deep_link } = req.body;
+  const { token, user_id, title, details, rich_media_url, deep_link } = req.body;
+ 
 
   // Validate input
   if (!token || !title || !details) {
@@ -86,7 +87,7 @@ router.post("/notifications/send", authenticateToken, async (req, res) => {
     const message = {
       token,
       notification: { title, body: details },
-      data: { title, details, deep_link, image: rich_media_url || "" },
+      data: { title, user_id, body: details, deep_link,  image: rich_media_url || "" },
     };
 
     // Send the notification
@@ -95,7 +96,7 @@ router.post("/notifications/send", authenticateToken, async (req, res) => {
     // Log the notification in the notification_logs table
     const logData = {
       notification_id: notificationId,
-      target_id: token,
+      target_id: user_id,
       status: "delivered",
       error_message: "none", // Update error_message for success
       sent_at: new Date(),
@@ -116,7 +117,7 @@ router.post("/notifications/send", authenticateToken, async (req, res) => {
       interval_minutes: null, // Default null
       last_sent_at: new Date(), // Current timestamp
       status: "sent", // Status 'sent'
-      target_id: token,
+      target_id: user_id,
       created_at: new Date(), // Current timestamp
       updated_at: new Date(), // Current timestamp
     };
@@ -133,7 +134,7 @@ router.post("/notifications/send", authenticateToken, async (req, res) => {
     // Log the failure in the notification_logs table
     const logData = {
       notification_id: notificationId,
-      target_id: token,
+      target_id: user_id,
       status: "failed",
       error_message: err.message,
       sent_at: new Date(),
