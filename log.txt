@@ -873,3 +873,427 @@ SyntaxError: missing ) after argument list
     at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:20:24)
     at Module._compile (node:internal/modules/cjs/loader:1376:14)
 
+2024-12-15T11:44:56.172Z - ERROR: cron is not defined
+ReferenceError: cron is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:201:1)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-15T11:47:37.818Z - ERROR: cron is not defined
+ReferenceError: cron is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:201:1)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-15T11:47:59.701Z - ERROR: cron is not defined
+ReferenceError: cron is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:201:1)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-15T11:48:22.433Z - ERROR: cron is not defined
+ReferenceError: cron is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:201:1)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-15T11:48:52.287Z - ERROR: cron is not defined
+ReferenceError: cron is not defined
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:201:1)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+
+2024-12-15T11:50:02.278Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:50:18.533Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:50:34.964Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:51:18.784Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:52:45.371Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:53:03.203Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:54:01.608Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:54:16.369Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T11:54:33.573Z - ERROR: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module '../utils/responseHandler'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:6:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T12:37:48.220Z - ERROR: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js:4:16)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T12:37:56.159Z - ERROR: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js:4:16)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T12:51:27.744Z - ERROR: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js:4:16)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T12:51:58.558Z - ERROR: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js:4:16)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T12:55:40.322Z - ERROR: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js:4:16)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T12:55:45.524Z - ERROR: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+Error: Cannot find module 'moment-timezone'
+Require stack:
+- D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js
+- D:\My codes\Github\admin_panel_nodejs_backend\app.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\cron\notificationCron.js:4:16)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+
+2024-12-15T12:56:25.426Z - ERROR: Unhandled Rejection at: [object Promise], reason: Error: Table 'admin_coin.notifications_log' doesn't exist
+Error: Unhandled Rejection at: [object Promise], reason: Error: Table 'admin_coin.notifications_log' doesn't exist
+    at process.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\documentRoutes.js:613:14)
+    at process.emit (node:events:514:28)
+    at emit (node:internal/process/promises:150:20)
+    at processPromiseRejections (node:internal/process/promises:284:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:96:32)
+
+2024-12-15T12:59:18.968Z - ERROR: Unhandled Rejection at: [object Promise], reason: Error: Table 'admin_coin.notifications_log' doesn't exist
+Error: Unhandled Rejection at: [object Promise], reason: Error: Table 'admin_coin.notifications_log' doesn't exist
+    at process.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\documentRoutes.js:613:14)
+    at process.emit (node:events:514:28)
+    at emit (node:internal/process/promises:150:20)
+    at processPromiseRejections (node:internal/process/promises:284:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:96:32)
+
+2024-12-15T13:01:57.729Z - ERROR: Unexpected token ','
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:108
+      notification_id: , // Generate a random UUID for failures too
+                       ^
+
+SyntaxError: Unexpected token ','
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-15T13:02:03.323Z - ERROR: Unhandled Rejection at: [object Promise], reason: Error: Cannot add or update a child row: a foreign key constraint fails (`admin_coin`.`notification_logs`, CONSTRAINT `notification_logs_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`) ON DELETE CASCADE)
+Error: Unhandled Rejection at: [object Promise], reason: Error: Cannot add or update a child row: a foreign key constraint fails (`admin_coin`.`notification_logs`, CONSTRAINT `notification_logs_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`) ON DELETE CASCADE)
+    at process.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\documentRoutes.js:613:14)
+    at process.emit (node:events:514:28)
+    at emit (node:internal/process/promises:150:20)
+    at processPromiseRejections (node:internal/process/promises:284:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:96:32)
+
+2024-12-15T13:02:45.221Z - ERROR: Unhandled Rejection at: [object Promise], reason: ReferenceError: randomId is not defined
+Error: Unhandled Rejection at: [object Promise], reason: ReferenceError: randomId is not defined
+    at process.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\documentRoutes.js:613:14)
+    at process.emit (node:events:514:28)
+    at emit (node:internal/process/promises:150:20)
+    at processPromiseRejections (node:internal/process/promises:284:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:96:32)
+
+2024-12-15T13:07:32.900Z - ERROR: Unhandled Rejection at: [object Promise], reason: Error: Cannot add or update a child row: a foreign key constraint fails (`admin_coin`.`notification_logs`, CONSTRAINT `notification_logs_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`) ON DELETE CASCADE)
+Error: Unhandled Rejection at: [object Promise], reason: Error: Cannot add or update a child row: a foreign key constraint fails (`admin_coin`.`notification_logs`, CONSTRAINT `notification_logs_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`) ON DELETE CASCADE)
+    at process.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\routes\documentRoutes.js:613:14)
+    at process.emit (node:events:514:28)
+    at emit (node:internal/process/promises:150:20)
+    at processPromiseRejections (node:internal/process/promises:284:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:96:32)
+
+2024-12-15T13:12:27.444Z - ERROR: Unexpected identifier 'image'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:75
+  const { token, title, body,deep_link image } = req.body;
+                                       ^^^^^
+
+SyntaxError: Unexpected identifier 'image'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+

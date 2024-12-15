@@ -19,6 +19,8 @@ const gmailAppPassRoutes = require('./routes/gmailAppPassRoutes'); // Import the
 const staffAuthRoutes = require('./routes/staffAuthRoutes');
 const templateRoutes = require('./routes/templateRoutes');
 
+require("./cron/notificationCron"); // Start the cron job
+
 
 dotenv.config();
 
