@@ -184,7 +184,7 @@ router.post("/notifications/fetch-by-target", authenticateToken, async (req, res
     );
 
     // Return success response with the notifications
-    SUCCESS(res, "S10003", "Notifications fetched successfully.", { notifications });
+    SUCCESS(res, "S100000", "Notifications fetched successfully.", { notifications });
   } catch (err) {
     console.error("Error fetching notifications:", err);
     ERROR(res, "E10006", "Failed to fetch notifications.", err.message);
