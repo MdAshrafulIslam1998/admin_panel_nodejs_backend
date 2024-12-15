@@ -249,7 +249,7 @@ router.get("/levels", authenticateToken, async (req, res) => {
         }
 
         SUCCESS(res, RESPONSE_CODES.SUCCESS, MESSAGES.LEVELS_FETCH_SUCCESSFULLY, {
-            levels,
+            levels, // Includes levid now
         });
     } catch (error) {
         ERROR(
@@ -260,6 +260,7 @@ router.get("/levels", authenticateToken, async (req, res) => {
         );
     }
 });
+
 
 // DELETE /api/levels/:levid - Delete a level by levid
 router.delete("/levels/:levid", authenticateToken, async (req, res) => {

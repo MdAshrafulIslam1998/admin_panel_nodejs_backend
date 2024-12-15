@@ -2,10 +2,11 @@ const db = require('../config/db.config'); // Adjust the path as necessary
 
 class LevelModel {
     static async getAllLevels() {
-        const query = 'SELECT level_name, level_value, min_thresh, max_thresh, created_by, date FROM levels';
+        const query = 'SELECT levid, level_name, level_value, min_thresh, max_thresh, created_by, date FROM levels';
         const [rows] = await db.execute(query);
         return rows;
     }
+
 
 
     static async getLevelById(id) {
