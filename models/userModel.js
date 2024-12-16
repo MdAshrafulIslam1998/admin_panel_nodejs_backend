@@ -464,6 +464,83 @@ const updateUserColumns = async (userId, updates) => {
 };
 
 
+/**
+ * Function to search users with fuzzy matching and pagination.
+ * @param {string} searchQuery - The text to search for (name, email, address, level, or status).
+ * @param {number} page - The current page number for pagination.
+ * @param {number} limit - The number of records to return per page.
+ * @returns {object} - An object containing the search results and pagination data.
+ */
+const searchUsers = async (searchQuery, page, limit) => {
+  const offset = (page - 1) * limit;
+
+  // Define the SQL query with fuzzy search using LIKE.
+  const query = `
+      SELECT 
+          user_id, name, email, dob, gender, address, level, status, approved_by, push_token, date
+      FROM 
+          user
+      WHERE 
+          name LIKE ? OR
+          email LIKE ? OR
+          address LIKE ? OR
+          level LIKE ? OR
+          status LIKE ?
+      ORDER BY 
+          date DESC
+      LIMIT ? OFFSET ?;
+  `;
+
+  // Total count query for pagination
+  const countQuery = `
+      SELECT COUNT(*) AS total
+      FROM user
+      WHERE 
+          name LIKE ? OR
+          email LIKE ? OR
+          address LIKE ? OR
+          level LIKE ? OR
+          status LIKE ?;
+  `;
+
+  // Fuzzy search pattern
+  const searchPattern = `%${searchQuery}%`;
+
+  // Execute the main query
+  const [users] = await db.execute(query, [
+      searchPattern,
+      searchPattern,
+      searchPattern,
+      searchPattern,
+      searchPattern,
+      limit,
+      offset,
+  ]);
+
+  // Execute the count query
+  const [countResult] = await db.execute(countQuery, [
+      searchPattern,
+      searchPattern,
+      searchPattern,
+      searchPattern,
+      searchPattern,
+  ]);
+  const total = countResult[0]?.total || 0;
+
+  // Calculate total pages
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+      users,
+      pagination: {
+          total,
+          total_pages: totalPages,
+          current_page: page,
+          limit,
+      },
+  };
+};
+
 
 // Function to update user password
 
@@ -479,6 +556,7 @@ module.exports = {
   getTotalBlockedUserCount,
   getBlockedUsers,
   getUserByEmail,
+  searchUsers,
   checkUserByEmail,
   getTotalVerifiedUserCount,
   getVerifiedUsersWithCoins,

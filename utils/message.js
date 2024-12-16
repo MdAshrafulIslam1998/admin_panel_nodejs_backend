@@ -109,6 +109,9 @@ module.exports = {
 
     USER_PROFILE_FETCH_SUCCESS: 'User profile fetched successfully',
 
+    SEARCH_QUERY_REQUIRED: 'Search query is required.',
+    USER_LIST_FETCH_SUCCESS: 'User list fetched successfully.',
+
 
     // Category-related
     CATEGORY_ADDED_SUCCESS: 'Category added successfully',

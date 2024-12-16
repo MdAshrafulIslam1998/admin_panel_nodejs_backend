@@ -4,6 +4,7 @@ const db = require('../config/db.config');
 const authenticateToken = require("../middleware/authenticateToken");
 const {
     getUserList,
+    searchUsers,
     getUserById,
     updateUserLevel,
     updateUserStatus,
@@ -805,6 +806,54 @@ router.put("/user/update_columns/:userId", async (req, res) => {
             responseCode: "E500000",
             responseMessage: MESSAGES.SERVER_ERROR,
             error: error.message,
+        });
+    }
+});
+
+
+/**
+ * GET /users/search - Search users with pagination and fuzzy matching.
+ */
+router.get('/users/search', async (req, res) => {
+    const { query, page = 1, limit = 10 } = req.query;
+
+    // Validate inputs
+    if (!query) {
+        return res.status(400).json({
+            responseCode: RESPONSE_CODES.BAD_REQUEST,
+            responseMessage: MESSAGES.SEARCH_QUERY_REQUIRED,
+        });
+    }
+
+    try {
+        // Call the searchUsers function from the model
+        const result = await searchUsers(query, parseInt(page, 10), parseInt(limit, 10));
+
+        return res.status(200).json({
+            responseCode: RESPONSE_CODES.SUCCESS,
+            responseMessage: MESSAGES.USER_LIST_FETCH_SUCCESS,
+            data: {
+                users: result.users.map((user) => ({
+                    user_id: user.user_id,
+                    name: user.name,
+                    email: user.email,
+                    dob: user.dob,
+                    gender: user.gender,
+                    address: user.address,
+                    level: user.level,
+                    status: user.status,
+                    approved_by: user.approved_by,
+                    push_token: user.push_token,
+                    date: user.date,
+                })),
+                pagination: result.pagination,
+            },
+        });
+    } catch (error) {
+        console.error('Error during user search:', error);
+        return res.status(500).json({
+            responseCode: RESPONSE_CODES.SERVER_ERROR,
+            responseMessage: MESSAGES.SERVER_ERROR + error.message,
         });
     }
 });
