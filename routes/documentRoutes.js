@@ -350,6 +350,9 @@ router.get('/sliders/userwithall/:uid', async (req, res) => {
         // Merge both sets of sliders (user-specific and 'ALL' sliders)
         const combinedSliders = [...userSliders, ...allSliders];
 
+        // Final sort just in case (optional)
+        combinedSliders.sort((a, b) => new Date(b.from_date) - new Date(a.from_date));
+
         // Calculate the total count for the combined sliders
         const totalUserSliders = await SliderModel.getSlidersForUserCount(uid);
         const totalAllSliders = await SliderModel.getAllSlidersWithTypeAllCount();
@@ -359,8 +362,8 @@ router.get('/sliders/userwithall/:uid', async (req, res) => {
         const totalPages = Math.ceil(total / limit);
 
         if (combinedSliders.length === 0) {
-            return res.status(404).json({
-                responseCode: RESPONSE_CODES.NOT_FOUND,
+            return res.status(200).json({
+                responseCode: RESPONSE_CODES.SUCCESS,
                 responseMessage: MESSAGES.SLIDERS_NOT_FOUND,
                 data: null,
                 pagination: {

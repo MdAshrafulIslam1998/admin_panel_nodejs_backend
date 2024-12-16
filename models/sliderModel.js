@@ -21,10 +21,16 @@ class SliderModel {
         return rows[0].total;
     }
 
-     // Method to fetch sliders where send_type is 'ALL'
-     static async getAllSlidersWithTypeAll(limit, offset) {
+    // Method to fetch sliders where send_type is 'ALL'
+    static async getAllSlidersWithTypeAll(limit, offset) {
         const [rows] = await db.execute(
-            'SELECT * FROM sliders WHERE send_type = "ALL" LIMIT ? OFFSET ?', 
+            `SELECT * 
+             FROM sliders 
+             WHERE send_type = "ALL" 
+               AND from_date <= NOW() 
+               AND to_date >= NOW() 
+             ORDER BY from_date DESC 
+             LIMIT ? OFFSET ?`,
             [limit, offset]
         );
         return rows;
@@ -32,24 +38,46 @@ class SliderModel {
 
     // Method to get count of sliders where send_type is 'ALL'
     static async getAllSlidersWithTypeAllCount() {
-        const [rows] = await db.execute('SELECT COUNT(*) AS total FROM sliders WHERE send_type = "ALL"');
-        return rows[0].total;
+        const [[{ count }]] = await db.execute(
+            `SELECT COUNT(*) AS count 
+             FROM sliders 
+             WHERE send_type = "ALL" 
+               AND from_date <= NOW() 
+               AND to_date >= NOW()`
+        );
+        return count;
     }
+
 
     // Method to fetch sliders for a specific user by uid
     static async getSlidersForUser(uid, limit, offset) {
         const [rows] = await db.execute(
-            'SELECT * FROM sliders WHERE send_to = ? LIMIT ? OFFSET ?', 
+            `SELECT * 
+             FROM sliders 
+             WHERE send_to = ? 
+               AND from_date <= NOW() 
+               AND to_date >= NOW() 
+             ORDER BY from_date DESC 
+             LIMIT ? OFFSET ?`,
             [uid, limit, offset]
         );
         return rows;
     }
 
+
     // Method to get count of sliders for a specific user by uid
     static async getSlidersForUserCount(uid) {
-        const [rows] = await db.execute('SELECT COUNT(*) AS total FROM sliders WHERE send_to = ?', [uid]);
-        return rows[0].total;
+        const [[{ count }]] = await db.execute(
+            `SELECT COUNT(*) AS count 
+             FROM sliders 
+             WHERE send_to = ? 
+               AND from_date <= NOW() 
+               AND to_date >= NOW()`,
+            [uid]
+        );
+        return count;
     }
+
 
     // Delete a slider by ID
     static async deleteSliderById(sliderId) {
