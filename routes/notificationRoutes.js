@@ -61,7 +61,7 @@ router.post("/notifications", authenticateToken, async (req, res) => {
 router.get("/notifications", authenticateToken, async (req, res) => {
   try {
     const [rows] = await db.execute("SELECT * FROM notifications ORDER BY created_at DESC");
-    SUCCESS(res, "S10002", "Notifications fetched successfully.", rows);
+    SUCCESS(res, "S100000", "Notifications fetched successfully.", rows);
   } catch (err) {
     console.error("Error fetching notifications:", err);
     ERROR(res, "E10003", "Failed to fetch notifications.", err.message);
