@@ -4,6 +4,7 @@ const admin = require("firebase-admin");
 const db = require("../config/db.config");
 const authenticateToken = require("../middleware/authenticateToken");
 const { SUCCESS, ERROR } = require('../middleware/handler');
+const fs = require("fs");
 
 
 // Initialize Firebase Admin if not already initialized
@@ -31,15 +32,37 @@ router.get("/notifications", authenticateToken, async (req, res) => {
 router.post("/topics", authenticateToken, async (req, res) => {
   const { topic_name } = req.body;
 
+  // Validate topic_name presence
   if (!topic_name) {
     return ERROR(res, "E20001", "Topic name is mandatory.");
   }
 
-  try {
-    // Insert topic into database
-    const [result] = await db.query("INSERT INTO fcm_topics (topic_name, created_at) VALUES (?, NOW())", [topic_name]);
+  // Check for spaces in topic_name
+  if (topic_name.includes(' ')) {
+    return ERROR(res, "E20003", "Topic name must not contain spaces.");
+  }
 
-    SUCCESS(res, "S20001", "Topic created successfully.", { id: result.insertId, topic_name });
+  try {
+    // Check if topic_name already exists
+    const [existingTopic] = await db.query(
+      "SELECT id FROM fcm_topics WHERE topic_name = ?",
+      [topic_name]
+    );
+
+    if (existingTopic.length > 0) {
+      return ERROR(res, "E20005", "Topic name already exists.");
+    }
+
+    // Insert topic into database
+    const [result] = await db.query(
+      "INSERT INTO fcm_topics (topic_name, created_at) VALUES (?, NOW())",
+      [topic_name]
+    );
+
+    SUCCESS(res, "S20001", "Topic created successfully.", {
+      id: result.insertId,
+      topic_name,
+    });
   } catch (err) {
     console.error("Error creating topic:", err);
     ERROR(res, "E20002", "Failed to create topic.", err.message);
@@ -255,21 +278,50 @@ router.delete("/topics/:topic_name", authenticateToken, async (req, res) => {
   const { topic_name } = req.params;
 
   try {
-    // Delete the topic and its subscriptions from the database
-    // await db.query(`DELETE FROM fcm_topic_subscriptions WHERE topic_name = ?`, [topic_name]);
-    await db.query(`DELETE FROM fcm_topics WHERE topic_name = ?`, [topic_name]);
+    // Step 1: Validate the topic exists in the database
+    const [topics] = await db.query("SELECT topic_name FROM fcm_topics WHERE topic_name = ?", [topic_name]);
+    if (topics.length === 0) {
+      return ERROR(res, "E20010", `Topic '${topic_name}' not found.`);
+    }
 
+    // Step 2: Fetch all users subscribed to the topic
+    const [subscriptions] = await db.query(
+      `SELECT fcm_subscriptions.user_id, user.push_token 
+      FROM fcm_subscriptions 
+      JOIN user ON user.user_id = fcm_subscriptions.user_id 
+      WHERE fcm_subscriptions.topic_name = ?`,
+      [topic_name]
+    );
+
+    if (subscriptions.length > 0) {
+      // Step 3: Unsubscribe all users from the topic in FCM
+      const tokens = subscriptions.map((sub) => sub.push_token);
+
+      const batchSize = 1000;
+      for (let i = 0; i < tokens.length; i += batchSize) {
+        const batch = tokens.slice(i, i + batchSize);
+        await admin.messaging().unsubscribeFromTopic(batch, topic_name);
+      }
+
+      // Step 4: Delete all subscriptions for this topic from the database
+      await db.query("DELETE FROM fcm_subscriptions WHERE topic_name = ?", [topic_name]);
+    }
+
+    // Step 5: Delete the topic from the `fcm_topics` table
+    await db.query("DELETE FROM fcm_topics WHERE topic_name = ?", [topic_name]);
+
+    // Step 6: Send success response
     SUCCESS(res, "S20007", "Topic deleted successfully.", { topic_name });
   } catch (err) {
     console.error("Error deleting topic:", err);
-    ERROR(res, "E20010", "Failed to delete topic.", err.message);
+    ERROR(res, "E20011", "Failed to delete topic.", err.message);
   }
 });
 
 
 
 
-// 6. API to send notification to a topic
+// 7. API to send notification to a topic
 router.post("/topics/:topic_name/send", authenticateToken, async (req, res) => {
   const { topic_name } = req.params;
   const { title, details, rich_media_url, deep_link } = req.body;
@@ -279,10 +331,16 @@ router.post("/topics/:topic_name/send", authenticateToken, async (req, res) => {
   }
 
   try {
-    // Generate a random notification ID
+    // Step 1: Validate the topic exists in the database
+    const [topics] = await db.query("SELECT topic_name FROM fcm_topics WHERE topic_name = ?", [topic_name]);
+    if (topics.length === 0) {
+      return ERROR(res, "E20010", `Topic '${topic_name}' not found.`);
+    }
+
+    // Step 2: Generate a random notification ID
     const notificationId = Math.floor(Math.random() * 1e12);
 
-    // Prepare the message payload
+    // Step 3: Prepare the message payload
     const message = {
       topic: topic_name,
       notification: { title, body: details },
@@ -294,26 +352,50 @@ router.post("/topics/:topic_name/send", authenticateToken, async (req, res) => {
       },
     };
 
-    // Send the notification
-    const response = await admin.messaging().send(message);
+    let fcmResponse;
+    let status = "delivered";
+    let errorMessage = "none";
 
-    // Log the notification in the database
+    try {
+      // Step 4: Send the notification to FCM
+      fcmResponse = await admin.messaging().send(message);
+    } catch (err) {
+      console.error("Error sending notification to topic:", err);
+      status = "failed";
+      errorMessage = err.message;
+    }
+
+    // Step 5: Log the notification in the `notification_logs` table
     await db.query(
-      `INSERT INTO notifications (notification_id, title, details, rich_media_url, deep_link, type, status, target_type, target_id, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, ?, 'instant', 'sent', 'ALL', ?, NOW(), NOW())`,
+      `INSERT INTO notification_logs (notification_id, target_id, status, error_message, sent_at) 
+       VALUES (?, ?, ?, ?, NOW())`,
+      [notificationId, topic_name, status, errorMessage]
+    );
+
+    // Step 6: Log the notification in the `notifications` table
+    await db.query(
+      `INSERT INTO notifications (notification_id, title, details, rich_media_url, deep_link, type, time, 
+        days_of_week, start_date, interval_minutes, last_sent_at, status, target_type, target_id, created_at, updated_at) 
+       VALUES (?, ?, ?, ?, ?, 'instant', NOW(), NULL, NULL, NULL, NOW(), ?, 'ALL', ?, NOW(), NOW())`,
       [
         notificationId,
         title,
         details,
         rich_media_url || null,
         deep_link || null,
+        status === "delivered" ? "sent" : "failed",
         topic_name,
       ]
     );
 
-    SUCCESS(res, "S20003", "Notification sent to topic successfully.", response);
+    // Step 7: Return response
+    if (status === "delivered") {
+      SUCCESS(res, "S20003", "Notification sent to topic successfully.", fcmResponse);
+    } else {
+      ERROR(res, "E20006", "Failed to send notification to topic.", errorMessage);
+    }
   } catch (err) {
-    console.error("Error sending notification to topic:", err);
+    console.error("Unexpected error sending notification:", err);
     ERROR(res, "E20006", "Failed to send notification to topic.", err.message);
   }
 });
@@ -321,10 +403,108 @@ router.post("/topics/:topic_name/send", authenticateToken, async (req, res) => {
 
 
 
-// instant notification
+// 8. Fetch all notifications for a specific target_id and subscribed topics
+router.post("/notifications/fetch-by-target", authenticateToken, async (req, res) => {
+  const { target_id } = req.body; // Here, target_id is the push token
+
+  // Validate input
+  if (!target_id) {
+    return ERROR(res, "E10005", "Push token (target ID) is mandatory.");
+  }
+
+  try {
+    // Step 1: Fetch user-specific notifications using the push token
+    const [userNotifications] = await db.query(
+      `SELECT 
+        id,
+        notification_id,
+        title,
+        details,
+        rich_media_url,
+        deep_link,
+        type,
+        time,
+        days_of_week,
+        start_date,
+        interval_minutes,
+        last_sent_at,
+        status,
+        target_id,
+        created_at,
+        updated_at 
+      FROM notifications 
+      WHERE target_id = ? 
+      ORDER BY created_at DESC`,
+      [target_id]
+    );
+
+    // Step 2: Fetch user_id from the users table using the push token
+    const [userInfo] = await db.query(
+      "SELECT user_id FROM user WHERE push_token = ?",
+      [target_id]
+    );
+
+    if (userInfo.length === 0) {
+      return ERROR(res, "E10008", "User not found for the provided push token.");
+    }
+
+    const user_id = userInfo[0].user_id;
+
+    // Step 3: Fetch the subscribed topics for the user
+    const [subscriptions] = await db.query(
+      "SELECT topic_name FROM fcm_subscriptions WHERE user_id = ?",
+      [user_id]
+    );
+
+    const topicNames = subscriptions.map((sub) => sub.topic_name);
+
+    // Step 4: Fetch notifications for subscribed topics
+    let topicNotifications = [];
+    if (topicNames.length > 0) {
+      [topicNotifications] = await db.query(
+        `SELECT 
+          id,
+          notification_id,
+          title,
+          details,
+          rich_media_url,
+          deep_link,
+          type,
+          time,
+          days_of_week,
+          start_date,
+          interval_minutes,
+          last_sent_at,
+          status,
+          target_id,
+          created_at,
+          updated_at 
+        FROM notifications 
+        WHERE target_id IN (?) 
+        ORDER BY created_at DESC`,
+        [topicNames]
+      );
+    }
+
+    // Combine user-specific notifications and topic-based notifications
+    const allNotifications = [...userNotifications, ...topicNotifications];
+
+    // Return the combined notifications
+    return SUCCESS(res, "S100000", "Notifications fetched successfully.", {
+      notifications: allNotifications,
+    });
+  } catch (err) {
+    console.error("Error fetching notifications:", err);
+    return ERROR(res, "E10006", "Failed to fetch notifications.", err.message);
+  }
+});
+
+
+
+
+// 9. Instant notification send
 router.post("/notifications/send", authenticateToken, async (req, res) => {
   const { token, user_id, title, details, rich_media_url, deep_link } = req.body;
-
 
   // Validate input
   if (!token || !title || !details) {
@@ -369,6 +549,7 @@ router.post("/notifications/send", authenticateToken, async (req, res) => {
       interval_minutes: null, // Default null
       last_sent_at: new Date(), // Current timestamp
       status: "sent", // Status 'sent'
+      target_type: "SPECIFIC", // Set target_type to 'SPECIFIC'
       target_id: user_id,
       created_at: new Date(), // Current timestamp
       updated_at: new Date(), // Current timestamp
@@ -400,46 +581,116 @@ router.post("/notifications/send", authenticateToken, async (req, res) => {
 
 
 
-// Fetch all notifications for a specific target_id
-router.post("/notifications/fetch-by-target", authenticateToken, async (req, res) => {
-  const { target_id } = req.body;
+// 10. Delete a notification by notification_id
+router.delete("/notifications/delete/:notification_id", authenticateToken, async (req, res) => {
+  const { notification_id } = req.params;
 
   // Validate input
-  if (!target_id) {
-    return ERROR(res, "E10005", "Target ID is mandatory.");
+  if (!notification_id) {
+    return ERROR(res, "E10007", "Notification ID is mandatory.");
   }
 
   try {
-    // Fetch notifications for the given target_id
-    const [notifications] = await db.query(
-      `SELECT 
-        id,
-        notification_id,
-        title,
-        details,
-        rich_media_url,
-        deep_link,
-        type,
-        time,
-        days_of_week,
-        start_date,
-        interval_minutes,
-        last_sent_at,
-        status,
-        target_id,
-        created_at,
-        updated_at 
-      FROM notifications 
-      WHERE target_id = ? 
-      ORDER BY created_at DESC`,
-      [target_id]
+    // Check if the notification exists
+    const [notification] = await db.query(
+      "SELECT * FROM notifications WHERE notification_id = ?",
+      [notification_id]
     );
 
-    // Return success response with the notifications
-    SUCCESS(res, "S100000", "Notifications fetched successfully.", { notifications });
+    if (!notification.length) {
+      return ERROR(res, "E10008", "Notification not found.");
+    }
+
+    // Delete the notification from the notifications table
+    await db.query("DELETE FROM notifications WHERE notification_id = ?", [
+      notification_id,
+    ]);
+
+    // Add a log entry indicating the notification was deleted
+    const logData = {
+      notification_id: notification_id,
+      target_id: notification[0].target_id, // Use the target_id from the original notification
+      status: "deleted",
+      error_message: "This Notification ID Instance Deleted", // No error since it's a deletion
+      sent_at: new Date(), // Current timestamp
+    };
+    await db.query("INSERT INTO notification_logs SET ?", logData);
+
+    // Return success response
+    SUCCESS(res, "S100000", "Notification deleted successfully.", `Notification with ID ${notification_id} has been removed.`);
   } catch (err) {
-    console.error("Error fetching notifications:", err);
-    ERROR(res, "E10006", "Failed to fetch notifications.", err.message);
+    console.error("Error deleting notification:", err);
+    ERROR(res, "E10009", "Failed to delete notification.", err.message);
+  }
+});
+
+
+
+
+
+// 11. Subscribe to topics with an updated push token
+router.post("/notifications/subscribe-again", authenticateToken, async (req, res) => {
+  const { push_token } = req.body;
+
+  // Validate input
+  if (!push_token) {
+    return ERROR(res, "E10005", "Push token is mandatory.");
+  }
+
+  try {
+    // Step 1: Find the user_id from the users table using the push token
+    const [userInfo] = await db.query(
+      "SELECT user_id FROM user WHERE push_token = ?",
+      [push_token]
+    );
+
+    if (userInfo.length === 0) {
+      return ERROR(res, "E10008", "Push token not found in the user table.");
+    }
+
+    const user_id = userInfo[0].user_id;
+
+    // Step 2: Find the topics the user is subscribed to
+    const [subscriptions] = await db.query(
+      "SELECT topic_name FROM fcm_subscriptions WHERE user_id = ?",
+      [user_id]
+    );
+
+    if (subscriptions.length === 0) {
+      return SUCCESS(res, "S100001", "User is not subscribed to any topics.");
+    }
+
+    const topicNames = subscriptions.map((sub) => sub.topic_name);
+
+    // Step 3: Re-subscribe the new push token to the topics
+    const subscriptionLogs = [];
+    for (const topic of topicNames) {
+      try {
+        await admin.messaging().subscribeToTopic(push_token, topic);
+        const logEntry = `Subscribed to topic: ${topic} with token: ${push_token}`;
+        console.log(logEntry);
+        subscriptionLogs.push(logEntry);
+
+        // Write to log.txt
+        fs.appendFileSync("log.txt", `${logEntry}\n`);
+      } catch (err) {
+        const errorLog = `Failed to subscribe to topic: ${topic} with token: ${push_token}. Error: ${err.message}`;
+        console.error(errorLog);
+        subscriptionLogs.push(errorLog);
+
+        // Write error to log.txt
+        fs.appendFileSync("log.txt", `${errorLog}\n`);
+      }
+    }
+
+    // Step 4: Return success response with subscription details
+    return SUCCESS(res, "S100000", "User successfully re-subscribed to topics.", {
+      topics: topicNames,
+      logs: subscriptionLogs,
+    });
+  } catch (err) {
+    console.error("Error re-subscribing to topics:", err);
+    return ERROR(res, "E10006", "Failed to re-subscribe to topics.", err.message);
   }
 });
 

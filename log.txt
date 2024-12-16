@@ -1534,3 +1534,6 @@ SyntaxError: missing ) after argument list
     at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
     at Module._compile (node:internal/modules/cjs/loader:1376:14)
 
+Subscribed to topic: gnre with token: epk795ynQ-uANofARmCTQm:APA91bF5yqZFrk5jAX63EuHwqIUBVixTIFSsaUPDcRHbwrICUasUGyZqh3uWp6JmAZI4prCsumBN-sjIlov0_mQ2t6LIIUfa8G8eF66gWz9vaMWUjjMliVU
+Subscribed to topic: gnre with token: epk795ynQ-uANofARmCTQm:APA91bF5yqZFrk5jAX63EuHwqIUBVixTIFSsaUPDcRHbwrICUasUGyZqh3uWp6JmAZI4prCsumBN-sjIlov0_mQ2t6LIIUfa8G8eF66gWz9vaMWUjjMliVU
+Subscribed to topic: gnre with token: epk795ynQ-uANofARmCTQm:APA91bF5yqZFrk5jAX63EuHwqIUBVixTIFSsaUPDcRHbwrICUasUGyZqh3uWp6JmAZI4prCsumBN-sjIlov0_mQ2t6LIIUfa8G8eF66gWz9vaMWUjjMliVU
