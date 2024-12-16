@@ -406,10 +406,11 @@ router.post("/topics/:topic_name/send", authenticateToken, async (req, res) => {
 // 8. Fetch all notifications for a specific target_id and subscribed topics
 router.post("/notifications/fetch-by-target", authenticateToken, async (req, res) => {
   const { target_id } = req.body; // Here, target_id is the push token
+  const u_id = target_id;
 
   // Validate input
-  if (!target_id) {
-    return ERROR(res, "E10005", "Push token (target ID) is mandatory.");
+  if (!u_id) {
+    return ERROR(res, "E10005", "User Id (target ID) is mandatory.");
   }
 
   try {
@@ -435,25 +436,25 @@ router.post("/notifications/fetch-by-target", authenticateToken, async (req, res
       FROM notifications 
       WHERE target_id = ? 
       ORDER BY created_at DESC`,
-      [target_id]
+      [u_id]
     );
 
-    // Step 2: Fetch user_id from the users table using the push token
-    const [userInfo] = await db.query(
-      "SELECT user_id FROM user WHERE push_token = ?",
-      [target_id]
-    );
+    // // Step 2: Fetch user_id from the users table using the push token
+    // const [userInfo] = await db.query(
+    //   "SELECT user_id FROM user WHERE push_token = ?",
+    //   [target_id]
+    // );
 
-    if (userInfo.length === 0) {
-      return ERROR(res, "E10008", "User not found for the provided push token.");
-    }
+    // if (userInfo.length === 0) {
+    //   return ERROR(res, "E10008", "User not found for the provided push token.");
+    // }
 
-    const user_id = userInfo[0].user_id;
+    //const user_id = userInfo[0].user_id;
 
     // Step 3: Fetch the subscribed topics for the user
     const [subscriptions] = await db.query(
       "SELECT topic_name FROM fcm_subscriptions WHERE user_id = ?",
-      [user_id]
+      [u_id]
     );
 
     const topicNames = subscriptions.map((sub) => sub.topic_name);

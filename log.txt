@@ -1537,3 +1537,105 @@ SyntaxError: missing ) after argument list
 Subscribed to topic: gnre with token: epk795ynQ-uANofARmCTQm:APA91bF5yqZFrk5jAX63EuHwqIUBVixTIFSsaUPDcRHbwrICUasUGyZqh3uWp6JmAZI4prCsumBN-sjIlov0_mQ2t6LIIUfa8G8eF66gWz9vaMWUjjMliVU
 Subscribed to topic: gnre with token: epk795ynQ-uANofARmCTQm:APA91bF5yqZFrk5jAX63EuHwqIUBVixTIFSsaUPDcRHbwrICUasUGyZqh3uWp6JmAZI4prCsumBN-sjIlov0_mQ2t6LIIUfa8G8eF66gWz9vaMWUjjMliVU
 Subscribed to topic: gnre with token: epk795ynQ-uANofARmCTQm:APA91bF5yqZFrk5jAX63EuHwqIUBVixTIFSsaUPDcRHbwrICUasUGyZqh3uWp6JmAZI4prCsumBN-sjIlov0_mQ2t6LIIUfa8G8eF66gWz9vaMWUjjMliVU
+2024-12-16T15:15:26.119Z - ERROR: Unexpected identifier 'user'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:409
+  cont user
+       ^^^^
+
+SyntaxError: Unexpected identifier 'user'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-16T15:15:30.922Z - ERROR: Unexpected identifier 'u_id'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:409
+  cont u_id 
+       ^^^^
+
+SyntaxError: Unexpected identifier 'u_id'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-16T15:15:32.089Z - ERROR: Unexpected identifier 'u_id'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:409
+  cont u_id = req.user_id;
+       ^^^^
+
+SyntaxError: Unexpected identifier 'u_id'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-16T15:15:34.047Z - ERROR: Unexpected identifier 'u_id'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:409
+  cont u_id = req.;
+       ^^^^
+
+SyntaxError: Unexpected identifier 'u_id'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-16T15:15:37.131Z - ERROR: Unexpected identifier 'u_id'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:409
+  cont u_id = req.body;
+       ^^^^
+
+SyntaxError: Unexpected identifier 'u_id'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
+2024-12-16T15:22:10.957Z - ERROR: Unexpected token ';'
+D:\My codes\Github\admin_panel_nodejs_backend\routes\notificationRoutes.js:409
+  const { u_id = req.body;
+                         ^
+
+SyntaxError: Unexpected token ';'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (D:\My codes\Github\admin_panel_nodejs_backend\app.js:14:28)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+
